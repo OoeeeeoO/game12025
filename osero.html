@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>埋め込み型 オセロゲーム</title>
+    <style>
+        /* CSS (style.cssの内容) */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        #board-container {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+            border: 4px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .cell {
+            width: 100%;
+            height: 100%;
+            background-color: #008000; /* オセロ盤の緑色 */
+            border: 1px solid #006400;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .disc {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            position: relative;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        .black {
+            background-color: #000;
+        }
+
+        .white {
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>オセロゲーム</h1>
+
+    <div id="game-status">
+        <p>現在のターン: <span id="current-player">黒</span></p>
+        <p>黒: <span id="score-black">2</span> - 白: <span id="score-white">2</span></p>
+    </div>
+
+    <div id="board-container">
+        </div>
+
+    <button id="reset-button">ゲームをリセット</button>
+
+    <script>
+        // JavaScript (script.jsの内容)
+        const BOARD_SIZE = 8;
+        const EMPTY = 0;
+        const BLACK = 1;
+        const WHITE = 2;
+
+        let board = [];
+        let currentPlayer = BLACK;
+        let passCount = 0; // 連続パス回数を記録
+
+        // DOM要素の取得
+        const boardContainer = document.getElementById('board-container');
+        const currentPlayerDisplay = document.getElementById('current-player');
+        const scoreBlackDisplay = document.getElementById('score-black');
+        const scoreWhiteDisplay = document.getElementById('score-white');
+        const resetButton = document.getElementById('reset-button');
+
+        // -----------------------------------------------------
+        // 1. 盤面の初期化
+        // -----------------------------------------------------
+        function initializeBoard() {
+            board = Array(BOARD_SIZE).fill(0).map(() => Array(BOARD_SIZE).fill(EMPTY));
+
+            // 初期配置 (中央の4マス)
+            board[3][3] = WHITE;
+            board[3][4] = BLACK;
+            board[4][3] = BLACK;
+            board[4][4] = WHITE;
+
+            currentPlayer = BLACK;
+            passCount = 0;
+            drawBoard();
+            updateStatus();
+        }
+
+        // -----------------------------------------------------
+        // 2. 盤面の描画
+        // -----------------------------------------------------
+        function drawBoard() {
+            boardContainer.innerHTML = ''; // 既存の盤面をクリア
+
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+
+                    // 石を配置
+                    if (board[r][c] !== EMPTY) {
+                        const disc = document.createElement('div');
+                        disc.classList.add('disc', board[r][c] === BLACK ? 'black' : 'white');
+                        cell.appendChild(disc);
+                    }
+
+                    // クリックイベントリスナーを設定
+                    cell.addEventListener('click', handleCellClick);
+
+                    boardContainer.appendChild(cell);
+                }
+            }
+        }
+
+        // -----------------------------------------------------
+        // 3. ゲームロジック
+        // -----------------------------------------------------
+
+        /**
+         * 石を置くことで挟める相手の石のリストを取得する
+         */
+        function getFlipList(r, c, player) {
+            if (board[r][c] !== EMPTY) return [];
+
+            const opponent = player === BLACK ? WHITE : BLACK;
+            const flipList = [];
+
+            // 8方向のチェック (dr, dc: direction row/col)
+            for (let dr = -1; dr <= 1; dr++) {
+                for (let dc = -1; dc <= 1; dc++) {
+                    if (dr === 0 && dc === 0) continue;
+
+                    let currentPath = [];
+                    let i = r + dr;
+                    let j = c + dc;
+
+                    // 盤面内かつ相手の石がある間は進む
+                    while (i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE && board[i][j] === opponent) {
+                        currentPath.push({r: i, c: j});
+                        i += dr;
+                        j += dc;
+                    }
+
+                    // 盤面内に収まり、パスの終点が自分の石であれば、挟んでいると判定
+                    if (i >= 0 && i < BOARD_SIZE && j >= 0 && j < BOARD_SIZE && board[i][j] === player) {
+                        flipList.push(...currentPath);
+                    }
+                }
+            }
+
+            return flipList;
+        }
+
+        /**
+         * セルがクリックされた時の処理
+         */
+        function handleCellClick(event) {
+            const r = parseInt(event.currentTarget.dataset.row);
+            const c = parseInt(event.currentTarget.dataset.col);
+
+            const discsToFlip = getFlipList(r, c, currentPlayer);
+
+            if (discsToFlip.length > 0) {
+                // 1. 石を置く
+                board[r][c] = currentPlayer;
+
+                // 2. 石をひっくり返す
+                discsToFlip.forEach(pos => {
+                    board[pos.r][pos.c] = currentPlayer;
+                });
+
+                // 3. 描画を更新
+                drawBoard();
+
+                // 4. ターンを切り替え
+                passCount = 0; // 石が置かれたのでパス回数をリセット
+                switchTurn();
+            } else {
+                // 有効な手ではない
+                // ここで「そこには置けません」といった視覚的なフィードバックを与えることもできます
+            }
+        }
