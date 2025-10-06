@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>埋め込み型 オセロゲーム</title>
     <style>
-        /* CSS (style.cssの内容) */
+        /* CSS (デザイン) */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f0f0f0;
         }
 
+        /* 盤面コンテナ */
         #board-container {
             display: grid;
             grid-template-columns: repeat(8, 50px);
@@ -22,6 +23,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
+        /* 各セル */
         .cell {
             width: 100%;
             height: 100%;
@@ -34,6 +36,7 @@
             cursor: pointer;
         }
 
+        /* 石のデザイン */
         .disc {
             width: 80%;
             height: 80%;
@@ -43,10 +46,12 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
         }
 
+        /* 黒石 */
         .black {
             background-color: #000;
         }
 
+        /* 白石 */
         .white {
             background-color: #fff;
             border: 1px solid #ccc;
@@ -67,7 +72,7 @@
     <button id="reset-button">ゲームをリセット</button>
 
     <script>
-        // JavaScript (script.jsの内容)
+        // JavaScript (ゲームロジック)
         const BOARD_SIZE = 8;
         const EMPTY = 0;
         const BLACK = 1;
@@ -84,9 +89,9 @@
         const scoreWhiteDisplay = document.getElementById('score-white');
         const resetButton = document.getElementById('reset-button');
 
-        // -----------------------------------------------------
-        // 1. 盤面の初期化
-        // -----------------------------------------------------
+        /**
+         * 盤面の初期化とゲーム開始
+         */
         function initializeBoard() {
             board = Array(BOARD_SIZE).fill(0).map(() => Array(BOARD_SIZE).fill(EMPTY));
 
@@ -102,11 +107,11 @@
             updateStatus();
         }
 
-        // -----------------------------------------------------
-        // 2. 盤面の描画
-        // -----------------------------------------------------
+        /**
+         * 盤面のHTML要素を再描画する
+         */
         function drawBoard() {
-            boardContainer.innerHTML = ''; // 既存の盤面をクリア
+            boardContainer.innerHTML = ''; 
 
             for (let r = 0; r < BOARD_SIZE; r++) {
                 for (let c = 0; c < BOARD_SIZE; c++) {
@@ -130,12 +135,8 @@
             }
         }
 
-        // -----------------------------------------------------
-        // 3. ゲームロジック
-        // -----------------------------------------------------
-
         /**
-         * 石を置くことで挟める相手の石のリストを取得する
+         * 石を置くことで挟める相手の石のリストを取得する (コアロジック)
          */
         function getFlipList(r, c, player) {
             if (board[r][c] !== EMPTY) return [];
@@ -193,8 +194,90 @@
                 // 4. ターンを切り替え
                 passCount = 0; // 石が置かれたのでパス回数をリセット
                 switchTurn();
+            }
+            // 有効な手ではない場合は特に何もしない（アラートは出さない）
+        }
+
+        /**
+         * ターンを切り替え、パス判定を行う
+         */
+        function switchTurn() {
+            currentPlayer = currentPlayer === BLACK ? WHITE : BLACK;
+            updateStatus();
+
+            // 次のプレイヤーが置ける場所があるかチェック
+            if (!hasValidMoves(currentPlayer)) {
+                passCount++;
+                alert(`${currentPlayer === BLACK ? '黒' : '白'}は置ける場所がないため、パスします。`);
+
+                if (passCount === 2) {
+                    gameOver();
+                    return;
+                }
+
+                // 連続パスが2回未満なら、さらにターンを切り替える
+                switchTurn();
             } else {
-                // 有効な手ではない
-                // ここで「そこには置けません」といった視覚的なフィードバックを与えることもできます
+                // 有効な手がある場合は続行
             }
         }
+
+        /**
+         * 指定されたプレイヤーが置ける有効な手があるかチェックする
+         */
+        function hasValidMoves(player) {
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    if (board[r][c] === EMPTY) {
+                        if (getFlipList(r, c, player).length > 0) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /**
+         * ゲームの終了処理
+         */
+        function gameOver() {
+            const blackCount = board.flat().filter(cell => cell === BLACK).length;
+            const whiteCount = board.flat().filter(cell => cell === WHITE).length;
+
+            let resultMessage;
+            if (blackCount > whiteCount) {
+                resultMessage = `黒の勝利！  (${blackCount}対${whiteCount})`;
+            } else if (whiteCount > blackCount) {
+                resultMessage = `白の勝利！  (${whiteCount}対${blackCount})`;
+            } else {
+                resultMessage = `引き分け！ (${blackCount}対${whiteCount})`;
+            }
+
+            alert(`ゲーム終了: ${resultMessage}`);
+        }
+
+        /**
+         * 盤面とスコアの表示を更新する
+         */
+        function updateStatus() {
+            const blackCount = board.flat().filter(cell => cell === BLACK).length;
+            const whiteCount = board.flat().filter(cell => cell === WHITE).length;
+
+            currentPlayerDisplay.textContent = currentPlayer === BLACK ? '黒' : '白';
+            scoreBlackDisplay.textContent = blackCount;
+            scoreWhiteDisplay.textContent = whiteCount;
+
+            // 盤面が全て埋まった場合もゲーム終了
+            if (blackCount + whiteCount === BOARD_SIZE * BOARD_SIZE) {
+                gameOver();
+            }
+        }
+
+
+        // イベントリスナーの設定とゲーム開始
+        resetButton.addEventListener('click', initializeBoard);
+        initializeBoard(); // ページ読み込み時にゲームを開始
+    </script>
+</body>
+</html>
