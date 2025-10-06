@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたきゲーム</title>
+    <title>たたきゲーム</title>
     <style>
-        /* CSS (デザイン) */
+        /* CSS (デザイン) - 前回のコードとほぼ同じですが、金モグラのスタイルを追加 */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -58,6 +58,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            border: 2px solid transparent; /* 金モグラの枠用 */
+            box-sizing: border-box; /* 枠線がサイズに含まれるように */
         }
 
         /* モグラが出ている状態 */
@@ -67,13 +69,44 @@
         }
 
         /* ---------------------------------- */
-        /* ★★★ モグラの顔のデザイン (鼻とひげ付き) ★★★ */
+        /* ★★★ 金のモグラのスタイル ★★★ */
+        /* ---------------------------------- */
+        .mole.gold {
+            background: linear-gradient(to bottom, #ffd700, #daa520); /* グラデーションで金っぽく */
+            border: 3px solid #b8860b; /* 濃い金の枠 */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); /* 光っているように */
+        }
+
+        /* 通常のモグラの顔の色は背景に合わせる */
+        .mole:not(.gold) .eye, .mole:not(.gold) .nose {
+            background-color: white; /* 目の色 */
+            border-color: black;
+        }
+        .mole.gold .eye {
+            background-color: black; /* 金モグラの目は黒く */
+            border-color: #663300;
+        }
+        .mole.gold .nose {
+            background-color: #f08080; /* 金モグラの鼻は少し赤めに */
+            border-color: #8b0000;
+        }
+        .mole.gold .nose::before, .mole.gold .nose::after,
+        .mole.gold .nose::before + span, .mole.gold .nose::after + span { /* 疑似要素のひげも変更 */
+            background-color: #fffacd; /* 薄い金色 */
+            box-shadow: 
+                0 -4px 0 0 #fffacd, 
+                0 4px 0 0 #fffacd;
+        }
+
+
+        /* ---------------------------------- */
+        /* モグラの顔のデザイン (共通) */
         /* ---------------------------------- */
         .face-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 15%; 
+            margin-top: 15%;
         }
 
         .eyes {
@@ -91,48 +124,41 @@
             border-radius: 50%;
         }
 
-        /* 鼻 */
         .nose {
             width: 10px;
             height: 8px;
             background-color: pink;
             border-radius: 50%;
             border: 1px solid #c0c0c0;
-            position: relative; /* ひげの基準点 */
+            position: relative;
         }
-        
-        /* 疑似要素でひげを作成 */
+
         .nose::before,
         .nose::after {
             content: '';
             position: absolute;
-            width: 18px; /* ひげの長さ */
+            width: 18px;
             height: 1px;
-            background: #f0f0f0; /* ひげの色（白っぽい色） */
+            background: #f0f0f0;
             top: 50%;
-            transform-origin: 0% 0%; /* 回転の基準点を左端に設定 */
+            transform-origin: 0% 0%;
         }
 
-        /* 左側のひげの配置と角度 */
         .nose::before {
-            right: 100%; /* 鼻の左端に配置 */
+            right: 100%;
             margin-right: 2px;
-            /* 3本のひげに見せるための工夫 */
-            box-shadow: 
-                0 -4px 0 0 #f0f0f0, /* 上のひげ */
-                0 4px 0 0 #f0f0f0;  /* 下のひげ */
+            box-shadow:
+                0 -4px 0 0 #f0f0f0,
+                0 4px 0 0 #f0f0f0;
         }
 
-        /* 右側のひげの配置と角度 */
         .nose::after {
-            left: 100%; /* 鼻の右端に配置 */
+            left: 100%;
             margin-left: 2px;
-            /* 3本のひげに見せるための工夫 */
-            box-shadow: 
-                0 -4px 0 0 #f0f0f0, /* 上のひげ */
-                0 4px 0 0 #f0f0f0;  /* 下のひげ */
+            box-shadow:
+                0 -4px 0 0 #f0f0f0,
+                0 4px 0 0 #f0f0f0;
         }
-
     </style>
 </head>
 <body>
@@ -150,10 +176,13 @@
         </div>
 
     <script>
-        // JavaScript (ゲームロジック) - 基本的に前回と同じです
+        // JavaScript (ゲームロジック)
 
         const HOLE_COUNT = 9;
         const GAME_DURATION = 30;
+        const NORMAL_MOLE_SCORE = 1;
+        const GOLD_MOLE_SCORE = 5;
+        const GOLD_MOLE_CHANCE = 0.2; // 金モグラの出現確率 (20%)
 
         let score = 0;
         let timeLeft = GAME_DURATION;
@@ -179,18 +208,18 @@
 
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
+                // ここではまだgoldクラスはつけない
 
-                // モグラの顔のパーツを生成 (鼻とひげを考慮した構造)
                 mole.innerHTML = `
                     <div class="face-container">
                         <div class="eyes">
                             <div class="eye"></div>
                             <div class="eye"></div>
                         </div>
-                        <div class="nose"></div> </div>
+                        <div class="nose"></div>
+                    </div>
                 `;
 
-                // クリックイベントの設定
                 hole.addEventListener('click', whack);
 
                 hole.appendChild(mole);
@@ -199,7 +228,7 @@
         }
 
         // -----------------------------------------------------
-        // 2. モグラの出現ロジック (省略 - 前回と同じ)
+        // 2. モグラの出現ロジック
         // -----------------------------------------------------
 
         function randomTime(min, max) {
@@ -223,11 +252,23 @@
 
             const time = randomTime(500, 1500);
             const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+
+            // 金モグラの判定とクラス追加
+            const isGoldMole = Math.random() < GOLD_MOLE_CHANCE;
+            if (isGoldMole) {
+                mole.classList.add('gold');
+                mole.dataset.score = GOLD_MOLE_SCORE; // 点数をデータ属性に保存
+            } else {
+                mole.classList.remove('gold'); // 念のため削除
+                mole.dataset.score = NORMAL_MOLE_SCORE;
+            }
 
             hole.classList.add('up');
 
             setTimeout(() => {
                 hole.classList.remove('up');
+                mole.classList.remove('gold'); // 引っ込む時に金モグラクラスも除去
                 if (isGameRunning) {
                     peep();
                 }
@@ -235,23 +276,27 @@
         }
 
         // -----------------------------------------------------
-        // 3. プレイヤーの操作ロジック (省略 - 前回と同じ)
+        // 3. プレイヤーの操作ロジック
         // -----------------------------------------------------
         function whack(event) {
             if (!isGameRunning) return;
 
             const hole = event.currentTarget;
+            const mole = hole.querySelector('.mole');
 
             if (hole.classList.contains('up')) {
-                score++;
+                const points = parseInt(mole.dataset.score || NORMAL_MOLE_SCORE); // データ属性から点数を取得
+                score += points;
                 scoreDisplay.textContent = score;
 
+                // たたいたらすぐに引っ込める
                 hole.classList.remove('up');
+                mole.classList.remove('gold'); // 叩かれた金モグラもクラス除去
             }
         }
 
         // -----------------------------------------------------
-        // 4. ゲームの流れ (省略 - 前回と同じ)
+        // 4. ゲームの流れ
         // -----------------------------------------------------
 
         function startGame() {
