@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>顔付きモグラたたきゲーム</title>
+    <title>モグラたたきゲーム</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -54,7 +54,6 @@
             bottom: -100%;
             transition: bottom 0.2s;
             pointer-events: none;
-            /* 顔のパーツを配置するためにFlexboxを使用 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -68,14 +67,21 @@
         }
 
         /* ---------------------------------- */
-        /* ★★★ モグラの顔のデザイン ★★★ */
+        /* ★★★ モグラの顔のデザイン (鼻付き) ★★★ */
         /* ---------------------------------- */
+        .face-container {
+            /* モグラの頭上で顔パーツ全体の位置を調整する */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15%; /* 全体的に少し上に配置 */
+        }
+        
         .eyes {
             display: flex;
             justify-content: space-around;
-            width: 40%;
-            margin-top: 15%; /* 顔の位置調整 */
-            margin-bottom: 10%;
+            width: 50px; /* 目の間隔 */
+            margin-bottom: 5px; /* 目と鼻の間隔 */
         }
 
         .eye {
@@ -86,18 +92,18 @@
             border-radius: 50%;
         }
 
-        .mouth {
-            width: 25px;
-            height: 10px;
-            border: 2px solid white;
-            border-top: none; /* 上の線だけ消して笑顔のように見せる */
-            border-radius: 0 0 10px 10px;
-            background-color: #c90000; /* 口の中の色 */
+        /* 鼻 */
+        .nose {
+            width: 10px;
+            height: 8px;
+            background-color: pink; /* モグラらしいピンクの鼻 */
+            border-radius: 50%;
+            border: 1px solid #c0c0c0;
         }
     </style>
 </head>
 <body>
-    <h1>顔付きモグラたたき！ </h1>
+    <h1>鼻付きモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -143,11 +149,13 @@
 
                 // モグラの顔のパーツを生成
                 mole.innerHTML = `
-                    <div class="eyes">
-                        <div class="eye"></div>
-                        <div class="eye"></div>
+                    <div class="face-container">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="nose"></div>
                     </div>
-                    <div class="mouth"></div>
                 `;
 
                 // クリックイベントの設定
@@ -159,7 +167,7 @@
         }
 
         // -----------------------------------------------------
-        // 2. モグラの出現ロジック
+        // 2. モグラの出現ロジック (省略 - 前回と同じ)
         // -----------------------------------------------------
 
         function randomTime(min, max) {
@@ -195,7 +203,7 @@
         }
 
         // -----------------------------------------------------
-        // 3. プレイヤーの操作ロジック
+        // 3. プレイヤーの操作ロジック (省略 - 前回と同じ)
         // -----------------------------------------------------
         function whack(event) {
             if (!isGameRunning) return;
@@ -206,13 +214,12 @@
                 score++;
                 scoreDisplay.textContent = score;
 
-                // たたいたらすぐに引っ込める
                 hole.classList.remove('up');
             }
         }
 
         // -----------------------------------------------------
-        // 4. ゲームの流れ
+        // 4. ゲームの流れ (省略 - 前回と同じ)
         // -----------------------------------------------------
 
         function startGame() {
@@ -225,10 +232,7 @@
             timeLeftDisplay.textContent = timeLeft;
             startButton.disabled = true;
 
-            // カウントダウンタイマー開始
             countdownTimerId = setInterval(countdown, 1000);
-
-            // モグラ出現ロジック開始
             peep();
         }
 
