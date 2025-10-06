@@ -67,21 +67,20 @@
         }
 
         /* ---------------------------------- */
-        /* ★★★ モグラの顔のデザイン (鼻付き) ★★★ */
+        /* ★★★ モグラの顔のデザイン (鼻とひげ付き) ★★★ */
         /* ---------------------------------- */
         .face-container {
-            /* モグラの頭上で顔パーツ全体の位置を調整する */
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 15%; /* 全体的に少し上に配置 */
+            margin-top: 15%; 
         }
-        
+
         .eyes {
             display: flex;
             justify-content: space-around;
-            width: 50px; /* 目の間隔 */
-            margin-bottom: 5px; /* 目と鼻の間隔 */
+            width: 50px;
+            margin-bottom: 5px;
         }
 
         .eye {
@@ -96,14 +95,48 @@
         .nose {
             width: 10px;
             height: 8px;
-            background-color: pink; /* モグラらしいピンクの鼻 */
+            background-color: pink;
             border-radius: 50%;
             border: 1px solid #c0c0c0;
+            position: relative; /* ひげの基準点 */
         }
+        
+        /* 疑似要素でひげを作成 */
+        .nose::before,
+        .nose::after {
+            content: '';
+            position: absolute;
+            width: 18px; /* ひげの長さ */
+            height: 1px;
+            background: #f0f0f0; /* ひげの色（白っぽい色） */
+            top: 50%;
+            transform-origin: 0% 0%; /* 回転の基準点を左端に設定 */
+        }
+
+        /* 左側のひげの配置と角度 */
+        .nose::before {
+            right: 100%; /* 鼻の左端に配置 */
+            margin-right: 2px;
+            /* 3本のひげに見せるための工夫 */
+            box-shadow: 
+                0 -4px 0 0 #f0f0f0, /* 上のひげ */
+                0 4px 0 0 #f0f0f0;  /* 下のひげ */
+        }
+
+        /* 右側のひげの配置と角度 */
+        .nose::after {
+            left: 100%; /* 鼻の右端に配置 */
+            margin-left: 2px;
+            /* 3本のひげに見せるための工夫 */
+            box-shadow: 
+                0 -4px 0 0 #f0f0f0, /* 上のひげ */
+                0 4px 0 0 #f0f0f0;  /* 下のひげ */
+        }
+
     </style>
 </head>
 <body>
-    <h1>鼻付きモグラたたき！ </h1>
+    <h1>鼻とひげ付きモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -147,15 +180,14 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
 
-                // モグラの顔のパーツを生成
+                // モグラの顔のパーツを生成 (鼻とひげを考慮した構造)
                 mole.innerHTML = `
                     <div class="face-container">
                         <div class="eyes">
                             <div class="eye"></div>
                             <div class="eye"></div>
                         </div>
-                        <div class="nose"></div>
-                    </div>
+                        <div class="nose"></div> </div>
                 `;
 
                 // クリックイベントの設定
