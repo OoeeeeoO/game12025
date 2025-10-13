@@ -2,129 +2,129 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白いとこふんだらだめゲーム</title>
+    <title>タワー積みゲーム</title>
     <style>
-        /* CSS: スタイル定義 */
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
             margin: 0;
+            overflow: hidden; /* スクロールバー非表示 */
             background-color: #f0f0f0;
-        }
-        #game-area {
-            width: 300px;
-            height: 400px;
-            border: 2px solid #333;
-            overflow: hidden; /* タイルが上に消えるように */
-            background-color: #eee;
-        }
-        .tile-row {
             display: flex;
-            height: 100px; /* 4行で400pxになるように */
-            width: 100%;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .tile {
-            flex-grow: 1;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        .black {
-            background-color: black;
-            cursor: pointer;
-        }
-        .white {
-            background-color: white;
-        }
-        #message {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
+        canvas {
+            border: 2px solid #333;
+            background-color: #fff;
         }
     </style>
 </head>
 <body>
-
-    <h1>黒いタイルを踏め！</h1>
-    <div id="score">スコア: 0</div>
-    <div id="game-area">
-        </div>
-    <div id="message"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <script>
-        // JavaScript: ゲームロジック
-        const gameArea = document.getElementById('game-area');
-        const scoreDisplay = document.getElementById('score');
-        const messageDisplay = document.getElementById('message');
-        let score = 0;
-        let isGameOver = false;
+        // Matter.jsのエイリアスを設定（コードを短くするため）
+        var Engine = Matter.Engine,
+            Render = Matter.Render,
+            Runner = Matter.Runner,
+            Bodies = Matter.Bodies,
+            Composite = Matter.Composite,
+            MouseConstraint = Matter.MouseConstraint,
+            Mouse = Matter.Mouse,
+            Events = Matter.Events;
 
-        // --- 1. 新しいタイル行を生成する関数 ---
-        function createNewRow() {
-            if (isGameOver) return;
+        // 1. エンジンとレンダラーの設定
+        var width = 600;
+        var height = 800;
 
-            const row = document.createElement('div');
-            row.className = 'tile-row';
-            
-            // 4つのタイルのうち、ランダムに1つだけを黒くする
-            const blackTileIndex = Math.floor(Math.random() * 4); // 0, 1, 2, or 3
-            
-            for (let i = 0; i < 4; i++) {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                
-                if (i === blackTileIndex) {
-                    tile.classList.add('black');
-                    tile.onclick = handleCorrectClick; // 黒いタイルに正解時のイベントを設定
-                } else {
-                    tile.classList.add('white');
-                    tile.onclick = handleWrongClick; // 白いタイルに不正解時のイベントを設定
-                }
-                row.appendChild(tile);
+        var engine = Engine.create();
+        var render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: width,
+                height: height,
+                wireframes: false, // ワイヤーフレーム表示を無効にして色を付ける
+                background: '#fafafa'
             }
-            
-            // ゲームエリアの**先頭**に追加することで、下から上に進むように見える
-            gameArea.prepend(row);
+        });
 
-            // ゲームエリアからはみ出した一番下の行を削除（メモリ節約とゲームの進行）
-            if (gameArea.children.length > 5) {
-                gameArea.lastChild.remove();
-            }
-        }
+        // 2. 地面と壁の作成
+        var ground = Bodies.rectangle(width / 2, height, width, 50, { 
+            isStatic: true, // 静止オブジェクト（動かない）
+            render: { fillStyle: '#666' }
+        });
 
-        // --- 2. 正解（黒いタイル）をクリックしたときの処理 ---
-        function handleCorrectClick(event) {
-            if (isGameOver) return;
-            
-            // クリックされたタイルを取り除く
-            event.currentTarget.removeEventListener('click', handleCorrectClick);
-            
-            score++;
-            scoreDisplay.textContent = `スコア: ${score}`;
-
-            // 新しい行を生成してゲームを続ける
-            createNewRow();
-        }
-
-        // --- 3. 不正解（白いタイル）をクリックしたときの処理 ---
-        function handleWrongClick() {
-            if (isGameOver) return;
-            
-            isGameOver = true;
-            messageDisplay.textContent = `ゲームオーバー！最終スコア: ${score}`;
-            
-            // すべてのクリックイベントを停止（シンプルにするためメッセージ表示のみ）
-            // 実際にはタイルのクリックイベントをすべて解除する処理が必要
-        }
-
-        // --- 4. ゲームの開始 ---
-        // 最初は画面を満たす数の行を生成
-        for (let i = 0; i < 4; i++) {
-            createNewRow();
-        }
+        // 左右の壁
+        var wallL = Bodies.rectangle(0, height / 2, 50, height, { isStatic: true, render: { fillStyle: '#666' } });
+        var wallR = Bodies.rectangle(width, height / 2, 50, height, { isStatic: true, render: { fillStyle: '#666' } });
         
+        // 3. 全てのオブジェクトをワールドに追加
+        Composite.add(engine.world, [ground, wallL, wallR]);
+
+        // 4. マウス操作の設定（既存のブロックを掴んで動かせるようにする）
+        var mouse = Mouse.create(render.canvas),
+            mouseConstraint = MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    render: {
+                        visible: false
+                    }
+                }
+            });
+
+        Composite.add(engine.world, mouseConstraint);
+        render.mouse = mouse; // レンダラーとマウスを同期
+
+        // 5. 実行処理
+        Render.run(render);
+        var runner = Runner.create();
+        Runner.run(runner, engine);
+
+        // --- ゲームの主要ロジック ---
+
+        // 新しいブロックを生成する関数
+        function createRandomBlock(x, y) {
+            // ランダムなサイズ
+            var sizeW = Math.random() * 50 + 30; // 30〜80
+            var sizeH = Math.random() * 50 + 30; // 30〜80
+            
+            // ランダムな色
+            var color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+
+            // ブロックの作成
+            var block = Bodies.rectangle(x, y, sizeW, sizeH, {
+                restitution: 0.2, // 反発係数（跳ねにくさ）
+                density: 0.001,   // 密度
+                friction: 0.8,    // 摩擦
+                render: {
+                    fillStyle: color,
+                    strokeStyle: 'black',
+                    lineWidth: 1
+                }
+            });
+
+            Composite.add(engine.world, block);
+        }
+
+        // 6. クリックイベントでブロックを生成
+        Events.on(render, 'click', function(event) {
+            var mousePosition = event.mouse.position;
+            
+            // マウスのX座標、画面上部少し下のY座標からブロックを落とす
+            createRandomBlock(mousePosition.x, 50); 
+        });
+
+        // 7. キー操作でブロックを生成（タワー積みのコントロール用）
+        // ※この段階ではマウスで生成位置を選ぶだけですが、キー操作でブロックを制御する実装も可能です。
+        // 例：キーを押したら画面上部中央からブロックを落とす
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                createRandomBlock(width / 2, 50); // スペースキーで中央から落とす
+            }
+        });
+
     </script>
 </body>
 </html>
