@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Jelly Tetris</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #222; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+    <script>
+        // Matter.jsのエイリアス
+        const { Engine, Render, World, Bodies, Events, Common, Mouse, MouseConstraint } = Matter;
+
+        // ゲーム設定
+        const width = 300;
+        const height = 600;
+        const cellSize = 30;
+        let score = 0;
+        let activeBlock = null;
+        let isGameOver = false;
+
+        // エンジンの作成
+        const engine = Engine.create();
+        const world = engine.world;
+
+        // レンダラーの作成
+        const render = Render.create({
+            element: document.body,
+            engine: engine,
+            canvas: document.createElement('canvas'),
+            options: {
+                width: width,
+                height: height,
+                wireframes: false,
+                background: '#222'
+            }
+        });
+
+        document.body.appendChild(render.canvas);
+
+        // 重力設定
+        engine.gravity.y = 1.0;
+
+        // 地面と壁の作成
+        const ground = Bodies.rectangle(width / 2, height + 50, width, 100, { isStatic: true, friction: 1, render: { fillStyle: '#444' } });
+        const leftWall = Bodies.rectangle(-50, height / 2, 100, height, { isStatic: true, render: { fillStyle: '#444' } });
+        const rightWall = Bodies.rectangle(width + 50, height / 2, 100, height, { isStatic: true, render: { fillStyle: '#444' } });
+
+        World.add(world, [ground, leftWall, rightWall]);
+
+        // ブロックの種類と色
+        const blocks = [
+            // I-Block
+            [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 }, { x: 0, y: 3 }],
+            // O-Block
+            [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }],
+            // T-Block
+            [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }],
+            // L-Block
+            [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }],
+            // J-Block
+            [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 }, { x: -1, y: 1 }],
+            // S-Block
+            [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 1 }],
+            // Z-Block
+            [{ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }]
+        ];
+
+        const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#808'];
+
+        // 新しいブロックを生成する関数
+        function createBlock() {
+            if (isGameOver) return;
+
+            const blockType = Common.random(0, blocks.length - 1);
+            const blockColor = colors[blockType];
+            const parts = blocks[blockType].map(part => {
+                return Bodies.circle(
+                    width / 2 + part.x * cellSize * 1.5,
+                    0 + part.y * cellSize * 1.5,
+                    cellSize / 2,
+                    {
+                        frictionAir: 0.1, // 空気抵抗
+                        restitution: 0.3, // 反発係数
+                        render: {
+                            fillStyle: blockColor
+                        }
+                    }
+                );
+            });
+
+            const block = Common.create({ parts: parts });
+            World.add(world, block);
+            activeBlock = block;
+        }
+
+        // キーボード操作
+        document.addEventListener('keydown', (e) => {
+            if (isGameOver || !activeBlock) return;
+
+            const speed = 10;
+            switch (e.key) {
+                case 'ArrowLeft':
+                    Matter.Body.translate(activeBlock, { x: -speed, y: 0 });
+                    break;
+                case 'ArrowRight':
+                    Matter.Body.translate(activeBlock, { x: speed, y: 0 });
+                    break;
+                case 'ArrowDown':
+                    Matter.Body.translate(activeBlock, { x: 0, y: speed * 3 });
+                    break;
+                case 'ArrowUp':
+                    Matter.Body.rotate(activeBlock, Math.PI / 2);
+                    break;
+            }
+        });
+
+        // 衝突判定
+        Events.on(engine, 'collisionStart', (e) => {
+            if (!activeBlock) return;
+            const pairs = e.pairs;
+            for (const pair of pairs) {
+                const bodyA = pair.bodyA;
+                const bodyB = pair.bodyB;
+                // アクティブブロックが地面や他のブロックと衝突したら新しいブロックを生成
+                if ((bodyA === activeBlock && bodyB !== activeBlock) || (bodyB === activeBlock && bodyA !== activeBlock)) {
+                    activeBlock = null;
+                    setTimeout(createBlock, 500); // 0.5秒後に新しいブロックを生成
+                    break;
+                }
+            }
+        });
+
+        // ゲームループ
+        Events.on(engine, 'beforeUpdate', () => {
+            if (!activeBlock) return;
+            // 画面上部からブロックがはみ出たらゲームオーバー
+            if (activeBlock.position.y < -50) {
+                isGameOver = true;
+                alert('Game Over! Score: ' + score);
+                document.location.reload();
+            }
+        });
+
+        // 描画開始とゲーム開始
+        Render.run(render);
+        Engine.run(engine);
+        createBlock(); // 最初のブロックを生成
+
+        // マウス操作（デバッグ用）
+        const mouse = Mouse.create(render.canvas);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: {
+                    visible: false
+                }
+            }
+        });
+        World.add(world, mouseConstraint);
+        render.mouse = mouse;
+    </script>
+</body>
+</html>
