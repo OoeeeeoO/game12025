@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>モグラたたき - スペシャルモグラ付き</title>
+    <style>
+        /* CSS (デザイン) - 金モグラ、爆弾モグラ、時計モグラのスタイルを追加 */
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        h1 { color: #333; }
+
+        #controls { margin-bottom: 20px; }
+
+        #game-info {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        /* ゲーム盤面 */
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 330px;
+            height: 330px;
+            margin: 0 auto;
+            background-color: #556b2f;
+            border: 6px solid #8b4513;
+            border-radius: 10px;
+            padding: 5px;
+            gap: 5px;
+        }
+
+        /* 穴 */
+        .hole {
+            background-color: #a0522d;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 3px solid #696969;
+        }
+
+        /* モグラ本体 */
+        .mole {
+            width: 100%;
+            height: 100%;
+            background-color: #663300;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -100%;
+            transition: bottom 0.2s;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid transparent; 
+            box-sizing: border-box; 
+        }
+
+        /* モグラが出ている状態 */
+        .hole.up .mole {
+            bottom: 0;
+            pointer-events: auto;
+        }
+
+        /* ---------------------------------- */
+        /* ★★★ 金のモグラのスタイル ★★★ */
+        /* ---------------------------------- */
+        .mole.gold {
+            background: linear-gradient(to bottom, #ffd700, #daa520);
+            border: 3px solid #b8860b;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+        .mole.gold .eye {
+            background-color: black;
+            border-color: #663300;
+        }
+        .mole.gold .nose {
+            background-color: #f08080;
+            border-color: #8b0000;
+        }
+        /* 金モグラのひげ */
+        .mole.gold .nose::before, .mole.gold .nose::after {
+            box-shadow: 0 -4px 0 0 #fffacd, 0 4px 0 0 #fffacd;
+        }
+        .mole.gold .nose::before, .mole.gold .nose::after {
+            background-color: #fffacd;
+        }
+
+
+        /* ---------------------------------- */
+        /* ★★★ 爆弾モグラのスタイル ★★★ */
+        /* ---------------------------------- */
+        .mole.bomb {
+            background-color: #333; /* 黒っぽく */
+            border: 3px solid #ff4500; /* 爆発をイメージした枠 */
+        }
+        .mole.bomb .eye {
+            background-color: red; /* 目を赤く */
+            border-color: darkred;
+        }
+        .mole.bomb .nose {
+            background-color: #000;
+            border-color: #666;
+        }
+        .mole.bomb .nose::before, .mole.bomb .nose::after {
+            background-color: #ff4500; /* ひげを赤く */
+        }
+
+
+        /* ---------------------------------- */
+        /* ★★★ 時計モグラのスタイル ★★★ */
+        /* ---------------------------------- */
+        .mole.clock {
+            background-color: #4682b4; /* 青っぽく */
+            border: 3px solid #3cb371; /* 緑のボーナスをイメージした枠 */
+        }
+        .mole.clock .eye {
+            background-color: limegreen; /* 目を緑に */
+            border-color: darkgreen;
+        }
+        .mole.clock .nose {
+            background-color: #fff;
+            border-color: #333;
+        }
+        .mole.clock .nose::before, .mole.clock .nose::after {
+            background-color: #fff; /* ひげを白く */
+        }
+
+
+        /* ---------------------------------- */
+        /* モグラの顔のデザイン (共通/通常モグラのデフォルト) */
+        /* ---------------------------------- */
+        .face-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15%;
+        }
+
+        .eyes {
+            display: flex;
+            justify-content: space-around;
+            width: 50px;
+            margin-bottom: 5px;
+        }
+
+        .eye {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 50%;
+        }
+
+        .nose {
+            width: 10px;
+            height: 8px;
+            background-color: pink;
+            border-radius: 50%;
+            border: 1px solid #c0c0c0;
+            position: relative;
+        }
+
+        .nose::before,
+        .nose::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 1px;
+            background: #f0f0f0; /* 通常モグラのひげ色 */
+            top: 50%;
+            transform-origin: 0% 0%;
+        }
+
+        .nose::before {
+            right: 100%;
+            margin-right: 2px;
+            box-shadow:
+                0 -4px 0 0 #f0f0f0,
+                0 4px 0 0 #f0f0f0;
+        }
+
+        .nose::after {
+            left: 100%;
+            margin-left: 2px;
+            box-shadow:
+                0 -4px 0 0 #f0f0f0,
+                0 4px 0 0 #f0f0f0;
+        }
+
+        /* 通常のモグラの顔の色は背景に合わせる */
+        .mole:not(.gold):not(.bomb):not(.clock) .eye, 
+        .mole:not(.gold):not(.bomb):not(.clock) .nose {
+            background-color: white; 
+            border-color: black;
+        }
+        .mole:not(.gold):not(.bomb):not(.clock) .nose {
+            background-color: pink; 
+            border-color: #c0c0c0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>スペシャルモグラたたき！ </h1>
+
+    <div id="game-info">
+        <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
+    </div>
+
+    <div id="controls">
+        <button id="start-button">ゲームスタート</button>
+    </div>
+
+    <div id="grid">
+        </div>
+
+    <script>
+        // JavaScript (ゲームロジック)
+
+        const HOLE_COUNT = 9;
+        const GAME_DURATION = 30;
+        
+        // --- スコア設定 ---
+        const NORMAL_MOLE_SCORE = 1;
+        const GOLD_MOLE_SCORE = 3;
+        const BOMB_MOLE_SCORE = -5; // 叩くと減点
+        const CLOCK_MOLE_SCORE = 2;
+
+        // --- 時間設定 ---
+        const BOMB_TIME_PENALTY = 5; // 爆弾モグラ: -5秒
+        const CLOCK_TIME_BONUS = 5;  // 時計モグラ: +5秒
+
+        // --- 出現確率設定 (合計が100%になるように調整) ---
+        const GOLD_MOLE_CHANCE = 0.10; // 10%
+        const BOMB_MOLE_CHANCE = 0.15; // 15%
+        const CLOCK_MOLE_CHANCE = 0.05; // 5%
+        const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); // 残り 70%
+
+        let score = 0;
+        let timeLeft = GAME_DURATION;
+        let isGameRunning = false;
+        let countdownTimerId;
+        let lastHole = null;
+
+        // DOM要素の取得
+        const scoreDisplay = document.getElementById('score');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const startButton = document.getElementById('start-button');
+        const grid = document.getElementById('grid');
+
+        // -----------------------------------------------------
+        // 1. 盤面の初期化 (穴の生成)
+        // -----------------------------------------------------
+        function createHoles() {
+            grid.innerHTML = '';
+            for (let i = 0; i < HOLE_COUNT; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                hole.dataset.id = i;
+
+                const mole = document.createElement('div');
+                mole.classList.add('mole');
+                
+                mole.innerHTML = `
+                    <div class="face-container">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="nose"></div>
+                    </div>
+                `;
+
+                hole.addEventListener('click', whack);
+
+                hole.appendChild(mole);
+                grid.appendChild(hole);
+            }
+        }
+
+        // -----------------------------------------------------
+        // 2. モグラの出現ロジック
+        // -----------------------------------------------------
+
+        function randomTime(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            const idx = Math.floor(Math.random() * holes.length);
+            const hole = holes[idx];
+
+            if (hole === lastHole) {
+                return randomHole();
+            }
+            lastHole = hole;
+            return hole;
+        }
+
+        /**
+         * 確率に基づいて出現させるモグラのタイプを決定
+         * @returns {string} モグラのタイプ ('normal', 'gold', 'bomb', 'clock')
+         */
+        function randomMoleType() {
+            const r = Math.random();
+            if (r < CLOCK_MOLE_CHANCE) {
+                return 'clock';
+            } else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) {
+                return 'bomb';
+            } else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) {
+                return 'gold';
+            } else {
+                return 'normal';
+            }
+        }
+
+        function peep() {
+            if (!isGameRunning) return;
+
+            const time = randomTime(500, 1500);
+            const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+            
+            // モグラのタイプを決定し、クラスとデータ属性を設定
+            const moleType = randomMoleType();
+            
+            mole.classList.remove('gold', 'bomb', 'clock'); // まずリセット
+            let scoreValue;
+
+            switch (moleType) {
+                case 'gold':
+                    mole.classList.add('gold');
+                    scoreValue = GOLD_MOLE_SCORE;
+                    break;
+                case 'bomb':
+                    mole.classList.add('bomb');
+                    scoreValue = BOMB_MOLE_SCORE;
+                    break;
+                case 'clock':
+                    mole.classList.add('clock');
+                    scoreValue = CLOCK_MOLE_SCORE;
+                    break;
+                case 'normal':
+                default:
+                    scoreValue = NORMAL_MOLE_SCORE;
+                    break;
+            }
+
+            mole.dataset.type = moleType; // モグラのタイプをデータ属性に保存 (whackで使用)
+            mole.dataset.score = scoreValue;
+
+            hole.classList.add('up');
+
+            // モグラが引っ込むタイマー
+            setTimeout(() => {
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); // 引っ込む時にクラスを除去
+                delete mole.dataset.type; // データ属性も削除
+                delete mole.dataset.score;
+                
+                if (isGameRunning) {
+                    peep();
+                }
+            }, time);
+        }
+
+        // -----------------------------------------------------
+        // 3. プレイヤーの操作ロジック
+        // -----------------------------------------------------
+        function updateTime() {
+             // 時間が0未満にならないように調整
+            if (timeLeft < 0) {
+                timeLeft = 0;
+            }
+            timeLeftDisplay.textContent = timeLeft;
+            
+            if (timeLeft <= 0 && isGameRunning) {
+                endGame();
+            }
+        }
+
+        function whack(event) {
+            if (!isGameRunning) return;
+
+            const hole = event.currentTarget;
+            const mole = hole.querySelector('.mole');
+
+            if (hole.classList.contains('up')) {
+                const points = parseInt(mole.dataset.score);
+                const type = mole.dataset.type;
+
+                // スコア加算
+                score += points;
+                scoreDisplay.textContent = score;
+
+                // 時間ボーナス/ペナルティの処理
+                if (type === 'clock') {
+                    timeLeft += CLOCK_TIME_BONUS;
+                    alert(` 時間ボーナス! +${CLOCK_TIME_BONUS}秒`);
+                } else if (type === 'bomb') {
+                    timeLeft -= BOMB_TIME_PENALTY;
+                    alert(` 爆弾ペナルティ! -${BOMB_TIME_PENALTY}秒`);
+                }
+                
+                updateTime(); // 制限時間の表示を更新
+
+                // たたいたらすぐに引っ込める
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }
+        }
+
+        // -----------------------------------------------------
+        // 4. ゲームの流れ
+        // -----------------------------------------------------
+
+        function startGame() {
+            if (isGameRunning) return;
+
+            isGameRunning = true;
+            score = 0;
+            timeLeft = GAME_DURATION;
+            scoreDisplay.textContent = score;
+            timeLeftDisplay.textContent = timeLeft;
+            startButton.disabled = true;
+
+            countdownTimerId = setInterval(countdown, 1000);
+            peep();
+        }
+
+        function countdown() {
+            timeLeft--;
+            updateTime();
+            // updateTime()内でtimeLeft <= 0のチェックとendGame()の呼び出しが行われる
+        }
+
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(countdownTimerId);
+
+            // 念のため全てのモグラを引っ込める
+            document.querySelectorAll('.hole.up').forEach(hole => {
+                hole.classList.remove('up');
+                const mole = hole.querySelector('.mole');
+                mole.classList.remove('gold', 'bomb', 'clock');
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            });
+
+
+            startButton.disabled = false;
+            alert(`ゲームオーバー！あなたの最終スコアは ${score} 点です！`);
+        }
+
+        // -----------------------------------------------------
+        // 初期設定とイベントリスナー
+        // -----------------------------------------------------
+        createHoles();
+        startButton.addEventListener('click', startGame);
+    </script>
+</body>
+</html>
