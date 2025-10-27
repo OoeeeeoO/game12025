@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - 画像に合わせた可愛いモグラ！</title>
+    <title>モグラたたき - もっと飛び出すモグラ！</title>
     <style>
         /* CSS (デザイン) - 画像に合わせてビジュアルを再構築 */
         body {
@@ -69,9 +69,9 @@
 
         /* 穴 */
         .hole {
-            background-color: #a0522d; /* 穴の色 */
+            background-color: #a0522d; 
             border-radius: 50%;
-            overflow: hidden;
+            overflow: hidden; /* モグラが飛び出す部分で隠れるように */
             position: relative;
             cursor: pointer;
             border: 4px solid #696969; 
@@ -81,12 +81,12 @@
         /* モグラ本体 */
         .mole {
             width: 100%;
-            height: 100%;
-            background-color: #c28b5e; /* ★画像に合わせた薄茶色（デフォルト）★ */
-            border: 4px solid #8b4513; /* ★濃い茶色の輪郭★ */
+            height: 100%; /* モグラの高さは穴の高さと同じに */
+            background-color: #c28b5e; 
+            border: 4px solid #8b4513; 
             border-radius: 50%;
             position: absolute;
-            bottom: -100%; 
+            bottom: -100%; /* ★完全に隠れるように★ */
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
@@ -99,7 +99,7 @@
         }
         /* モグラが出ている状態 */
         .hole.up .mole {
-            bottom: -15px; /* 穴の縁に被るように少し上に持ち上げる */
+            bottom: 0; /* ★穴の真上まで飛び出すように★ */
             pointer-events: auto; 
         }
 
@@ -111,10 +111,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* 顔パーツを上部に寄せる */
             width: 100%; 
             height: 100%; 
-            margin-top: 15%; 
+            padding-top: 15%; /* 飛び出した時に顔が中央にくるように調整 */
+            box-sizing: border-box;
         }
 
         .eyes {
@@ -122,12 +123,12 @@
             justify-content: space-between;
             width: 50%; 
             position: absolute;
-            top: 25%; /* 画像に合わせて目を上に */
+            top: 25%; 
             z-index: 3;
         }
 
         .eye {
-            width: 20px; /* 大きく */
+            width: 20px; 
             height: 20px; 
             background-color: white;
             border: 2px solid black; 
@@ -135,7 +136,7 @@
             position: relative;
             box-sizing: border-box;
         }
-        .eye::before { /* 瞳 */
+        .eye::before { 
             content: '';
             position: absolute;
             width: 8px;
@@ -146,7 +147,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-        .eye::after { /* ハイライト（大きく強調） */
+        .eye::after { 
             content: '';
             position: absolute;
             width: 5px; 
@@ -160,7 +161,7 @@
         .nose {
             width: 16px; 
             height: 10px; 
-            background-color: #e6a782; /* 薄いオレンジピンク */
+            background-color: #e6a782; 
             border-radius: 50%;
             border: 1px solid #8b4513; 
             position: absolute;
@@ -170,7 +171,7 @@
             justify-content: center;
             align-items: center;
         }
-        .nose::before { /* 鼻のハイライト */
+        .nose::before { 
             content: '';
             position: absolute;
             width: 4px;
@@ -179,7 +180,7 @@
             border-radius: 50%;
             top: 15%;
         }
-        .nose::after { /* 口 */
+        .nose::after { 
             content: 'U';
             font-family: Arial, sans-serif;
             font-size: 10px;
@@ -189,23 +190,18 @@
             line-height: 0;
         }
 
-
         .cheeks {
             position: absolute;
             width: 25px;
             height: 15px;
-            background-color: #ffb6c1; /* 薄いピンクの頬 */
+            background-color: #ffb6c1; 
             border-radius: 50%;
             top: 40%; 
             z-index: 2;
             box-shadow: 0 0 5px rgba(255, 182, 193, 0.5);
         }
-        .cheek.left {
-            left: 15%;
-        }
-        .cheek.right {
-            right: 15%;
-        }
+        .cheek.left { left: 15%; }
+        .cheek.right { right: 15%; }
         
         /* ひげ (疑似要素で表現) */
         .whiskers {
@@ -220,24 +216,24 @@
             position: absolute;
             width: 20px;
             height: 1px;
-            background: #8b4513; /* 茶色のひげ */
+            background: #8b4513; 
             top: 0;
             transform-origin: 100% 50%;
         }
-        .whiskers::before { /* 左側のひげ */
+        .whiskers::before { 
             right: 50%;
             margin-right: 5px;
             box-shadow: 
-                0 -6px 0 0 #8b4513, /* 上段 */
-                0 6px 0 0 #8b4513; /* 下段 */
+                0 -6px 0 0 #8b4513, 
+                0 6px 0 0 #8b4513;
             transform: rotate(0deg);
         }
-        .whiskers::after { /* 右側のひげ */
+        .whiskers::after { 
             left: 50%;
             margin-left: 5px;
             box-shadow: 
-                0 -6px 0 0 #8b4513, /* 上段 */
-                0 6px 0 0 #8b4513; /* 下段 */
+                0 -6px 0 0 #8b4513, 
+                0 6px 0 0 #8b4513;
             transform: rotate(0deg);
         }
 
@@ -245,26 +241,26 @@
         .paws {
             position: absolute;
             width: 100%;
-            height: 30px; /* 手のサイズ */
-            bottom: 0; /* モグラの底にくっつける */
-            z-index: 4; /* 手が穴の縁の上に来るように */
+            height: 30px; 
+            bottom: 0; /* ★モグラの底に手を配置★ */
+            z-index: 4; 
             pointer-events: none;
         }
         .paw {
             position: absolute;
             width: 35px;
             height: 35px;
-            background-color: #a0522d; /* 体より少し濃い色 */
+            background-color: #a0522d; 
             border: 2px solid #8b4513;
             border-radius: 50%;
-            bottom: 0;
+            bottom: 10px; /* ★穴の縁に手のひらがくるように調整★ */
             z-index: 4;
             box-shadow: 0 5px 5px rgba(0,0,0,0.2);
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .paw::before { /* 爪 */
+        .paw::before { 
             content: '';
             position: absolute;
             width: 10px;
@@ -276,14 +272,8 @@
             transform: translateX(-50%);
         }
 
-        .paw.left {
-            left: 15%;
-            transform: rotate(-10deg);
-        }
-        .paw.right {
-            right: 15%;
-            transform: rotate(10deg);
-        }
+        .paw.left { left: 15%; transform: rotate(-10deg); }
+        .paw.right { right: 15%; transform: rotate(10deg); }
 
         /* ---------------------------------- */
         /* ★★★ 各モグラのカスタムスタイル ★★★ */
@@ -361,7 +351,7 @@
         .mole.bomb .eye::before { background-color: #fff; }
         .mole.bomb .eye::after { display: none; }
         .mole.bomb .nose { background-color: #000; border-color: #666; }
-        .mole.bomb .nose::after { content: '-'; color: #ff0000; } /* への字口っぽく */
+        .mole.bomb .nose::after { content: '-'; color: #ff0000; } 
         .mole.bomb .paw::before { background: radial-gradient(#ff0000 30%, transparent 30%); }
 
 
@@ -449,7 +439,6 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                // モグラの顔と手のパーツを追加 (耳は削除)
                 mole.innerHTML = `
                     <div class="face-container">
                         <div class="eyes">
