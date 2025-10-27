@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - もっと飛び出すモグラ！</title>
+    <title>モグラたたき - 画面内スコア表示</title>
     <style>
-        /* CSS (デザイン) - 画像に合わせてビジュアルを再構築 */
+        /* CSS (デザイン) - 飛び出しモグラ + 最終スコア表示のスタイル追加 */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -52,6 +52,29 @@
         #game-info p { margin: 0; }
         #score, #time-left { font-weight: bold; color: #d35400; }
 
+        /* ---------------------------------- */
+        /* ★★★ 最終スコアメッセージのスタイル ★★★ */
+        /* ---------------------------------- */
+        #final-score-message {
+            margin-top: 30px;
+            padding: 20px 40px;
+            border: 3px solid #e74c3c;
+            background-color: #f9e79f;
+            color: #c0392b;
+            font-size: 2em;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none; /* 初期状態では非表示 */
+            transform: scale(0.8);
+            transition: all 0.3s ease-in-out;
+        }
+        /* 表示されたときのスケールアニメーション */
+        #final-score-message.show {
+            display: block;
+            transform: scale(1);
+        }
+
         /* ゲーム盤面 */
         #grid {
             display: grid;
@@ -71,7 +94,7 @@
         .hole {
             background-color: #a0522d; 
             border-radius: 50%;
-            overflow: hidden; /* モグラが飛び出す部分で隠れるように */
+            overflow: hidden; 
             position: relative;
             cursor: pointer;
             border: 4px solid #696969; 
@@ -81,12 +104,12 @@
         /* モグラ本体 */
         .mole {
             width: 100%;
-            height: 100%; /* モグラの高さは穴の高さと同じに */
+            height: 100%; 
             background-color: #c28b5e; 
             border: 4px solid #8b4513; 
             border-radius: 50%;
             position: absolute;
-            bottom: -100%; /* ★完全に隠れるように★ */
+            bottom: -100%; 
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
@@ -95,11 +118,11 @@
             justify-content: flex-start;
             box-sizing: border-box; 
             z-index: 2; 
-            overflow: visible; /* 手をはみ出させるため */
+            overflow: visible; 
         }
         /* モグラが出ている状態 */
         .hole.up .mole {
-            bottom: 0; /* ★穴の真上まで飛び出すように★ */
+            bottom: 0; 
             pointer-events: auto; 
         }
 
@@ -111,10 +134,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* 顔パーツを上部に寄せる */
+            justify-content: flex-start; 
             width: 100%; 
             height: 100%; 
-            padding-top: 15%; /* 飛び出した時に顔が中央にくるように調整 */
+            padding-top: 15%; 
             box-sizing: border-box;
         }
 
@@ -242,7 +265,7 @@
             position: absolute;
             width: 100%;
             height: 30px; 
-            bottom: 0; /* ★モグラの底に手を配置★ */
+            bottom: 0; 
             z-index: 4; 
             pointer-events: none;
         }
@@ -253,7 +276,7 @@
             background-color: #a0522d; 
             border: 2px solid #8b4513;
             border-radius: 50%;
-            bottom: 10px; /* ★穴の縁に手のひらがくるように調整★ */
+            bottom: 10px; 
             z-index: 4;
             box-shadow: 0 5px 5px rgba(0,0,0,0.2);
             display: flex;
@@ -276,78 +299,30 @@
         .paw.right { right: 15%; transform: rotate(10deg); }
 
         /* ---------------------------------- */
-        /* ★★★ 各モグラのカスタムスタイル ★★★ */
+        /* ★★★ 各モグラのカスタムスタイル (省略) ★★★ */
         /* ---------------------------------- */
 
         /* 通常モグラ */
-        .mole:not(.gold):not(.bomb):not(.clock) {
-            background-color: #c28b5e;
-            border-color: #8b4513;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .paw {
-             background-color: #a0522d;
-             border-color: #8b4513;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .cheeks {
-            background-color: #ffb6c1;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::before,
-        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::after {
-            background: #8b4513;
-            box-shadow: 
-                0 -6px 0 0 #8b4513, 
-                0 6px 0 0 #8b4513;
-        }
+        .mole:not(.gold):not(.bomb):not(.clock) { background-color: #c28b5e; border-color: #8b4513; }
+        .mole:not(.gold):not(.bomb):not(.clock) .paw { background-color: #a0522d; border-color: #8b4513; }
+        .mole:not(.gold):not(.bomb):not(.clock) .cheeks { background-color: #ffb6c1; }
+        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::before, .mole:not(.gold):not(.bomb):not(.clock) .whiskers::after { background: #8b4513; box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; }
 
         /* 金のモグラ */
-        .mole.gold {
-            background: linear-gradient(to bottom, #ffd700, #daa520);
-            border: 4px solid #b8860b;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-        }
-        .mole.gold .paw {
-            background-color: #ffd700;
-            border-color: #b8860b;
-        }
-        .mole.gold .cheeks {
-            background-color: #ffcc00; 
-        }
-        .mole.gold .whiskers::before,
-        .mole.gold .whiskers::after {
-            background: #b8860b;
-            box-shadow: 
-                0 -6px 0 0 #b8860b, 
-                0 6px 0 0 #b8860b;
-        }
+        .mole.gold { background: linear-gradient(to bottom, #ffd700, #daa520); border: 4px solid #b8860b; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        .mole.gold .paw { background-color: #ffd700; border-color: #b8860b; }
+        .mole.gold .cheeks { background-color: #ffcc00; }
+        .mole.gold .whiskers::before, .mole.gold .whiskers::after { background: #b8860b; box-shadow: 0 -6px 0 0 #b8860b, 0 6px 0 0 #b8860b; }
         .mole.gold .eye { border-color: #b8860b; }
         .mole.gold .nose { background-color: #f08080; border-color: #8b0000; }
         .mole.gold .nose::after { color: #8b0000; }
 
-
         /* 爆弾モグラ */
-        .mole.bomb {
-            background-color: #333; 
-            border: 4px solid #ff4500; 
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.7);
-        }
-        .mole.bomb .paw {
-            background-color: #000;
-            border-color: #ff4500;
-        }
-        .mole.bomb .cheeks {
-            background-color: #ff0000; 
-        }
-        .mole.bomb .whiskers::before,
-        .mole.bomb .whiskers::after {
-            background: #ff4500;
-            box-shadow: 
-                0 -6px 0 0 #ff4500, 
-                0 6px 0 0 #ff4500;
-        }
-        .mole.bomb .eye { 
-            background-color: #ff0000; 
-            border-color: #8b0000;
-        }
+        .mole.bomb { background-color: #333; border: 4px solid #ff4500; box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); }
+        .mole.bomb .paw { background-color: #000; border-color: #ff4500; }
+        .mole.bomb .cheeks { background-color: #ff0000; }
+        .mole.bomb .whiskers::before, .mole.bomb .whiskers::after { background: #ff4500; box-shadow: 0 -6px 0 0 #ff4500, 0 6px 0 0 #ff4500; }
+        .mole.bomb .eye { background-color: #ff0000; border-color: #8b0000;}
         .mole.bomb .eye::before { background-color: #fff; }
         .mole.bomb .eye::after { display: none; }
         .mole.bomb .nose { background-color: #000; border-color: #666; }
@@ -356,30 +331,14 @@
 
 
         /* 時計モグラ */
-        .mole.clock {
-            background-color: #4682b4; 
-            border: 4px solid #3cb371; 
-            box-shadow: 0 0 10px rgba(60, 179, 113, 0.7);
-        }
-        .mole.clock .paw {
-            background-color: #3cb371;
-            border-color: #4682b4;
-        }
-        .mole.clock .cheeks {
-            background-color: #90ee90; 
-        }
-        .mole.clock .whiskers::before,
-        .mole.clock .whiskers::after {
-            background: #3cb371;
-            box-shadow: 
-                0 -6px 0 0 #3cb371, 
-                0 6px 0 0 #3cb371;
-        }
+        .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; box-shadow: 0 0 10px rgba(60, 179, 113, 0.7); }
+        .mole.clock .paw { background-color: #3cb371; border-color: #4682b4; }
+        .mole.clock .cheeks { background-color: #90ee90; }
+        .mole.clock .whiskers::before, .mole.clock .whiskers::after { background: #3cb371; box-shadow: 0 -6px 0 0 #3cb371, 0 6px 0 0 #3cb371; }
         .mole.clock .eye { border-color: #008000; }
         .mole.clock .eye::before { background-color: #006400; }
         .mole.clock .nose { background-color: #e0ffff; border-color: #4682b4; }
         .mole.clock .nose::after { color: #008000; }
-
     </style>
 </head>
 <body>
@@ -396,8 +355,12 @@
     <div id="grid">
         </div>
 
+    <div id="final-score-message">
+        ゲームオーバー！<br>最終スコア: <span id="final-score">0</span>点！
+    </div>
+
     <script>
-        // JavaScript (ゲームロジック) - 変更なし
+        // JavaScript (ゲームロジック) - 最終スコア表示機能を追加
 
         const HOLE_COUNT = 9;
         const GAME_DURATION = 30;
@@ -413,7 +376,6 @@
         const GOLD_MOLE_CHANCE = 0.10; 
         const BOMB_MOLE_CHANCE = 0.15; 
         const CLOCK_MOLE_CHANCE = 0.05; 
-        const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); 
 
         let score = 0;
         let timeLeft = GAME_DURATION;
@@ -425,6 +387,10 @@
         const timeLeftDisplay = document.getElementById('time-left');
         const startButton = document.getElementById('start-button');
         const grid = document.getElementById('grid');
+        // ★最終スコア表示用のDOMを取得★
+        const finalScoreMessage = document.getElementById('final-score-message');
+        const finalScoreDisplay = document.getElementById('final-score');
+
 
         // -----------------------------------------------------
         // 1. 盤面の初期化 (穴の生成)
@@ -463,36 +429,26 @@
         }
 
         // -----------------------------------------------------
-        // 2. モグラの出現ロジック
+        // 2. モグラの出現ロジック (省略 - 変更なし)
         // -----------------------------------------------------
 
-        function randomTime(min, max) {
-            return Math.round(Math.random() * (max - min) + min);
-        }
+        function randomTime(min, max) { return Math.round(Math.random() * (max - min) + min); }
 
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
             const idx = Math.floor(Math.random() * holes.length);
             const hole = holes[idx];
-
-            if (hole === lastHole) {
-                return randomHole();
-            }
+            if (hole === lastHole) { return randomHole(); }
             lastHole = hole;
             return hole;
         }
 
         function randomMoleType() {
             const r = Math.random();
-            if (r < CLOCK_MOLE_CHANCE) {
-                return 'clock';
-            } else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) {
-                return 'bomb';
-            } else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) {
-                return 'gold';
-            } else {
-                return 'normal';
-            }
+            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
+            else { return 'normal'; }
         }
 
         function peep() {
@@ -501,29 +457,16 @@
             const time = randomTime(500, 1500);
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
-            
             const moleType = randomMoleType();
             
             mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
 
             switch (moleType) {
-                case 'gold':
-                    mole.classList.add('gold');
-                    scoreValue = GOLD_MOLE_SCORE;
-                    break;
-                case 'bomb':
-                    mole.classList.add('bomb');
-                    scoreValue = BOMB_MOLE_SCORE;
-                    break;
-                case 'clock':
-                    mole.classList.add('clock');
-                    scoreValue = CLOCK_MOLE_SCORE;
-                    break;
-                case 'normal':
-                default:
-                    scoreValue = NORMAL_MOLE_SCORE;
-                    break;
+                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
+                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
+                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
+                default: scoreValue = NORMAL_MOLE_SCORE; break;
             }
 
             mole.dataset.type = moleType; 
@@ -537,29 +480,21 @@
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
                 
-                if (isGameRunning) {
-                    peep();
-                }
+                if (isGameRunning) { peep(); }
             }, time);
         }
 
         // -----------------------------------------------------
-        // 3. プレイヤーの操作ロジック
+        // 3. プレイヤーの操作ロジック (省略 - 変更なし)
         // -----------------------------------------------------
         function updateTime() {
-            if (timeLeft < 0) {
-                timeLeft = 0;
-            }
+            if (timeLeft < 0) { timeLeft = 0; }
             timeLeftDisplay.textContent = timeLeft;
-            
-            if (timeLeft <= 0 && isGameRunning) {
-                endGame();
-            }
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
         }
 
         function whack(event) {
             if (!isGameRunning) return;
-
             const hole = event.currentTarget;
             const mole = hole.querySelector('.mole');
 
@@ -570,11 +505,8 @@
                 score += points;
                 scoreDisplay.textContent = score;
 
-                if (type === 'clock') {
-                    timeLeft += CLOCK_TIME_BONUS;
-                } else if (type === 'bomb') {
-                    timeLeft -= BOMB_TIME_PENALTY;
-                }
+                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
+                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
                 
                 updateTime(); 
 
@@ -586,7 +518,7 @@
         }
 
         // -----------------------------------------------------
-        // 4. ゲームの流れ
+        // 4. ゲームの流れ (startGameとendGameを修正)
         // -----------------------------------------------------
 
         function startGame() {
@@ -598,6 +530,9 @@
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
             startButton.disabled = true;
+            
+            // ★ゲーム開始時に最終スコアメッセージを非表示にする★
+            finalScoreMessage.classList.remove('show');
 
             countdownTimerId = setInterval(countdown, 1000);
             peep();
@@ -620,9 +555,11 @@
                 delete mole.dataset.score;
             });
 
-
             startButton.disabled = false;
-            alert(`ゲームオーバー！あなたの最終スコアは ${score} 点です！`);
+            
+            // ★alert()を削除し、画面上にスコアを表示★
+            finalScoreDisplay.textContent = score;
+            finalScoreMessage.classList.add('show');
         }
 
         // -----------------------------------------------------
