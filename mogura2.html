@@ -9,6 +9,7 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             background-color: #f0f0f0;
+            position: relative; /* フィードバック表示のために必要 */
         }
 
         h1 { color: #333; }
@@ -32,6 +33,7 @@
             border-radius: 10px;
             padding: 5px;
             gap: 5px;
+            position: relative; /* 子要素の絶対配置の基準に */
         }
 
         /* 穴 */
@@ -205,6 +207,34 @@
             border-color: #c0c0c0;
         }
 
+        /* ---------------------------------- */
+        /* ★★★ フィードバック表示のスタイル ★★★ */
+        /* ---------------------------------- */
+        #feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: none; /* クリックイベントを妨げない */
+        }
+        #feedback.show {
+            opacity: 1;
+            transform: translate(-50%, -70%); /* 少し上に移動するアニメーション */
+        }
+        #feedback.positive {
+            color: #32cd32; /* 緑 */
+        }
+        #feedback.negative {
+            color: #ff4500; /* 赤 */
+        }
+
     </style>
 </head>
 <body>
@@ -219,7 +249,7 @@
     </div>
 
     <div id="grid">
-        </div>
+        <div id="feedback"></div> </div>
 
     <script>
         // JavaScript (ゲームロジック)
@@ -254,12 +284,20 @@
         const timeLeftDisplay = document.getElementById('time-left');
         const startButton = document.getElementById('start-button');
         const grid = document.getElementById('grid');
+        const feedbackDisplay = document.getElementById('feedback'); // フィードバック表示用
 
         // -----------------------------------------------------
         // 1. 盤面の初期化 (穴の生成)
         // -----------------------------------------------------
         function createHoles() {
-            grid.innerHTML = '';
+            grid.innerHTML = '<div id="feedback"></div>'; // フィードバック要素も再生成時に含める
+            const feedbackElem = grid.querySelector('#feedback'); // 再度取得
+            if (!feedbackElem) { // もしなければ追加 (念のため)
+                 const newFeedback = document.createElement('div');
+                 newFeedback.id = 'feedback';
+                 grid.appendChild(newFeedback);
+            }
+
             for (let i = 0; i < HOLE_COUNT; i++) {
                 const hole = document.createElement('div');
                 hole.classList.add('hole');
@@ -387,6 +425,25 @@
             }
         }
 
+        /**
+         * ゲーム盤面の中央にフィードバックメッセージを表示する
+         * @param {string} message 表示するテキスト (例: "+5s")
+         * @param {string} type 'positive' または 'negative' で色を変える
+         */
+        let feedbackTimeoutId;
+        function showFeedback(message, type) {
+            clearTimeout(feedbackTimeoutId); // 前のフィードバックがあればクリア
+
+            feedbackDisplay.textContent = message;
+            feedbackDisplay.classList.remove('positive', 'negative'); // クラスをリセット
+            feedbackDisplay.classList.add(type, 'show');
+
+            feedbackTimeoutId = setTimeout(() => {
+                feedbackDisplay.classList.remove('show');
+            }, 800); // 0.8秒後に消える
+        }
+
+
         function whack(event) {
             if (!isGameRunning) return;
 
@@ -404,10 +461,10 @@
                 // 時間ボーナス/ペナルティの処理
                 if (type === 'clock') {
                     timeLeft += CLOCK_TIME_BONUS;
-                    alert(` 時間ボーナス! +${CLOCK_TIME_BONUS}秒`);
+                    showFeedback(`+${CLOCK_TIME_BONUS}秒`, 'positive'); // フィードバック表示
                 } else if (type === 'bomb') {
                     timeLeft -= BOMB_TIME_PENALTY;
-                    alert(` 爆弾ペナルティ! -${BOMB_TIME_PENALTY}秒`);
+                    showFeedback(`-${BOMB_TIME_PENALTY}秒`, 'negative'); // フィードバック表示
                 }
                 
                 updateTime(); // 制限時間の表示を更新
@@ -433,6 +490,10 @@
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
             startButton.disabled = true;
+
+            // ゲーム開始時にフィードバック表示をリセット
+            feedbackDisplay.classList.remove('show'); 
+            clearTimeout(feedbackTimeoutId);
 
             countdownTimerId = setInterval(countdown, 1000);
             peep();
