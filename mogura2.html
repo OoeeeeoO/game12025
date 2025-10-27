@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - 画像風モグラ！</title>
+    <title>モグラたたき - 画像に合わせた可愛いモグラ！</title>
     <style>
-        /* CSS (デザイン) - 画像のモグラに合わせて大幅修正 */
+        /* CSS (デザイン) - 画像に合わせてビジュアルを再構築 */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -24,10 +24,8 @@
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
-
-        #controls { 
-            margin-bottom: 20px; 
-        }
+        
+        #controls { margin-bottom: 20px; }
         #start-button {
             padding: 10px 25px;
             font-size: 1.5em;
@@ -39,17 +37,8 @@
             transition: background-color 0.3s, transform 0.1s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        #start-button:hover {
-            background-color: #45a049;
-            transform: translateY(-2px);
-        }
-        #start-button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: translateY(0);
-            box-shadow: none;
-        }
-
+        #start-button:hover { background-color: #45a049; transform: translateY(-2px); }
+        #start-button:disabled { background-color: #cccccc; cursor: not-allowed; transform: translateY(0); box-shadow: none; }
 
         #game-info {
             font-size: 1.4em;
@@ -60,14 +49,8 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        #game-info p {
-            margin: 0;
-        }
-        #score, #time-left {
-            font-weight: bold;
-            color: #d35400; /* オレンジ系の強調色 */
-        }
-
+        #game-info p { margin: 0; }
+        #score, #time-left { font-weight: bold; color: #d35400; }
 
         /* ゲーム盤面 */
         #grid {
@@ -76,8 +59,8 @@
             width: 420px; 
             height: 420px; 
             margin: 0 auto;
-            background-color: #556b2f; /* 濃い緑の地面 */
-            border: 8px solid #8b4513; /* 茶色い枠 */
+            background-color: #556b2f; 
+            border: 8px solid #8b4513; 
             border-radius: 15px;
             padding: 8px;
             gap: 8px;
@@ -91,48 +74,33 @@
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            /* 穴の縁はモグラのボーダーで表現するため削除 */
-            /* box-shadow: inset 0 0 10px rgba(0,0,0,0.5); */
-        }
-        
-        /* 土の部分 */
-        .soil {
-            position: absolute;
-            width: 110%; /* 穴より少し大きく */
-            height: 50%; /* 穴の高さの半分くらい */
-            background-color: #8B4513; /* 土の色 */
-            border-radius: 50% / 100% 100% 0 0; /* 下側は真っ直ぐに */
-            bottom: -15px; /* モグラの少し下に配置 */
-            left: -5%;
-            z-index: 10; /* モグラより手前 */
-            box-shadow: 0 5px 10px rgba(0,0,0,0.3); /* 浮き出た感じ */
-            border: 4px solid #663300; /* 土の縁 */
-            border-top: none; /* 上側の縁はモグラの体に隠れるためなし */
+            border: 4px solid #696969; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
         }
 
         /* モグラ本体 */
         .mole {
-            width: 90%; 
-            height: 90%; 
-            background-color: #CD853F; /* 画像のモグラの色 */
-            border: 4px solid #663300; /* 太いアウトライン */
+            width: 100%;
+            height: 100%;
+            background-color: #c28b5e; /* ★画像に合わせた薄茶色（デフォルト）★ */
+            border: 4px solid #8b4513; /* ★濃い茶色の輪郭★ */
             border-radius: 50%;
             position: absolute;
-            bottom: -100%; /* 初期位置は隠れている */
-            left: 5%; /* 中央配置 */
-            transition: bottom 0.2s ease-out; /* スムーズな出現アニメーション */
-            pointer-events: none; /* 初期状態ではクリック不可 */
+            bottom: -100%; 
+            transition: bottom 0.2s ease-out; 
+            pointer-events: none; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; 
+            justify-content: flex-start;
             box-sizing: border-box; 
-            z-index: 15; /* 土より手前 */
+            z-index: 2; 
+            overflow: visible; /* 手をはみ出させるため */
         }
         /* モグラが出ている状態 */
         .hole.up .mole {
-            bottom: 5%; /* 穴から少し出る位置 */
-            pointer-events: auto; /* 出ている間はクリック可能 */
+            bottom: -15px; /* 穴の縁に被るように少し上に持ち上げる */
+            pointer-events: auto; 
         }
 
         /* ---------------------------------- */
@@ -146,147 +114,176 @@
             justify-content: center;
             width: 100%; 
             height: 100%; 
-            padding-top: 20%; /* 顔が体の少し上に来るように */
+            margin-top: 15%; 
         }
 
         .eyes {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             width: 50%; 
             position: absolute;
-            top: 25%; /* 顔の中央より少し上 */
+            top: 25%; /* 画像に合わせて目を上に */
             z-index: 3;
         }
 
         .eye {
             width: 20px; /* 大きく */
-            height: 20px; /* 大きく */
-            background-color: black; /* 黒目がち */
+            height: 20px; 
+            background-color: white;
+            border: 2px solid black; 
             border-radius: 50%;
             position: relative;
-            /* box-shadow: 0 1px 2px rgba(0,0,0,0.2); */
+            box-sizing: border-box;
         }
-        .eye::before { /* ハイライト */
+        .eye::before { /* 瞳 */
             content: '';
             position: absolute;
             width: 8px;
             height: 8px;
+            background-color: black;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .eye::after { /* ハイライト（大きく強調） */
+            content: '';
+            position: absolute;
+            width: 5px; 
+            height: 5px; 
             background-color: white;
             border-radius: 50%;
             top: 15%;
             left: 15%;
-            box-shadow: 1px 1px 2px rgba(255,255,255,0.5);
-        }
-        .eye::after { /* 小さなハイライト */
-            content: '';
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background-color: white;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
         }
 
         .nose {
-            width: 18px; 
+            width: 16px; 
             height: 10px; 
-            background-color: #F4A460; /* 画像の鼻の色 */
+            background-color: #e6a782; /* 薄いオレンジピンク */
             border-radius: 50%;
-            border: 2px solid #663300; /* 鼻の縁 */
+            border: 1px solid #8b4513; 
             position: absolute;
             top: 50%; 
             z-index: 3;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        /* 鼻のハイライトは今回はなし */
-
-
-        .mouth {
-            width: 20px;
-            height: 8px;
-            border: 2px solid #663300; /* 口の縁 */
-            border-top: none;
-            border-radius: 0 0 15px 15px;
+        .nose::before { /* 鼻のハイライト */
+            content: '';
             position: absolute;
-            top: 65%; /* 鼻の下 */
-            z-index: 3;
-            background-color: transparent; 
-            box-sizing: border-box;
-            transform: rotate(0deg); /* への字口のリセット */
+            width: 4px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            top: 15%;
         }
-        
+        .nose::after { /* 口 */
+            content: 'U';
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: #8b4513;
+            position: absolute;
+            bottom: -10px;
+            line-height: 0;
+        }
+
+
         .cheeks {
             position: absolute;
             width: 25px;
             height: 15px;
-            background-color: #FF99AA; /* 赤い頬 */
+            background-color: #ffb6c1; /* 薄いピンクの頬 */
             border-radius: 50%;
-            top: 45%; /* 鼻の横あたり */
+            top: 40%; 
             z-index: 2;
+            box-shadow: 0 0 5px rgba(255, 182, 193, 0.5);
         }
         .cheek.left {
-            left: 20%;
+            left: 15%;
         }
         .cheek.right {
-            right: 20%;
+            right: 15%;
         }
-
-        /* ひげ */
+        
+        /* ひげ (疑似要素で表現) */
         .whiskers {
             position: absolute;
-            width: 60%;
+            width: 80%;
             height: 1px;
-            top: 55%; /* 鼻の横あたり */
+            top: 55%;
             z-index: 3;
+        }
+        .whiskers::before, .whiskers::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 1px;
+            background: #8b4513; /* 茶色のひげ */
+            top: 0;
+            transform-origin: 100% 50%;
+        }
+        .whiskers::before { /* 左側のひげ */
+            right: 50%;
+            margin-right: 5px;
+            box-shadow: 
+                0 -6px 0 0 #8b4513, /* 上段 */
+                0 6px 0 0 #8b4513; /* 下段 */
+            transform: rotate(0deg);
+        }
+        .whiskers::after { /* 右側のひげ */
+            left: 50%;
+            margin-left: 5px;
+            box-shadow: 
+                0 -6px 0 0 #8b4513, /* 上段 */
+                0 6px 0 0 #8b4513; /* 下段 */
+            transform: rotate(0deg);
+        }
+
+        /* 手（前足）の表現 */
+        .paws {
+            position: absolute;
+            width: 100%;
+            height: 30px; /* 手のサイズ */
+            bottom: 0; /* モグラの底にくっつける */
+            z-index: 4; /* 手が穴の縁の上に来るように */
             pointer-events: none;
         }
-        .whisker {
-            position: absolute;
-            width: 30px; /* ひげの長さ */
-            height: 2px;
-            background-color: #663300; /* ひげの色 */
-            left: 50%;
-            transform-origin: left center;
-        }
-        .whisker.left-top { transform: translateX(-100%) rotate(-15deg) translate(-5px, -8px); }
-        .whisker.left-middle { transform: translateX(-100%) rotate(0deg) translate(-5px, 0px); }
-        .whisker.left-bottom { transform: translateX(-100%) rotate(15deg) translate(-5px, 8px); }
-        .whisker.right-top { transform: rotate(15deg) translate(5px, -8px); }
-        .whisker.right-middle { transform: rotate(0deg) translate(5px, 0px); }
-        .whisker.right-bottom { transform: rotate(-15deg) translate(5px, 8px); }
-
-        /* 手（前足） */
         .paw {
-            width: 50px; /* 手の幅 */
-            height: 25px; /* 手の高さ */
-            background-color: #CD853F; /* 体と同じ色 */
-            border: 4px solid #663300; /* アウトライン */
-            border-radius: 50% / 100% 100% 0 0; /* 上側が丸く、下側が直線 */
             position: absolute;
-            bottom: 0; /* モグラの体の一番下 */
-            z-index: 16; /* モグラの体より手前 */
-            box-sizing: border-box;
+            width: 35px;
+            height: 35px;
+            background-color: #a0522d; /* 体より少し濃い色 */
+            border: 2px solid #8b4513;
+            border-radius: 50%;
+            bottom: 0;
+            z-index: 4;
+            box-shadow: 0 5px 5px rgba(0,0,0,0.2);
             display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            padding-bottom: 5px;
+            justify-content: center;
+            align-items: center;
         }
+        .paw::before { /* 爪 */
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 5px;
+            background: radial-gradient(#663300 30%, transparent 30%);
+            background-size: 5px 5px;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         .paw.left {
-            left: 5%;
+            left: 15%;
             transform: rotate(-10deg);
         }
         .paw.right {
-            right: 5%;
+            right: 15%;
             transform: rotate(10deg);
         }
-        .finger {
-            width: 8px;
-            height: 8px;
-            background-color: #663300; /* 指の色 */
-            border-radius: 50%;
-        }
-
 
         /* ---------------------------------- */
         /* ★★★ 各モグラのカスタムスタイル ★★★ */
@@ -294,141 +291,105 @@
 
         /* 通常モグラ */
         .mole:not(.gold):not(.bomb):not(.clock) {
-            background-color: #CD853F;
-            border-color: #663300;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .eye {
-            background-color: black;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .nose {
-            background-color: #F4A460;
-            border-color: #663300;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .mouth {
-            border-color: #663300;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .cheeks {
-            background-color: #FF99AA;
-        }
-        .mole:not(.gold):not(.bomb):not(.clock) .whisker {
-            background-color: #663300;
+            background-color: #c28b5e;
+            border-color: #8b4513;
         }
         .mole:not(.gold):not(.bomb):not(.clock) .paw {
-            background-color: #CD853F;
-            border-color: #663300;
+             background-color: #a0522d;
+             border-color: #8b4513;
         }
-        .mole:not(.gold):not(.bomb):not(.clock) .finger {
-            background-color: #663300;
+        .mole:not(.gold):not(.bomb):not(.clock) .cheeks {
+            background-color: #ffb6c1;
+        }
+        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::before,
+        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::after {
+            background: #8b4513;
+            box-shadow: 
+                0 -6px 0 0 #8b4513, 
+                0 6px 0 0 #8b4513;
         }
 
         /* 金のモグラ */
         .mole.gold {
-            background: linear-gradient(to bottom, #ffd700, #daa520); /* グラデーションで金っぽく */
-            border: 4px solid #b8860b; /* 濃い金の枠 */
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); /* 光っているように */
-        }
-        .mole.gold .eye {
-            background-color: black;
-        }
-        .mole.gold .eye::before, .mole.gold .eye::after {
-            background-color: #fffacd; /* 明るいハイライト */
-        }
-        .mole.gold .nose {
-            background-color: #f08080; /* 少し赤みのある鼻 */
-            border-color: #b8860b;
-        }
-        .mole.gold .mouth {
-            border-color: #b8860b; /* 茶色い口 */
-        }
-        .mole.gold .cheeks {
-            background-color: #ffcc00; /* 明るい黄色の頬 */
-        }
-        .mole.gold .whisker {
-            background-color: #b8860b;
+            background: linear-gradient(to bottom, #ffd700, #daa520);
+            border: 4px solid #b8860b;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
         }
         .mole.gold .paw {
-            background: linear-gradient(to bottom, #ffd700, #daa520);
+            background-color: #ffd700;
             border-color: #b8860b;
         }
-        .mole.gold .finger {
-            background-color: #b8860b;
+        .mole.gold .cheeks {
+            background-color: #ffcc00; 
         }
+        .mole.gold .whiskers::before,
+        .mole.gold .whiskers::after {
+            background: #b8860b;
+            box-shadow: 
+                0 -6px 0 0 #b8860b, 
+                0 6px 0 0 #b8860b;
+        }
+        .mole.gold .eye { border-color: #b8860b; }
+        .mole.gold .nose { background-color: #f08080; border-color: #8b0000; }
+        .mole.gold .nose::after { color: #8b0000; }
 
 
         /* 爆弾モグラ */
         .mole.bomb {
-            background-color: #333; /* 黒っぽく */
-            border: 4px solid #ff4500; /* 爆発をイメージした枠 */
+            background-color: #333; 
+            border: 4px solid #ff4500; 
             box-shadow: 0 0 10px rgba(255, 69, 0, 0.7);
         }
-        .mole.bomb .eye {
-            background-color: #ff0000; /* 赤い目 */
-            border-color: #8b0000;
-        }
-        .mole.bomb .eye::before, .mole.bomb .eye::after { /* ハイライトなし */
-            display: none;
-        }
-        .mole.bomb .nose {
-            background-color: #000;
-            border-color: #666;
-        }
-        .mole.bomb .mouth {
-            width: 20px;
-            height: 5px;
-            border: 2px solid #ff0000;
-            border-top: none;
-            border-radius: 0 0 5px 5px;
-            top: 70%; /* 少し上に */
-            transform: rotate(180deg); /* への字口 */
-            background-color: transparent;
-        }
-        .mole.bomb .cheeks {
-            background-color: #ff4500; /* 爆弾らしい赤 */
-        }
-        .mole.bomb .whisker {
-            background-color: #ff4500;
-        }
         .mole.bomb .paw {
-            background-color: #333;
+            background-color: #000;
             border-color: #ff4500;
         }
-        .mole.bomb .finger {
-            background-color: #ff4500;
+        .mole.bomb .cheeks {
+            background-color: #ff0000; 
         }
+        .mole.bomb .whiskers::before,
+        .mole.bomb .whiskers::after {
+            background: #ff4500;
+            box-shadow: 
+                0 -6px 0 0 #ff4500, 
+                0 6px 0 0 #ff4500;
+        }
+        .mole.bomb .eye { 
+            background-color: #ff0000; 
+            border-color: #8b0000;
+        }
+        .mole.bomb .eye::before { background-color: #fff; }
+        .mole.bomb .eye::after { display: none; }
+        .mole.bomb .nose { background-color: #000; border-color: #666; }
+        .mole.bomb .nose::after { content: '-'; color: #ff0000; } /* への字口っぽく */
+        .mole.bomb .paw::before { background: radial-gradient(#ff0000 30%, transparent 30%); }
 
 
         /* 時計モグラ */
         .mole.clock {
-            background-color: #4682b4; /* 青っぽく */
-            border: 4px solid #3cb371; /* 緑のボーナスをイメージした枠 */
+            background-color: #4682b4; 
+            border: 4px solid #3cb371; 
             box-shadow: 0 0 10px rgba(60, 179, 113, 0.7);
         }
-        .mole.clock .eye {
-            background-color: black;
-        }
-        .mole.clock .eye::before, .mole.clock .eye::after {
-            background-color: #e0ffff; /* 明るいハイライト */
-        }
-        .mole.clock .nose {
-            background-color: #e0ffff; /* 薄い水色の鼻 */
+        .mole.clock .paw {
+            background-color: #3cb371;
             border-color: #4682b4;
         }
-        .mole.clock .mouth {
-            border-color: #008000; /* 緑の口 */
-        }
         .mole.clock .cheeks {
-            background-color: #90ee90; /* 薄い緑の頬 */
+            background-color: #90ee90; 
         }
-        .mole.clock .whisker {
-            background-color: #008000;
+        .mole.clock .whiskers::before,
+        .mole.clock .whiskers::after {
+            background: #3cb371;
+            box-shadow: 
+                0 -6px 0 0 #3cb371, 
+                0 6px 0 0 #3cb371;
         }
-        .mole.clock .paw {
-            background-color: #4682b4;
-            border-color: #3cb371;
-        }
-        .mole.clock .finger {
-            background-color: #3cb371;
-        }
+        .mole.clock .eye { border-color: #008000; }
+        .mole.clock .eye::before { background-color: #006400; }
+        .mole.clock .nose { background-color: #e0ffff; border-color: #4682b4; }
+        .mole.clock .nose::after { color: #008000; }
+
     </style>
 </head>
 <body>
@@ -451,17 +412,14 @@
         const HOLE_COUNT = 9;
         const GAME_DURATION = 30;
         
-        // --- スコア設定 ---
         const NORMAL_MOLE_SCORE = 1;
         const GOLD_MOLE_SCORE = 3;
         const BOMB_MOLE_SCORE = -5;
         const CLOCK_MOLE_SCORE = 2;
 
-        // --- 時間設定 ---
         const BOMB_TIME_PENALTY = 5; 
         const CLOCK_TIME_BONUS = 5;  
 
-        // --- 出現確率設定 ---
         const GOLD_MOLE_CHANCE = 0.10; 
         const BOMB_MOLE_CHANCE = 0.15; 
         const CLOCK_MOLE_CHANCE = 0.05; 
@@ -473,7 +431,6 @@
         let countdownTimerId;
         let lastHole = null;
 
-        // DOM要素の取得
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
         const startButton = document.getElementById('start-button');
@@ -489,48 +446,28 @@
                 hole.classList.add('hole');
                 hole.dataset.id = i;
 
-                // 土の要素
-                const soil = document.createElement('div');
-                soil.classList.add('soil');
-
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                // モグラの顔と手のパーツを追加
+                // モグラの顔と手のパーツを追加 (耳は削除)
                 mole.innerHTML = `
                     <div class="face-container">
                         <div class="eyes">
                             <div class="eye"></div>
                             <div class="eye"></div>
                         </div>
-                        <div class="nose"></div>
-                        <div class="mouth"></div>
+                        <div class="whiskers"></div> <div class="nose"></div>
                         <div class="cheeks cheek left"></div>
                         <div class="cheeks cheek right"></div>
-                        <div class="whiskers">
-                            <div class="whisker left-top"></div>
-                            <div class="whisker left-middle"></div>
-                            <div class="whisker left-bottom"></div>
-                            <div class="whisker right-top"></div>
-                            <div class="whisker right-middle"></div>
-                            <div class="whisker right-bottom"></div>
-                        </div>
                     </div>
-                    <div class="paw left">
-                        <div class="finger"></div>
-                        <div class="finger"></div>
-                        <div class="finger"></div>
-                    </div>
-                    <div class="paw right">
-                        <div class="finger"></div>
-                        <div class="finger"></div>
-                        <div class="finger"></div>
+                    <div class="paws">
+                         <div class="paw left"></div>
+                         <div class="paw right"></div>
                     </div>
                 `;
 
                 hole.addEventListener('click', whack);
 
-                hole.appendChild(soil); // 土を穴に追加
                 hole.appendChild(mole);
                 grid.appendChild(hole);
             }
@@ -556,10 +493,6 @@
             return hole;
         }
 
-        /**
-         * 確率に基づいて出現させるモグラのタイプを決定
-         * @returns {string} モグラのタイプ ('normal', 'gold', 'bomb', 'clock')
-         */
         function randomMoleType() {
             const r = Math.random();
             if (r < CLOCK_MOLE_CHANCE) {
@@ -580,10 +513,9 @@
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
             
-            // モグラのタイプを決定し、クラスとデータ属性を設定
             const moleType = randomMoleType();
             
-            mole.classList.remove('gold', 'bomb', 'clock'); // まずリセット
+            mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
 
             switch (moleType) {
@@ -610,10 +542,9 @@
 
             hole.classList.add('up');
 
-            // モグラが引っ込むタイマー
             setTimeout(() => {
                 hole.classList.remove('up');
-                mole.classList.remove('gold', 'bomb', 'clock'); // 引っ込む時にクラスを除去
+                mole.classList.remove('gold', 'bomb', 'clock'); 
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
                 
@@ -627,7 +558,6 @@
         // 3. プレイヤーの操作ロジック
         // -----------------------------------------------------
         function updateTime() {
-             // 時間が0未満にならないように調整
             if (timeLeft < 0) {
                 timeLeft = 0;
             }
@@ -648,20 +578,17 @@
                 const points = parseInt(mole.dataset.score);
                 const type = mole.dataset.type;
 
-                // スコア加算
                 score += points;
                 scoreDisplay.textContent = score;
 
-                // 時間ボーナス/ペナルティの処理
                 if (type === 'clock') {
                     timeLeft += CLOCK_TIME_BONUS;
                 } else if (type === 'bomb') {
                     timeLeft -= BOMB_TIME_PENALTY;
                 }
                 
-                updateTime(); // 制限時間の表示を更新
+                updateTime(); 
 
-                // たたいたらすぐに引っ込める
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 delete mole.dataset.type; 
@@ -696,7 +623,6 @@
             isGameRunning = false;
             clearInterval(countdownTimerId);
 
-            // 念のため全てのモグラを引っ込める
             document.querySelectorAll('.hole.up').forEach(hole => {
                 hole.classList.remove('up');
                 const mole = hole.querySelector('.mole');
