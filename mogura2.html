@@ -2,209 +2,401 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - スペシャルモグラ付き (ダイアログなし)</title>
+    <title>モグラたたき - もっと可愛いモグラ！</title>
     <style>
-        /* CSS (デザイン) - 前回のコードと全く同じ */
+        /* CSS (デザイン) - モグラのビジュアルを可愛くするために大幅修正 */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        h1 { color: #333; }
+        h1 { 
+            color: #333; 
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
 
-        #controls { margin-bottom: 20px; }
+        #controls { 
+            margin-bottom: 20px; 
+        }
+        #start-button {
+            padding: 10px 25px;
+            font-size: 1.5em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        #start-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        #start-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
 
         #game-info {
-            font-size: 1.2em;
-            margin-bottom: 15px;
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            color: #555;
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        #game-info p {
+            margin: 0;
+        }
+        #score, #time-left {
+            font-weight: bold;
+            color: #d35400; /* オレンジ系の強調色 */
+        }
+
 
         /* ゲーム盤面 */
         #grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            width: 330px;
-            height: 330px;
+            width: 420px; /* 少し大きく */
+            height: 420px; /* 少し大きく */
             margin: 0 auto;
-            background-color: #556b2f;
-            border: 6px solid #8b4513;
-            border-radius: 10px;
-            padding: 5px;
-            gap: 5px;
+            background-color: #556b2f; /* 濃い緑の地面 */
+            border: 8px solid #8b4513; /* 茶色い枠 */
+            border-radius: 15px;
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative; /* モグラの影用 */
         }
 
         /* 穴 */
         .hole {
-            background-color: #a0522d;
+            background-color: #a0522d; /* 穴の色 */
             border-radius: 50%;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            border: 3px solid #696969;
+            border: 4px solid #696969; /* 穴の縁 */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* 穴の奥行き感 */
         }
 
         /* モグラ本体 */
         .mole {
             width: 100%;
             height: 100%;
-            background-color: #663300;
+            background-color: #663300; /* 通常モグラの体色 */
             border-radius: 50%;
             position: absolute;
-            bottom: -100%;
-            transition: bottom 0.2s;
-            pointer-events: none;
+            bottom: -100%; /* 初期位置は隠れている */
+            transition: bottom 0.2s ease-out; /* スムーズな出現アニメーション */
+            pointer-events: none; /* 初期状態ではクリック不可 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* 顔が上の方に来るように調整 */
+            border: none; /* 個別モグラタイプで枠をつける */
+            box-sizing: border-box; 
+            z-index: 2; /* 顔より手前に来るように */
+        }
+        /* モグラが出ている状態 */
+        .hole.up .mole {
+            bottom: 0;
+            pointer-events: auto; /* 出ている間はクリック可能 */
+        }
+
+        /* ---------------------------------- */
+        /* ★★★ モグラの顔のデザイン (共通) ★★★ */
+        /* ---------------------------------- */
+        .face-container {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 2px solid transparent; 
-            box-sizing: border-box; 
+            width: 80%; /* モグラの顔の横幅 */
+            height: 80%; /* モグラの顔の縦幅 */
+            margin-top: 15%; /* 穴から少しだけ顔が出るように調整 */
         }
 
-        /* モグラが出ている状態 */
-        .hole.up .mole {
-            bottom: 0;
-            pointer-events: auto;
+        /* 耳 */
+        .ear {
+            width: 30px;
+            height: 30px;
+            background-color: #663300; /* 体と同じ色 */
+            border-radius: 50%;
+            position: absolute;
+            top: 5%;
+            z-index: 1;
+            border: 2px solid rgba(0,0,0,0.1); /* 少し影をつける */
         }
-
-        /* ---------------------------------- */
-        /* ★★★ 金のモグラのスタイル ★★★ */
-        /* ---------------------------------- */
-        .mole.gold {
-            background: linear-gradient(to bottom, #ffd700, #daa520);
-            border: 3px solid #b8860b;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        .ear.left {
+            left: 5%;
+            transform: rotate(-25deg);
         }
-        .mole.gold .eye {
-            background-color: black;
-            border-color: #663300;
+        .ear.right {
+            right: 5%;
+            transform: rotate(25deg);
         }
-        .mole.gold .nose {
-            background-color: #f08080;
-            border-color: #8b0000;
-        }
-        /* 金モグラのひげ */
-        .mole.gold .nose::before, .mole.gold .nose::after {
-            box-shadow: 0 -4px 0 0 #fffacd, 0 4px 0 0 #fffacd;
-        }
-        .mole.gold .nose::before, .mole.gold .nose::after {
-            background-color: #fffacd;
-        }
-
-
-        /* ---------------------------------- */
-        /* ★★★ 爆弾モグラのスタイル ★★★ */
-        /* ---------------------------------- */
-        .mole.bomb {
-            background-color: #333; /* 黒っぽく */
-            border: 3px solid #ff4500; /* 爆発をイメージした枠 */
-        }
-        .mole.bomb .eye {
-            background-color: red; /* 目を赤く */
-            border-color: darkred;
-        }
-        .mole.bomb .nose {
-            background-color: #000;
-            border-color: #666;
-        }
-        .mole.bomb .nose::before, .mole.bomb .nose::after {
-            background-color: #ff4500; /* ひげを赤く */
-        }
-
-
-        /* ---------------------------------- */
-        /* ★★★ 時計モグラのスタイル ★★★ */
-        /* ---------------------------------- */
-        .mole.clock {
-            background-color: #4682b4; /* 青っぽく */
-            border: 3px solid #3cb371; /* 緑のボーナスをイメージした枠 */
-        }
-        .mole.clock .eye {
-            background-color: limegreen; /* 目を緑に */
-            border-color: darkgreen;
-        }
-        .mole.clock .nose {
-            background-color: #fff;
-            border-color: #333;
-        }
-        .mole.clock .nose::before, .mole.clock .nose::after {
-            background-color: #fff; /* ひげを白く */
-        }
-
-
-        /* ---------------------------------- */
-        /* モグラの顔のデザイン (共通/通常モグラのデフォルト) */
-        /* ---------------------------------- */
-        .face-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 15%;
+        .ear::before { /* 耳のインナー */
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background-color: #a0522d; /* 穴の色と近いピンクブラウン */
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .eyes {
             display: flex;
             justify-content: space-around;
-            width: 50px;
-            margin-bottom: 5px;
+            width: 60%; /* 目と目の間の幅 */
+            position: absolute;
+            top: 35%; /* 顔の中央より少し上 */
+            z-index: 3;
         }
 
         .eye {
-            width: 8px;
-            height: 8px;
+            width: 15px; /* 大きく */
+            height: 15px; /* 大きく */
             background-color: white;
-            border: 1px solid black;
+            border: 2px solid black; /* 太い縁 */
             border-radius: 50%;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .eye::before { /* 瞳 */
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: black;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .eye::after { /* ハイライト */
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: white;
+            border-radius: 50%;
+            top: 20%;
+            left: 20%;
+            box-shadow: 1px 1px 2px rgba(255,255,255,0.5);
         }
 
         .nose {
-            width: 10px;
-            height: 8px;
-            background-color: pink;
+            width: 18px; /* 大きく */
+            height: 12px; /* 大きく */
+            background-color: pink; /* デフォルトの鼻色 */
             border-radius: 50%;
-            border: 1px solid #c0c0c0;
-            position: relative;
+            border: 2px solid #a0522d; /* 鼻の縁 */
+            position: absolute;
+            top: 60%; /* 目と口の間 */
+            z-index: 3;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
-
-        .nose::before,
-        .nose::after {
+        .nose::before { /* 鼻のハイライト */
             content: '';
             position: absolute;
-            width: 18px;
-            height: 1px;
-            background: #f0f0f0; /* 通常モグラのひげ色 */
-            top: 50%;
-            transform-origin: 0% 0%;
+            width: 6px;
+            height: 3px;
+            background-color: white;
+            border-radius: 50%;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.7;
+        }
+        /* ひげは削除し、口を追加するため別要素で表現 */
+
+        .mouth {
+            width: 25px;
+            height: 10px;
+            border: 2px solid black;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            position: absolute;
+            top: 75%; /* 鼻の下 */
+            z-index: 3;
+            background-color: transparent; /* 口の中は透明 */
+            box-sizing: border-box;
+        }
+        
+        .cheeks {
+            position: absolute;
+            width: 20px;
+            height: 10px;
+            background-color: #ff99aa; /* 赤い頬 */
+            border-radius: 50%;
+            top: 58%;
+            z-index: 2;
+        }
+        .cheek.left {
+            left: 15%;
+        }
+        .cheek.right {
+            right: 15%;
         }
 
-        .nose::before {
-            right: 100%;
-            margin-right: 2px;
-            box-shadow:
-                0 -4px 0 0 #f0f0f0,
-                0 4px 0 0 #f0f0f0;
-        }
+        /* ---------------------------------- */
+        /* ★★★ 各モグラのカスタムスタイル ★★★ */
+        /* ---------------------------------- */
 
-        .nose::after {
-            left: 100%;
-            margin-left: 2px;
-            box-shadow:
-                0 -4px 0 0 #f0f0f0,
-                0 4px 0 0 #f0f0f0;
+        /* 通常モグラ */
+        .mole:not(.gold):not(.bomb):not(.clock) {
+            background-color: #663300;
         }
-
-        /* 通常のモグラの顔の色は背景に合わせる */
-        .mole:not(.gold):not(.bomb):not(.clock) .eye, 
-        .mole:not(.gold):not(.bomb):not(.clock) .nose {
-            background-color: white; 
+        .mole:not(.gold):not(.bomb):not(.clock) .ear {
+            background-color: #663300;
+        }
+        .mole:not(.gold):not(.bomb):not(.clock) .ear::before {
+            background-color: #a0522d;
+        }
+        .mole:not(.gold):not(.bomb):not(.clock) .eye {
+            background-color: white;
             border-color: black;
         }
+        .mole:not(.gold):not(.bomb):not(.clock) .eye::before {
+            background-color: black;
+        }
         .mole:not(.gold):not(.bomb):not(.clock) .nose {
-            background-color: pink; 
-            border-color: #c0c0c0;
+            background-color: pink;
+            border-color: #a0522d;
+        }
+        .mole:not(.gold):not(.bomb):not(.clock) .mouth {
+            border-color: black;
+        }
+        .mole:not(.gold):not(.bomb):not(.clock) .cheeks {
+            background-color: #ff99aa;
         }
 
+
+        /* 金のモグラ */
+        .mole.gold {
+            background: linear-gradient(to bottom, #ffd700, #daa520); /* グラデーションで金っぽく */
+            border: 3px solid #b8860b; /* 濃い金の枠 */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); /* 光っているように */
+        }
+        .mole.gold .ear {
+            background-color: #daa520;
+            border-color: #b8860b;
+        }
+        .mole.gold .ear::before {
+            background-color: #ffd700;
+        }
+        .mole.gold .eye {
+            background-color: #fff; /* 白い目 */
+            border-color: #8b4513; /* 茶色の縁 */
+        }
+        .mole.gold .eye::before { /* 瞳 */
+            background-color: #333; /* 濃い色 */
+        }
+        .mole.gold .nose {
+            background-color: #f08080; /* 少し赤みのある鼻 */
+            border-color: #8b0000;
+        }
+        .mole.gold .mouth {
+            border-color: #8b4513; /* 茶色い口 */
+        }
+        .mole.gold .cheeks {
+            background-color: #ffcc00; /* 明るい黄色の頬 */
+        }
+
+
+        /* 爆弾モグラ */
+        .mole.bomb {
+            background-color: #333; /* 黒っぽく */
+            border: 3px solid #ff4500; /* 爆発をイメージした枠 */
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.7);
+        }
+        .mole.bomb .ear {
+            background-color: #333;
+            border-color: #ff4500;
+        }
+        .mole.bomb .ear::before {
+            background-color: #666;
+        }
+        .mole.bomb .eye {
+            background-color: #ff0000; /* 赤い目 */
+            border-color: #8b0000;
+        }
+        .mole.bomb .eye::before { /* 瞳 */
+            background-color: #fff; /* 白い瞳で怒った感じ */
+        }
+        .mole.bomb .eye::after { /* ハイライトなし */
+            display: none;
+        }
+        .mole.bomb .nose {
+            background-color: #000;
+            border-color: #666;
+        }
+        .mole.bomb .mouth {
+            width: 20px;
+            height: 5px;
+            border: 2px solid #ff0000;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            top: 78%; /* 少し上に */
+            transform: rotate(180deg); /* への字口 */
+            background-color: transparent;
+        }
+        .mole.bomb .cheeks {
+            background-color: #ff4500; /* 爆弾らしい赤 */
+        }
+
+
+        /* 時計モグラ */
+        .mole.clock {
+            background-color: #4682b4; /* 青っぽく */
+            border: 3px solid #3cb371; /* 緑のボーナスをイメージした枠 */
+            box-shadow: 0 0 10px rgba(60, 179, 113, 0.7);
+        }
+        .mole.clock .ear {
+            background-color: #4682b4;
+            border-color: #3cb371;
+        }
+        .mole.clock .ear::before {
+            background-color: #87ceeb; /* 明るい青 */
+        }
+        .mole.clock .eye {
+            background-color: #fff; /* 白い目 */
+            border-color: #008000; /* 緑の縁 */
+        }
+        .mole.clock .eye::before { /* 瞳 */
+            background-color: #006400; /* 濃い緑 */
+        }
+        .mole.clock .nose {
+            background-color: #e0ffff; /* 薄い水色の鼻 */
+            border-color: #4682b4;
+        }
+        .mole.clock .mouth {
+            border-color: #008000; /* 緑の口 */
+        }
+        .mole.clock .cheeks {
+            background-color: #90ee90; /* 薄い緑の頬 */
+        }
     </style>
 </head>
 <body>
@@ -222,7 +414,7 @@
         </div>
 
     <script>
-        // JavaScript (ゲームロジック)
+        // JavaScript (ゲームロジック) - 変更なし
 
         const HOLE_COUNT = 9;
         const GAME_DURATION = 30;
@@ -268,13 +460,19 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
+                // モグラの顔のパーツを追加
                 mole.innerHTML = `
+                    <div class="ear left"></div>
+                    <div class="ear right"></div>
                     <div class="face-container">
                         <div class="eyes">
                             <div class="eye"></div>
                             <div class="eye"></div>
                         </div>
                         <div class="nose"></div>
+                        <div class="mouth"></div>
+                        <div class="cheeks cheek left"></div>
+                        <div class="cheeks cheek right"></div>
                     </div>
                 `;
 
@@ -404,10 +602,8 @@
                 // 時間ボーナス/ペナルティの処理
                 if (type === 'clock') {
                     timeLeft += CLOCK_TIME_BONUS;
-                    // alert(' 時間ボーナス! +5秒'); // ★ダイアログ削除★
                 } else if (type === 'bomb') {
                     timeLeft -= BOMB_TIME_PENALTY;
-                    // alert(' 爆弾ペナルティ! -5秒'); // ★ダイアログ削除★
                 }
                 
                 updateTime(); // 制限時間の表示を更新
