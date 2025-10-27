@@ -2,14 +2,13 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - スペシャルモグラ付き</title>
+    <title>モグラたたき - スペシャルモグラ付き (ダイアログなし)</title>
     <style>
-        /* CSS (デザイン) - 金モグラ、爆弾モグラ、時計モグラのスタイルを追加 */
+        /* CSS (デザイン) - 前回のコードと全く同じ */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             background-color: #f0f0f0;
-            position: relative; /* フィードバック表示のために必要 */
         }
 
         h1 { color: #333; }
@@ -33,7 +32,6 @@
             border-radius: 10px;
             padding: 5px;
             gap: 5px;
-            position: relative; /* 子要素の絶対配置の基準に */
         }
 
         /* 穴 */
@@ -207,34 +205,6 @@
             border-color: #c0c0c0;
         }
 
-        /* ---------------------------------- */
-        /* ★★★ フィードバック表示のスタイル ★★★ */
-        /* ---------------------------------- */
-        #feedback {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3em;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            z-index: 100;
-            opacity: 0;
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-            pointer-events: none; /* クリックイベントを妨げない */
-        }
-        #feedback.show {
-            opacity: 1;
-            transform: translate(-50%, -70%); /* 少し上に移動するアニメーション */
-        }
-        #feedback.positive {
-            color: #32cd32; /* 緑 */
-        }
-        #feedback.negative {
-            color: #ff4500; /* 赤 */
-        }
-
     </style>
 </head>
 <body>
@@ -249,7 +219,7 @@
     </div>
 
     <div id="grid">
-        <div id="feedback"></div> </div>
+        </div>
 
     <script>
         // JavaScript (ゲームロジック)
@@ -260,18 +230,18 @@
         // --- スコア設定 ---
         const NORMAL_MOLE_SCORE = 1;
         const GOLD_MOLE_SCORE = 3;
-        const BOMB_MOLE_SCORE = -5; // 叩くと減点
+        const BOMB_MOLE_SCORE = -5;
         const CLOCK_MOLE_SCORE = 2;
 
         // --- 時間設定 ---
-        const BOMB_TIME_PENALTY = 5; // 爆弾モグラ: -5秒
-        const CLOCK_TIME_BONUS = 5;  // 時計モグラ: +5秒
+        const BOMB_TIME_PENALTY = 5; 
+        const CLOCK_TIME_BONUS = 5;  
 
-        // --- 出現確率設定 (合計が100%になるように調整) ---
-        const GOLD_MOLE_CHANCE = 0.10; // 10%
-        const BOMB_MOLE_CHANCE = 0.15; // 15%
-        const CLOCK_MOLE_CHANCE = 0.05; // 5%
-        const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); // 残り 70%
+        // --- 出現確率設定 ---
+        const GOLD_MOLE_CHANCE = 0.10; 
+        const BOMB_MOLE_CHANCE = 0.15; 
+        const CLOCK_MOLE_CHANCE = 0.05; 
+        const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); 
 
         let score = 0;
         let timeLeft = GAME_DURATION;
@@ -284,20 +254,12 @@
         const timeLeftDisplay = document.getElementById('time-left');
         const startButton = document.getElementById('start-button');
         const grid = document.getElementById('grid');
-        const feedbackDisplay = document.getElementById('feedback'); // フィードバック表示用
 
         // -----------------------------------------------------
         // 1. 盤面の初期化 (穴の生成)
         // -----------------------------------------------------
         function createHoles() {
-            grid.innerHTML = '<div id="feedback"></div>'; // フィードバック要素も再生成時に含める
-            const feedbackElem = grid.querySelector('#feedback'); // 再度取得
-            if (!feedbackElem) { // もしなければ追加 (念のため)
-                 const newFeedback = document.createElement('div');
-                 newFeedback.id = 'feedback';
-                 grid.appendChild(newFeedback);
-            }
-
+            grid.innerHTML = '';
             for (let i = 0; i < HOLE_COUNT; i++) {
                 const hole = document.createElement('div');
                 hole.classList.add('hole');
@@ -392,7 +354,7 @@
                     break;
             }
 
-            mole.dataset.type = moleType; // モグラのタイプをデータ属性に保存 (whackで使用)
+            mole.dataset.type = moleType; 
             mole.dataset.score = scoreValue;
 
             hole.classList.add('up');
@@ -401,7 +363,7 @@
             setTimeout(() => {
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); // 引っ込む時にクラスを除去
-                delete mole.dataset.type; // データ属性も削除
+                delete mole.dataset.type; 
                 delete mole.dataset.score;
                 
                 if (isGameRunning) {
@@ -425,25 +387,6 @@
             }
         }
 
-        /**
-         * ゲーム盤面の中央にフィードバックメッセージを表示する
-         * @param {string} message 表示するテキスト (例: "+5s")
-         * @param {string} type 'positive' または 'negative' で色を変える
-         */
-        let feedbackTimeoutId;
-        function showFeedback(message, type) {
-            clearTimeout(feedbackTimeoutId); // 前のフィードバックがあればクリア
-
-            feedbackDisplay.textContent = message;
-            feedbackDisplay.classList.remove('positive', 'negative'); // クラスをリセット
-            feedbackDisplay.classList.add(type, 'show');
-
-            feedbackTimeoutId = setTimeout(() => {
-                feedbackDisplay.classList.remove('show');
-            }, 800); // 0.8秒後に消える
-        }
-
-
         function whack(event) {
             if (!isGameRunning) return;
 
@@ -461,10 +404,10 @@
                 // 時間ボーナス/ペナルティの処理
                 if (type === 'clock') {
                     timeLeft += CLOCK_TIME_BONUS;
-                    showFeedback(`+${CLOCK_TIME_BONUS}秒`, 'positive'); // フィードバック表示
+                    // alert(' 時間ボーナス! +5秒'); // ★ダイアログ削除★
                 } else if (type === 'bomb') {
                     timeLeft -= BOMB_TIME_PENALTY;
-                    showFeedback(`-${BOMB_TIME_PENALTY}秒`, 'negative'); // フィードバック表示
+                    // alert(' 爆弾ペナルティ! -5秒'); // ★ダイアログ削除★
                 }
                 
                 updateTime(); // 制限時間の表示を更新
@@ -491,10 +434,6 @@
             timeLeftDisplay.textContent = timeLeft;
             startButton.disabled = true;
 
-            // ゲーム開始時にフィードバック表示をリセット
-            feedbackDisplay.classList.remove('show'); 
-            clearTimeout(feedbackTimeoutId);
-
             countdownTimerId = setInterval(countdown, 1000);
             peep();
         }
@@ -502,7 +441,6 @@
         function countdown() {
             timeLeft--;
             updateTime();
-            // updateTime()内でtimeLeft <= 0のチェックとendGame()の呼び出しが行われる
         }
 
         function endGame() {
