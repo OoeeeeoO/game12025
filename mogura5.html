@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - 最終版</title>
+    <title>モグラたたき - 正円穴版</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -16,7 +16,6 @@
             min-height: 100vh;
             box-sizing: border-box;
 
-            /* 背景色に戻す */
             background-color: #f0f0f0; 
         }
 
@@ -65,10 +64,7 @@
         /* ゲーム盤面 */
         #grid {
             display: grid;
-            /* ★グリッドのサイズを固定（最大の12穴に対応可能なサイズ） */
-            width: 600px; 
-            height: 480px; 
-            
+            /* サイズはJSで動的に設定されます */
             margin: 0 auto;
             background-color: #556b2f; 
             border: 8px solid #8b4513; 
@@ -76,17 +72,6 @@
             padding: 8px;
             gap: 8px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        /* 難易度ごとの列数設定 (JSで #grid にクラスを追加して切り替え) */
-        .grid-easy {
-            grid-template-columns: repeat(3, 1fr); 
-        }
-        .grid-normal {
-            grid-template-columns: repeat(3, 1fr); 
-        }
-        .grid-hard {
-            grid-template-columns: repeat(4, 1fr); 
         }
 
         /* 穴 */
@@ -100,7 +85,7 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
         }
 
-        /* モグラ本体 */
+        /* モグラ本体（以下略、デザイン関連は変更なし） */
         .mole {
             width: 100%; height: 100%; background-color: #c28b5e; 
             border: 4px solid #8b4513; border-radius: 50%;
@@ -113,7 +98,6 @@
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* モグラのデザイン関連 (省略) */
         .face-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100%; padding-top: 15%; box-sizing: border-box; }
         .eyes { display: flex; justify-content: space-between; width: 50%; position: absolute; top: 25%; z-index: 3; }
         .eye { width: 20px; height: 20px; background-color: white; border: 2px solid black; border-radius: 50%; position: relative; box-sizing: border-box; }
@@ -163,9 +147,9 @@
     <div id="controls">
         <label for="difficulty-select">難易度: </label>
         <select id="difficulty-select">
-            <option value="easy">かんたん (6穴)</option>
-            <option value="normal" selected>ふつう (9穴)</option>
-            <option value="hard">むずかしい (12穴)</option>
+            <option value="easy">かんたん (9穴)</option>
+            <option value="normal" selected>ふつう (16穴)</option>
+            <option value="hard">むずかしい (25穴)</option>
         </select>
         <button id="start-button">ゲームスタート</button>
     </div>
@@ -199,21 +183,22 @@
         const BOMB_MOLE_CHANCE = 0.15; 
         const CLOCK_MOLE_CHANCE = 0.05; 
         
+        // ★★★ 難易度ごとのゲームパラメータを定義 (穴の数、列数を変更) ★★★
         const DIFFICULTY_SETTINGS = {
             easy: {
                 minTime: 800, maxTime: 1800,
-                holeCount: 6, 
+                holeCount: 9, 
                 gridColumns: 3, 
             },
             normal: {
                 minTime: 500, maxTime: 1500,
-                holeCount: 9, 
-                gridColumns: 3, 
+                holeCount: 16, 
+                gridColumns: 4, 
             },
             hard: {
                 minTime: 300, maxTime: 1000,
-                holeCount: 12, 
-                gridColumns: 4, 
+                holeCount: 25, 
+                gridColumns: 5, 
             }
         };
 
@@ -236,6 +221,29 @@
         const finalScoreDisplay = document.getElementById('final-score');
         const difficultySelect = document.getElementById('difficulty-select');
 
+
+        // 難易度に応じて #grid のサイズとレイアウトを動的に設定
+        function setGridClass(difficulty) {
+            grid.className = ''; 
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            const columns = settings.gridColumns;
+            
+            // ★穴が正円になるよう、グリッドコンテナの幅と高さを動的に設定
+            const baseSize = 100; // 穴一つのセルが持つベースサイズ (px)
+            const gap = 8;
+            const borderPadding = 16; 
+
+            // 幅/高さ: (ベースサイズ * 列数) + (隙間 * (列数 - 1)) + ボーダー/パディング
+            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
+
+            grid.style.width = `${newSize}px`;
+            grid.style.height = `${newSize}px`;
+
+            // グリッド列数を設定
+            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            
+            grid.classList.add('grid-' + difficulty);
+        }
 
         // 1. 盤面の初期化 (穴の生成)
         function createHoles() {
@@ -272,12 +280,6 @@
             }
         }
         
-        // 難易度に応じて #grid にクラスを追加してCSSでレイアウトを切り替え
-        function setGridClass(difficulty) {
-            grid.className = ''; 
-            grid.classList.add('grid-' + difficulty);
-        }
-
         // 2. モグラの出現ロジック (省略)
         function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
         function randomHole() {
@@ -432,7 +434,8 @@
         }
 
         startButton.addEventListener('click', startGame);
-        difficultySelect.addEventListener('change', initializeGame); // 難易度変更でグリッドを更新
+        // 難易度変更時にもグリッドを更新して穴を再生成
+        difficultySelect.addEventListener('change', initializeGame); 
     </script>
 </body>
 </html>
