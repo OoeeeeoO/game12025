@@ -457,6 +457,8 @@
         // JavaScript (ゲームロジック)
 
         const HOLE_COUNT = 9;
+        // ★制限時間を固定 (30秒)
+        const GAME_DURATION = 30; 
         
         const NORMAL_MOLE_SCORE = 1;
         const GOLD_MOLE_SCORE = 3;
@@ -471,32 +473,28 @@
         const CLOCK_MOLE_CHANCE = 0.05; 
         const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); 
 
-        // ★★★ 難易度ごとのゲームパラメータを定義 ★★★
+        // ★★★ 難易度ごとのゲームパラメータを定義 (出現時間のみ) ★★★
         const DIFFICULTY_SETTINGS = {
             easy: {
                 minTime: 800, // モグラの最小滞在時間 (ms)
                 maxTime: 1800, // モグラの最大滞在時間 (ms)
-                gameDuration: 45, // ゲーム時間 (秒)
             },
             normal: {
                 minTime: 500,
                 maxTime: 1500,
-                gameDuration: 30,
             },
             hard: {
                 minTime: 300,
                 maxTime: 1000,
-                gameDuration: 20,
             }
         };
 
         // 現在の難易度パラメータを初期化
         let currentMinTime = DIFFICULTY_SETTINGS.normal.minTime;
         let currentMaxTime = DIFFICULTY_SETTINGS.normal.maxTime;
-        let currentDuration = DIFFICULTY_SETTINGS.normal.gameDuration;
 
         let score = 0;
-        let timeLeft = currentDuration; // 初期ゲーム時間は難易度設定から取得
+        let timeLeft = GAME_DURATION; 
         let isGameRunning = false;
         let countdownTimerId;
         let lastHole = null;
@@ -507,14 +505,9 @@
         const grid = document.getElementById('grid');
         const gameOverModal = document.getElementById('game-over-modal');
         const finalScoreDisplay = document.getElementById('final-score');
-        
-        // ★★★ 難易度選択要素を取得 ★★★
         const difficultySelect = document.getElementById('difficulty-select');
 
-
-        // -----------------------------------------------------
-        // 1. 盤面の初期化 (穴の生成) - 変更なし
-        // -----------------------------------------------------
+        // ... (createHoles 関数 - 変更なし) ...
         function createHoles() {
             grid.innerHTML = '';
             for (let i = 0; i < HOLE_COUNT; i++) {
@@ -547,9 +540,8 @@
                 grid.appendChild(hole);
             }
         }
-
+        
         // 2. モグラの出現ロジック
-        // ★★★ 難易度パラメータを使用するように修正 ★★★
         function randomTime() { 
             return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); 
         }
@@ -572,7 +564,7 @@
         }
         function peep() {
             if (!isGameRunning) return;
-            const time = randomTime(); // 難易度に応じた時間を使用
+            const time = randomTime(); 
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
@@ -600,10 +592,7 @@
             }, time);
         }
 
-        // -----------------------------------------------------
         // 3. プレイヤーの操作ロジック
-        // -----------------------------------------------------
-
         function showScorePop(hole, points) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
@@ -659,25 +648,21 @@
             }
         }
 
-        // -----------------------------------------------------
         // 4. ゲームの流れ
-        // -----------------------------------------------------
-
-        // ★★★ 難易度設定の適用ロジックを追加 ★★★
         function startGame() {
             if (isGameRunning) return;
             isGameRunning = true;
             score = 0;
             
-            // 選択された難易度を取得し、ゲームパラメータを更新
+            // 選択された難易度を取得し、モグラの出現パラメータのみを更新
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             
             currentMinTime = settings.minTime;
             currentMaxTime = settings.maxTime;
-            currentDuration = settings.gameDuration;
-
-            timeLeft = currentDuration; 
+            
+            // ★ゲーム時間を固定値 (30秒) に設定
+            timeLeft = GAME_DURATION; 
             
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
@@ -715,9 +700,7 @@
             gameOverModal.style.display = 'none';
         }
 
-        // -----------------------------------------------------
         // 初期設定とイベントリスナー
-        // -----------------------------------------------------
         createHoles();
         startButton.addEventListener('click', startGame);
     </script>
