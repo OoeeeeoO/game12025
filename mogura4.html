@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ベルトコンベアー型モグラたたき</title>
+    <title>モグラたたき - 難易度選択＆穴の数変更</title>
     <style>
-        /* CSS (デザイン) - 主要な変更点 */
+        /* CSS (デザイン) */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -25,10 +25,10 @@
         }
 
         h1 { 
-            color: #fff;
+            color: #fff; 
             margin-bottom: 20px;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); 
         }
         
         #controls, #game-info { 
@@ -66,179 +66,89 @@
         #game-info p { margin: 0; color: #333; }
         #score, #time-left { font-weight: bold; color: #d35400; }
 
-        /* ---------------------------------- */
-        /* ★★★ コンベアー関連のスタイル ★★★ */
-        /* ---------------------------------- */
-
+        /* ゲーム盤面 */
         #grid {
-            /* グリッド全体をコンベアーのフレームに見立てる */
-            width: 420px; 
-            height: 600px; /* 縦長にする */
+            /* grid-template-columns は JS で設定されるため削除 */
+            display: grid;
+            width: 420px; /* 初期値 */
+            height: 420px; /* 初期値 */
             margin: 0 auto;
-            background-color: #999; /* コンベアーの色 */
-            border: 15px solid #666; /* コンベアーの端 */
-            border-radius: 10px;
-            padding: 0;
-            overflow: hidden; /* 流れる要素を隠す */
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            background-color: #556b2f; 
+            border: 8px solid #8b4513; 
+            border-radius: 15px;
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            /* 初期表示を normal (3x3) に設定 */
+            grid-template-columns: repeat(3, 1fr); 
         }
 
-        #conveyor-track {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* 流れてくる行 */
-        .row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            width: 100%;
-            height: 140px; /* 3つのモグラの穴が入る縦幅 */
-            position: absolute;
-            top: -140px; /* 画面外上部からスタート */
-            left: 0;
-            border-bottom: 5px solid #777; /* 行の区切り */
-            background-color: #b0c4de; /* 流れるベルトの色 */
-            transition: transform linear; /* JSで行時間に合わせて調整 */
-        }
-        
-        /* 穴 (コンベアー上のモグラの台座) */
+        /* 穴 */
         .hole {
-            background-color: transparent; /* 背景なし */
-            overflow: visible; 
+            background-color: #a0522d; 
+            border-radius: 50%;
+            overflow: hidden; 
             position: relative;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* モグラが下部から出るように */
-            border: none;
-            box-shadow: none;
+            border: 4px solid #696969; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
         }
 
         /* モグラ本体 */
         .mole {
-            width: 100px; 
-            height: 100px;
-            background-color: #c28b5e; 
-            border: 4px solid #8b4513; 
-            border-radius: 50%;
-            position: absolute;
-            bottom: 20px; /* 行の底から少し浮かせる */
-            transition: none; /* コンベアー式ではアニメーションさせない */
-            pointer-events: auto; /* クリック可能 */
-            z-index: 2; 
-            /* モグラの顔のデザイン (省略) - 縦横比は維持 */
+            width: 100%; height: 100%; background-color: #c28b5e; 
+            border: 4px solid #8b4513; border-radius: 50%;
+            position: absolute; bottom: -100%; 
+            transition: bottom 0.2s ease-out; 
+            pointer-events: none; 
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: flex-start; box-sizing: border-box; 
+            z-index: 2; overflow: visible; 
         }
+        .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* コンベアー式ではモグラが常に出ている状態 */
-        .row .mole {
-            bottom: 20px; 
-            pointer-events: auto; 
-        }
-
-        /* ---------------------------------- */
-        /* モグラの顔のデザイン (既存 - 簡略化) */
-        /* ---------------------------------- */
+        /* モグラのデザイン関連 (省略) */
+        .face-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 100%; height: 100%; padding-top: 15%; box-sizing: border-box; }
+        .eyes { display: flex; justify-content: space-between; width: 50%; position: absolute; top: 25%; z-index: 3; }
+        .eye { width: 20px; height: 20px; background-color: white; border: 2px solid black; border-radius: 50%; position: relative; box-sizing: border-box; }
+        .eye::before { content: ''; position: absolute; width: 8px; height: 8px; background-color: black; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .eye::after { content: ''; position: absolute; width: 5px; height: 5px; background-color: white; border-radius: 50%; top: 15%; left: 15%; }
+        .nose { width: 16px; height: 10px; background-color: #e6a782; border-radius: 50%; border: 1px solid #8b4513; position: absolute; top: 50%; z-index: 3; display: flex; justify-content: center; align-items: center; }
+        .nose::before { content: ''; position: absolute; width: 4px; height: 2px; background-color: white; border-radius: 50%; top: 15%; }
+        .nose::after { content: 'U'; font-family: Arial, sans-serif; font-size: 10px; color: #8b4513; position: absolute; bottom: -10px; line-height: 0; }
+        .cheeks { position: absolute; width: 25px; height: 15px; background-color: #ffb6c1; border-radius: 50%; top: 40%; z-index: 2; box-shadow: 0 0 5px rgba(255, 182, 193, 0.5); }
+        .cheek.left { left: 15%; }
+        .cheek.right { right: 15%; }
+        .whiskers { position: absolute; width: 80%; height: 1px; top: 55%; z-index: 3; }
+        .whiskers::before, .whiskers::after { content: ''; position: absolute; width: 20px; height: 1px; background: #8b4513; top: 0; transform-origin: 100% 50%; }
+        .whiskers::before { right: 50%; margin-right: 5px; box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; transform: rotate(0deg); }
+        .whiskers::after { left: 50%; margin-left: 5px; box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; transform: rotate(0deg); }
+        .paws { position: absolute; width: 100%; height: 30px; bottom: 0; z-index: 4; pointer-events: none; }
+        .paw { position: absolute; width: 35px; height: 35px; background-color: #a0522d; border: 2px solid #8b4513; border-radius: 50%; bottom: 10px; z-index: 4; box-shadow: 0 5px 5px rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; }
+        .paw::before { content: ''; position: absolute; width: 10px; height: 5px; background: radial-gradient(#663300 30%, transparent 30%); background-size: 5px 5px; top: 5px; left: 50%; transform: translateX(-50%); }
+        .paw.left { left: 15%; transform: rotate(-10deg); }
+        .paw.right { right: 15%; transform: rotate(10deg); }
         .mole:not(.gold):not(.bomb):not(.clock) { background-color: #c28b5e; border-color: #8b4513; }
-        .mole.gold { background: linear-gradient(to bottom, #ffd700, #daa520); border: 4px solid #b8860b; }
-        .mole.bomb { background-color: #333; border: 4px solid #ff4500; }
-        .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; }
-        /* 縦横サイズを固定 */
-        .face-container {
-            width: 100%; 
-            height: 100%; 
-            padding-top: 15%; 
-        }
-        /* ... (その他のモグラのパーツCSSは既存のまま) ... */
+        .mole.gold { background: linear-gradient(to bottom, #ffd700, #daa520); border: 4px solid #b8860b; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        .mole.bomb { background-color: #333; border: 4px solid #ff4500; box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); }
+        .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; box-shadow: 0 0 10px rgba(60, 179, 113, 0.7); }
 
-        /* ---------------------------------- */
-        /* スコアポップアップの調整 */
-        /* ---------------------------------- */
-        .score-pop {
-            position: absolute;
-            top: -30px; /* モグラの上からポップアップ */
-            left: 50%;
-            transform: translate(-50%, 0);
-            font-size: 2.5em;
-            z-index: 10;
-            /* アニメーションは既存のものを流用 */
-        }
-
-        /* ゲームオーバーモーダル (既存 - 省略) */
-        #game-over-modal {
-            display: none; 
-            position: fixed;
-            z-index: 100; 
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7); 
-            backdrop-filter: blur(5px); 
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 15% auto; 
-            padding: 30px;
-            border: 5px solid #d35400;
-            width: 80%;
-            max-width: 400px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.5s;
-        }
-
-        /* スコアポップアップのアニメーション定義 (既存) */
-        @keyframes scorePopUp {
-            0% { opacity: 1; transform: translate(-50%, 0); }
-            100% { opacity: 0; transform: translate(-50%, -100px); }
-        }
-
-        /* ---------------------------------- */
-        /* その他のモグラパーツCSS (長いため省略 - 既存コードを流用) */
-        /* ---------------------------------- */
-        .mole:not(.gold):not(.bomb):not(.clock) .paw { background-color: #a0522d; border-color: #8b4513; }
-        .mole:not(.gold):not(.bomb):not(.clock) .cheeks { background-color: #ffb6c1; }
-        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::before, .mole:not(.gold):not(.bomb):not(.clock) .whiskers::after { background: #8b4513; box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513;}
-
-        .mole.gold .paw { background-color: #ffd700; border-color: #b8860b; }
-        .mole.gold .cheeks { background-color: #ffcc00; }
-        .mole.gold .whiskers::before, .mole.gold .whiskers::after { background: #b8860b; box-shadow: 0 -6px 0 0 #b8860b, 0 6px 0 0 #b8860b; }
-        .mole.gold .eye { border-color: #b8860b; }
-        .mole.gold .nose { background-color: #f08080; border-color: #8b0000; }
-        .mole.gold .nose::after { color: #8b0000; }
-
-        .mole.bomb .paw { background-color: #000; border-color: #ff4500; }
-        .mole.bomb .cheeks { background-color: #ff0000; }
-        .mole.bomb .whiskers::before, .mole.bomb .whiskers::after { background: #ff4500; box-shadow: 0 -6px 0 0 #ff4500, 0 6px 0 0 #ff4500; }
-        .mole.bomb .eye { background-color: #ff0000; border-color: #8b0000; }
-        .mole.bomb .eye::before { background-color: #fff; }
-        .mole.bomb .eye::after { display: none; }
-        .mole.bomb .nose { background-color: #000; border-color: #666; }
-        .mole.bomb .nose::after { content: '-'; color: #ff0000; } 
-        .mole.bomb .paw::before { background: radial-gradient(#ff0000 30%, transparent 30%); }
-
-        .mole.clock .paw { background-color: #3cb371; border-color: #4682b4; }
-        .mole.clock .cheeks { background-color: #90ee90; }
-        .mole.clock .whiskers::before, .mole.clock .whiskers::after { background: #3cb371; box-shadow: 0 -6px 0 0 #3cb371, 0 6px 0 0 #3cb371; }
-        .mole.clock .eye { border-color: #008000; }
-        .mole.clock .eye::before { background-color: #006400; }
-        .mole.clock .nose { background-color: #e0ffff; border-color: #4682b4; }
-        .mole.clock .nose::after { color: #008000; }
+        /* ゲームオーバーモーダルのCSS (省略) */
+        #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #fff; margin: 15% auto; padding: 30px; border: 5px solid #d35400; width: 80%; max-width: 400px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s; }
+        .modal-content h2 { color: #d35400; font-size: 2.5em; margin-bottom: 10px; }
+        .final-score { font-size: 3.5em; color: #27ae60; font-weight: bold; display: block; margin: 15px 0; padding: 10px; background-color: #ecf0f1; border-radius: 8px; }
+        .modal-content button { background-color: #3498db; color: white; border: none; padding: 10px 20px; font-size: 1.2em; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .modal-content button:hover { background-color: #2980b9; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         
+        /* スコアポップアップのCSS (省略) */
+        .score-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); pointer-events: none; opacity: 0; transition: none; animation: scorePopUp 0.6s ease-out forwards; z-index: 5; }
+        @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -100px); } }
     </style>
 </head>
-<body>
-    <h1>ベルトコンベアー モグラたたき！ </h1>
+<body onload="applyGridStyle(3)">
+    <h1>スペシャルモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -247,16 +157,14 @@
     <div id="controls">
         <label for="difficulty-select">難易度: </label>
         <select id="difficulty-select">
-            <option value="easy">かんたん</option>
-            <option value="normal" selected>ふつう</option>
-            <option value="hard">むずかしい</option>
+            <option value="easy">かんたん (6穴)</option>
+            <option value="normal" selected>ふつう (9穴)</option>
+            <option value="hard">むずかしい (12穴)</option>
         </select>
         <button id="start-button">ゲームスタート</button>
     </div>
 
     <div id="grid">
-        <div id="conveyor-track">
-            </div>
     </div>
         
     <div id="game-over-modal">
@@ -269,11 +177,8 @@
     </div>
 
     <script>
-        // JavaScript (ゲームロジック) - 主要な変更点
+        // JavaScript (ゲームロジック)
 
-        const COLUMNS = 3; // 列数
-        const ROW_HEIGHT = 140; // CSSと同期 (px)
-        const TRACK_HEIGHT = 600; // CSSと同期 (#grid の高さ px)
         const GAME_DURATION = 30; 
         
         const NORMAL_MOLE_SCORE = 1;
@@ -288,44 +193,109 @@
         const BOMB_MOLE_CHANCE = 0.15; 
         const CLOCK_MOLE_CHANCE = 0.05; 
         
-        // 難易度ごとのゲームパラメータ (流れる速度と行の出現間隔)
+        // ★★★ 難易度ごとのゲームパラメータを定義 (出現時間 & 穴の数) ★★★
         const DIFFICULTY_SETTINGS = {
             easy: {
-                rowDuration: 5500, // 行が上から下まで流れる時間 (ms) - 長い
-                rowInterval: 1200, // 新しい行が出現する間隔 (ms) - 長い
+                minTime: 800, maxTime: 1800,
+                holeCount: 6, 
+                gridColumns: 3, 
             },
             normal: {
-                rowDuration: 4000,
-                rowInterval: 1000,
+                minTime: 500, maxTime: 1500,
+                holeCount: 9, 
+                gridColumns: 3, 
             },
             hard: {
-                rowDuration: 2500, // 短いほど速い
-                rowInterval: 800, // 短いほど頻繁
+                minTime: 300, maxTime: 1000,
+                holeCount: 12, 
+                gridColumns: 4, 
             }
         };
 
-        let currentRowDuration = DIFFICULTY_SETTINGS.normal.rowDuration;
-        let currentRowInterval = DIFFICULTY_SETTINGS.normal.rowInterval;
+        // 現在の難易度パラメータを初期化
+        let currentMinTime = DIFFICULTY_SETTINGS.normal.minTime;
+        let currentMaxTime = DIFFICULTY_SETTINGS.normal.maxTime;
+        let currentHoleCount = DIFFICULTY_SETTINGS.normal.holeCount;
+        let currentGridColumns = DIFFICULTY_SETTINGS.normal.gridColumns;
 
         let score = 0;
         let timeLeft = GAME_DURATION; 
         let isGameRunning = false;
         let countdownTimerId;
-        let rowIntervalId;
-        let rowCounter = 0;
+        let lastHole = null;
 
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
         const startButton = document.getElementById('start-button');
-        const conveyorTrack = document.getElementById('conveyor-track'); // IDを修正
+        const grid = document.getElementById('grid');
         const gameOverModal = document.getElementById('game-over-modal');
         const finalScoreDisplay = document.getElementById('final-score');
         const difficultySelect = document.getElementById('difficulty-select');
 
-        // -----------------------------------------------------
-        // 1. モグラの行生成ロジック
-        // -----------------------------------------------------
 
+        // 新しい関数: グリッドのCSSスタイルを適用
+        function applyGridStyle(columns) {
+            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            
+            // グリッド全体のサイズを調整し、穴が均等に収まるようにする
+            const holeSize = 130; // 穴のサイズを仮定
+            const gap = 8;
+            
+            // グリッドの幅: (穴のサイズ * 列数) + (隙間 * (列数 - 1)) + (ボーダー/パディング)
+            const newWidth = (holeSize * columns) + (gap * (columns - 1)) + 16; 
+            const newHeight = (holeSize * (currentHoleCount / columns)) + (gap * (currentHoleCount / columns - 1)) + 16;
+
+            grid.style.width = `${newWidth}px`;
+            grid.style.height = `${newHeight}px`;
+        }
+
+        // 1. 盤面の初期化 (穴の生成)
+        function createHoles() {
+            grid.innerHTML = '';
+            // ★ currentHoleCount を使用
+            for (let i = 0; i < currentHoleCount; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                hole.dataset.id = i;
+
+                const mole = document.createElement('div');
+                mole.classList.add('mole');
+                
+                // モグラのHTML構造 (省略)
+                mole.innerHTML = `
+                    <div class="face-container">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="whiskers"></div> <div class="nose"></div>
+                        <div class="cheeks cheek left"></div>
+                        <div class="cheeks cheek right"></div>
+                    </div>
+                    <div class="paws">
+                        <div class="paw left"></div>
+                        <div class="paw right"></div>
+                    </div>
+                `;
+
+                hole.addEventListener('click', whack);
+
+                hole.appendChild(mole);
+                grid.appendChild(hole);
+            }
+        }
+        
+        // 2. モグラの出現ロジック (変更なし)
+        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            const idx = Math.floor(Math.random() * holes.length);
+            const hole = holes[idx];
+
+            if (hole === lastHole) { return randomHole(); }
+            lastHole = hole;
+            return hole;
+        }
         function randomMoleType() {
             const r = Math.random();
             if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
@@ -333,197 +303,101 @@
             else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
             else { return 'normal'; }
         }
-
-        function createMoleRow() {
+        function peep() {
             if (!isGameRunning) return;
-
-            const row = document.createElement('div');
-            row.classList.add('row');
-            row.dataset.id = rowCounter++;
-
-            // CSSアニメーションのプロパティを設定
-            row.style.transitionDuration = `${currentRowDuration}ms`;
-            // 画面外からスタート位置(TRACK_HEIGHT)まで移動
-            row.style.transform = `translateY(${TRACK_HEIGHT + ROW_HEIGHT}px)`;
-
-            // 行が画面外に出たときの処理を設定
-            setTimeout(() => {
-                handleRowExit(row);
-            }, currentRowDuration); 
+            const time = randomTime(); 
+            const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+            const moleType = randomMoleType();
             
-            // 行の内部にモグラをランダムに配置
-            for (let i = 0; i < COLUMNS; i++) {
-                const hole = document.createElement('div');
-                hole.classList.add('hole');
-
-                // 確率でモグラを出現させる (約70%の確率で空き)
-                if (Math.random() > 0.3) { 
-                    const mole = document.createElement('div');
-                    const moleType = randomMoleType();
-                    
-                    mole.classList.add('mole', moleType);
-                    
-                    let scoreValue;
-                    switch (moleType) {
-                        case 'gold': scoreValue = GOLD_MOLE_SCORE; break;
-                        case 'bomb': scoreValue = BOMB_MOLE_SCORE; break;
-                        case 'clock': scoreValue = CLOCK_MOLE_SCORE; break;
-                        default: scoreValue = NORMAL_MOLE_SCORE; break;
-                    }
-
-                    mole.dataset.type = moleType; 
-                    mole.dataset.score = scoreValue;
-                    mole.dataset.whacked = 'false'; // 叩かれたかどうかのフラグ
-                    
-                    // モグラの顔のデザインを挿入
-                    mole.innerHTML = `
-                        <div class="face-container">
-                            <div class="eyes">
-                                <div class="eye"></div>
-                                <div class="eye"></div>
-                            </div>
-                            <div class="whiskers"></div> <div class="nose"></div>
-                            <div class="cheeks cheek left"></div>
-                            <div class="cheeks cheek right"></div>
-                        </div>
-                        <div class="paws">
-                            <div class="paw left"></div>
-                            <div class="paw right"></div>
-                        </div>
-                    `;
-
-                    mole.addEventListener('click', whack);
-                    hole.appendChild(mole);
-                }
-
-                row.appendChild(hole);
+            mole.classList.remove('gold', 'bomb', 'clock'); 
+            let scoreValue;
+            switch (moleType) {
+                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
+                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
+                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
+                default: scoreValue = NORMAL_MOLE_SCORE; break;
             }
-            
-            conveyorTrack.appendChild(row);
 
-            // アニメーションを即座に開始させるため、次のフレームでtransformをリセット
-            requestAnimationFrame(() => {
-                 row.style.transform = `translateY(0px)`;
-            });
+            mole.dataset.type = moleType; 
+            mole.dataset.score = scoreValue;
+
+            hole.classList.add('up');
+
+            setTimeout(() => {
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+                if (isGameRunning) { peep(); }
+            }, time);
         }
-        
-        // -----------------------------------------------------
-        // 2. プレイヤーの操作ロジック
-        // -----------------------------------------------------
 
-        function showScorePop(element, points) {
+        // 3. プレイヤーの操作ロジック (省略)
+        function showScorePop(hole, points) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
-            
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
-            
-            if (points > 0) {
-                pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; 
-            } else {
-                pop.style.color = '#e74c3c'; 
-            }
-            
-            element.closest('.hole').appendChild(pop);
-            
-            setTimeout(() => {
-                pop.remove();
-            }, 600); 
+            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
+            hole.appendChild(pop);
+            setTimeout(() => { pop.remove(); }, 600); 
         }
         
-        function whack(event) {
-            if (!isGameRunning) return;
-            const mole = event.currentTarget;
-            
-            // 既に叩かれているモグラは無視
-            if (mole.dataset.whacked === 'true') return;
-            
-            mole.dataset.whacked = 'true';
-            
-            const points = parseInt(mole.dataset.score);
-            const type = mole.dataset.type;
-            
-            showScorePop(mole, points);
-
-            score += points;
-            scoreDisplay.textContent = score;
-
-            if (type === 'clock') { 
-                timeLeft += CLOCK_TIME_BONUS; 
-            } else if (type === 'bomb') { 
-                timeLeft -= BOMB_TIME_PENALTY;
-            }
-
-            updateTime(); 
-            
-            // 叩かれたモグラは消える
-            mole.style.opacity = '0';
-            mole.style.pointerEvents = 'none';
-        }
-        
-        // -----------------------------------------------------
-        // 3. 行が画面外に出たときの処理（ミス判定）
-        // -----------------------------------------------------
-        function handleRowExit(row) {
-            if (!isGameRunning) return;
-
-            const missedMoles = row.querySelectorAll('.mole:not(.bomb)');
-            
-            missedMoles.forEach(mole => {
-                // 叩かれず、かつボムでないモグラが行の最後まで流れたらミス
-                if (mole.dataset.whacked === 'false') {
-                    // ミスによるペナルティ
-                    score -= NORMAL_MOLE_SCORE;
-                    if (score < 0) score = 0; // スコアがマイナスにならないように
-                    scoreDisplay.textContent = score;
-                    
-                    // ミスしたモグラに特別なポップアップを表示
-                    showScorePop(mole, -1);
-                }
-            });
-
-            // 行をDOMから削除
-            row.remove();
-        }
-
-
-        // -----------------------------------------------------
-        // 4. ゲームの流れ
-        // -----------------------------------------------------
-
         function updateTime() {
             if (timeLeft < 0) { timeLeft = 0; }
             timeLeftDisplay.textContent = timeLeft;
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
         }
+        
+        function whack(event) {
+            if (!isGameRunning) return;
+            const hole = event.currentTarget;
+            const mole = hole.querySelector('.mole');
+            
+            if (hole.classList.contains('up')) {
+                const points = parseInt(mole.dataset.score);
+                const type = mole.dataset.type;
+                
+                showScorePop(hole, points);
+                score += points;
+                scoreDisplay.textContent = score;
 
+                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                updateTime(); 
+                
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; delete mole.dataset.score;
+            }
+        }
+
+        // 4. ゲームの流れ
         function startGame() {
             if (isGameRunning) return;
             isGameRunning = true;
             score = 0;
-            rowCounter = 0; // 行カウンターをリセット
             
-            // 選択された難易度を取得し、パラメータを更新
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             
-            currentRowDuration = settings.rowDuration;
-            currentRowInterval = settings.rowInterval;
+            // モグラの出現時間と穴の数を更新
+            currentMinTime = settings.minTime;
+            currentMaxTime = settings.maxTime;
+            currentHoleCount = settings.holeCount;
+            currentGridColumns = settings.gridColumns;
+            
+            // 穴の再生成とグリッドスタイルの適用
+            applyGridStyle(currentGridColumns); 
+            createHoles(); 
             
             timeLeft = GAME_DURATION; 
-            
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
             startButton.disabled = true;
             gameOverModal.style.display = 'none'; 
-            
-            // 行生成を周期的に開始
-            rowIntervalId = setInterval(createMoleRow, currentRowInterval);
-            // ゲームの制限時間を開始
             countdownTimerId = setInterval(countdown, 1000);
-            
-            // 初回即時生成
-            createMoleRow(); 
+            peep();
         }
 
         function countdown() {
@@ -534,13 +408,15 @@
         function endGame() {
             isGameRunning = false;
             clearInterval(countdownTimerId);
-            clearInterval(rowIntervalId);
 
-            // 残っている行をすべて削除
-            conveyorTrack.innerHTML = '';
+            document.querySelectorAll('.hole.up').forEach(hole => {
+                hole.classList.remove('up');
+                const mole = hole.querySelector('.mole');
+                mole.classList.remove('gold', 'bomb', 'clock');
+                delete mole.dataset.type; delete mole.dataset.score;
+            });
 
             startButton.disabled = false;
-            
             finalScoreDisplay.textContent = score;
             gameOverModal.style.display = 'flex'; 
         }
@@ -550,8 +426,13 @@
         }
 
         // 初期設定とイベントリスナー
-        // 以前の createHoles() の代わりに、初期化時はトラックを空にする
-        conveyorTrack.innerHTML = ''; 
+        // 初期表示時にも穴とスタイルを適用
+        document.addEventListener('DOMContentLoaded', () => {
+             // ページのロード時に難易度 normal のスタイルを適用
+            applyGridStyle(DIFFICULTY_SETTINGS.normal.gridColumns);
+            createHoles(); 
+        });
+
         startButton.addEventListener('click', startGame);
     </script>
 </body>
