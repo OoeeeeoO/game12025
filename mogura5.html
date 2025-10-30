@@ -1,8 +1,22 @@
+<circle cx="40" cy="55" r="3" fill="black"/> <circle cx="60" cy="55" r="3" fill="black"/> ```
+
+#### 変更点の説明
+
+* `r="3"`: 半径を`1.5`から`3`に大きくし、目が大きくなります。
+* `cy="55"`: 目のY座標を`65`から`55`に移動させます。これにより、薄い顔色 (`mole-face`の`cy="75"`) の上、かつ体 (`mole-body`の`cy="70"`) の領域内に目が配置されます。
+
+この修正を適用した全体のコードを以下に示します。
+
+---
+
+## 🖼️ SVGモグラたたき 全体コード (目の修正版)
+
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版</title>
+    <title>モグラたたき - SVGモグラ版 (目の修正)</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -223,8 +237,8 @@
 
                 <circle cx="50" cy="70" r="3" fill="#333"/>
                 
-                <circle cx="40" cy="65" r="1.5" fill="black"/>
-                <circle cx="60" cy="65" r="1.5" fill="black"/>
+                <circle cx="40" cy="55" r="3" fill="black"/>
+                <circle cx="60" cy="55" r="3" fill="black"/>
 
                 <line x1="30" y1="75" x2="40" y2="75" stroke="#6A462F" stroke-width="1"/>
                 <line x1="30" y1="80" x2="40" y2="80" stroke="#6A462F" stroke-width="1"/>
