@@ -104,10 +104,12 @@
             box-sizing: border-box; 
             z-index: 2; 
             overflow: visible; 
+            /* 💡 手が顔を隠さないように顔の領域を上に押し上げる */
+            padding-bottom: 25px; 
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* モグラのデザイン関連 - 修正箇所 */
+        /* モグラのデザイン関連 */
         .face-container { 
             position: relative; 
             display: flex; 
@@ -153,15 +155,14 @@
             border-radius: 50%; 
             top: 15%; left: 15%; 
         }
-        
-        /* 💡 鼻の修正: 色を濃くし、位置を調整 */
+        /* 💡 鼻の修正 */
         .nose { 
             width: 16px; height: 10px; 
             background-color: #333; /* 濃い色 */
             border-radius: 50%; 
             position: absolute; 
-            top: 45%; /* 位置を少し上に調整 */
-            z-index: 4; /* 最前面に */
+            top: 45%; 
+            z-index: 4; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -175,32 +176,29 @@
             top: 15%; 
         }
         .nose::after { 
-            /* 口のUの字を削除 */
-            content: ''; 
+            content: ''; /* Uの字を削除 */
             position: absolute; 
             bottom: -10px; 
             line-height: 0; 
         }
-        
-        /* 頬の位置を鼻に合わせて調整 */
+        /* 頬の位置調整 */
         .cheeks { 
             position: absolute; 
             width: 25px; height: 15px; 
             background-color: #ffb6c1; 
             border-radius: 50%; 
-            top: 40%; /* 鼻の位置に合わせて調整 */
+            top: 40%; 
             z-index: 2; 
             box-shadow: 0 0 5px rgba(255, 182, 193, 0.5); 
         }
         .cheek.left { left: 15%; } 
         .cheek.right { right: 15%; } 
-        
-        /* 💡 ひげの修正: 構造は維持しつつ、位置と表現を確認 */
+        /* ひげの定義 */
         .whiskers { 
             position: absolute; 
             width: 80%; 
             height: 1px; 
-            top: 55%; /* 鼻の下に配置 */
+            top: 55%; 
             z-index: 3; 
         }
         .whiskers::before, .whiskers::after { 
@@ -222,14 +220,14 @@
             box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; 
             transform: rotate(0deg); 
         }
-
-        /* 手のデザインは変更なし */
+        
+        /* 💡 手の修正: z-indexを低くし、bottom位置を調整 */
         .paws { 
             position: absolute; 
             width: 100%; 
             height: 30px; 
             bottom: 0; 
-            z-index: 4; 
+            z-index: 1; /* 顔(z-index: 2以上)より下に描画 */
             pointer-events: none; 
         }
         .paw { 
@@ -238,8 +236,8 @@
             background-color: #a0522d; 
             border: 2px solid #8b4513; 
             border-radius: 50%; 
-            bottom: 10px; 
-            z-index: 4; 
+            bottom: 5px; /* padding-bottom に合わせて調整 */
+            z-index: 1; /* 顔(z-index: 2以上)より下に描画 */
             box-shadow: 0 5px 5px rgba(0,0,0,0.2); 
             display: flex; 
             justify-content: center; 
@@ -261,7 +259,7 @@
         .mole.bomb { background-color: #333; border: 4px solid #ff4500; box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); }
         .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; box-shadow: 0 0 10px rgba(60, 179, 113, 0.7); }
 
-        /* ゲームオーバーモーダルのCSS */
+        /* ゲームオーバーモーダルのCSS (省略) */
         #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .modal-content { background-color: #fff; margin: 15% auto; padding: 30px; border: 5px solid #d35400; width: 80%; max-width: 400px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s; }
         .modal-content h2 { color: #d35400; font-size: 2.5em; margin-bottom: 10px; }
@@ -270,7 +268,7 @@
         .modal-content button:hover { background-color: #2980b9; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         
-        /* スコアポップアップのCSS */
+        /* スコアポップアップのCSS (省略) */
         .score-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); pointer-events: none; opacity: 0; transition: none; animation: scorePopUp 0.6s ease-out forwards; z-index: 5; }
         @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -100px); } }
     </style>
@@ -390,7 +388,7 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                // モグラのHTML構造 (変更なし)
+                // モグラのHTML構造
                 mole.innerHTML = `
                     <div class="face-container">
                         <div class="eyes">
