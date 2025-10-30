@@ -1,10 +1,8 @@
-<circle cx="40" cy="55" r="3" fill="black"/> <circle cx="60" cy="55" r="3" fill="black"/> 
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (目の修正)</title>
+    <title>モグラたたき - SVGモグラ版 (修正済み)</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -90,10 +88,10 @@
 
         /* モグラ本体 (SVGコンテナ) */
         .mole {
-            width: 100%; /* SVGを広げるために100%に */
+            width: 100%; 
             height: 100%; 
             position: absolute; 
-            bottom: -100%; /* 穴の中に隠れる */
+            bottom: -100%; 
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
@@ -107,7 +105,6 @@
         .mole svg {
             width: 100%;
             height: 100%;
-            /* モグラの形状が穴に収まるように ViewBox を設定 */
             transform: translateY(10%); /* 穴の底に合わせるため微調整 */
         }
 
@@ -118,7 +115,7 @@
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
         .mole.bomb .mole-hand { fill: #222; }
 
-        /* ゲームオーバーモーダルのCSS (変更なし) */
+        /* ゲームオーバーモーダルのCSS */
         #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .modal-content { background-color: #fff; margin: 15% auto; padding: 30px; border: 5px solid #d35400; width: 80%; max-width: 400px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s; }
         .modal-content h2 { color: #d35400; font-size: 2.5em; margin-bottom: 10px; }
@@ -127,13 +124,13 @@
         .modal-content button:hover { background-color: #2980b9; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         
-        /* スコアポップアップのCSS (変更なし) */
+        /* スコアポップアップのCSS */
         .score-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); pointer-events: none; opacity: 0; transition: none; animation: scorePopUp 0.6s ease-out forwards; z-index: 5; }
         @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -100px); } }
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>モグラたたき！ </h1>
+    <h1>SVGスペシャルモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -219,24 +216,22 @@
         // ViewBoxを調整し、穴のサイズに合うようにモグラの図形を定義
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
-                <ellipse class="mole-body" cx="50" cy="70" rx="45" ry="40" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
                 
-                <ellipse class="mole-face" cx="50" cy="75" rx="20" ry="15" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
 
                 <circle cx="50" cy="70" r="3" fill="#333"/>
                 
-                <circle cx="40" cy="55" r="3" fill="black"/>
-                <circle cx="60" cy="55" r="3" fill="black"/>
+                <circle cx="38" cy="58" r="3.5" fill="black"/>
+                <circle cx="62" cy="58" r="3.5" fill="black"/>
 
-                <line x1="30" y1="75" x2="40" y2="75" stroke="#6A462F" stroke-width="1"/>
-                <line x1="30" y1="80" x2="40" y2="80" stroke="#6A462F" stroke-width="1"/>
-                <line x1="60" y1="75" x2="70" y2="75" stroke="#6A462F" stroke-width="1"/>
-                <line x1="60" y1="80" x2="70" y2="80" stroke="#6A462F" stroke-width="1"/>
+                <line x1="28" y1="75" x2="38" y2="75" stroke="#6A462F" stroke-width="1"/>
+                <line x1="28" y1="80" x2="38" y2="80" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="75" x2="72" y2="75" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="80" x2="72" y2="80" stroke="#6A462F" stroke-width="1"/>
 
-                <path d="M45 40 Q50 30 55 40" fill="none" stroke="#6A462F" stroke-width="2"/>
-
-                <ellipse class="mole-hand" cx="30" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-hand" cx="70" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
             </svg>
         `;
 
@@ -272,7 +267,6 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                // 💡 モグラのHTMLをSVGに置き換え
                 mole.innerHTML = MOLE_SVG; 
 
                 hole.addEventListener('click', whack);
@@ -307,7 +301,6 @@
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
             
-            // 💡 SVGの色を切り替えるためにクラスを適用
             mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
             switch (moleType) {
