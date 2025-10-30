@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - 正円穴版 (モグラ修正済み)</title>
+    <title>モグラたたき - SVGモグラ版</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -86,177 +86,37 @@
             align-items: flex-end; /* モグラが下から出てくるように */
         }
 
-        /* モグラ本体 */
+        /* モグラ本体 (SVGコンテナ) */
         .mole {
-            width: 90%; 
-            height: 90%; 
-            background-color: #c28b5e; 
-            border: 4px solid #8b4513; 
-            border-radius: 50%;
+            width: 100%; /* SVGを広げるために100%に */
+            height: 100%; 
             position: absolute; 
-            bottom: -100%; 
+            bottom: -100%; /* 穴の中に隠れる */
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            justify-content: flex-start; 
-            box-sizing: border-box; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
             z-index: 2; 
-            overflow: visible; 
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* モグラのデザイン関連 */
-        .face-container { 
-            position: relative; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: flex-start; 
-            width: 100%; 
-            height: 100%; 
-            padding-top: 15%; 
-            box-sizing: border-box; 
-            transform: translateY(10%); 
+        /* SVG共通スタイル */
+        .mole svg {
+            width: 100%;
+            height: 100%;
+            /* モグラの形状が穴に収まるように ViewBox を設定 */
+            transform: translateY(10%); /* 穴の底に合わせるため微調整 */
         }
-        .eyes { 
-            display: flex; 
-            justify-content: space-between; 
-            width: 60%; 
-            position: absolute; 
-            top: 25%; 
-            z-index: 3; 
-        }
-        .eye { 
-            width: 20px; height: 20px; 
-            background-color: white; 
-            border: 2px solid black; 
-            border-radius: 50%; 
-            position: relative; 
-            box-sizing: border-box; 
-        }
-        .eye::before { 
-            content: ''; 
-            position: absolute; 
-            width: 8px; height: 8px; 
-            background-color: black; 
-            border-radius: 50%; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); 
-        }
-        .eye::after { 
-            content: ''; 
-            position: absolute; 
-            width: 5px; height: 5px; 
-            background-color: white; 
-            border-radius: 50%; 
-            top: 15%; left: 15%; 
-        }
-        .nose { 
-            width: 16px; height: 10px; 
-            background-color: #e6a782; 
-            border-radius: 50%; 
-            border: 1px solid #8b4513; 
-            position: absolute; 
-            top: 50%; 
-            z-index: 3; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        .nose::before { 
-            content: ''; 
-            position: absolute; 
-            width: 4px; height: 2px; 
-            background-color: white; 
-            border-radius: 50%; 
-            top: 15%; 
-        }
-        .nose::after { 
-            content: 'U'; 
-            font-family: Arial, sans-serif; 
-            font-size: 10px; 
-            color: #8b4513; 
-            position: absolute; 
-            bottom: -10px; 
-            line-height: 0; 
-        }
-        .cheeks { 
-            position: absolute; 
-            width: 25px; height: 15px; 
-            background-color: #ffb6c1; 
-            border-radius: 50%; 
-            top: 40%; 
-            z-index: 2; 
-            box-shadow: 0 0 5px rgba(255, 182, 193, 0.5); 
-        }
-        .cheek.left { left: 15%; } 
-        .cheek.right { right: 15%; } 
-        .whiskers { 
-            position: absolute; 
-            width: 80%; 
-            height: 1px; 
-            top: 55%; 
-            z-index: 3; 
-        }
-        .whiskers::before, .whiskers::after { 
-            content: ''; 
-            position: absolute; 
-            width: 20px; 
-            height: 1px; 
-            background: #8b4513; 
-            top: 0; 
-            transform-origin: 100% 50%; 
-        }
-        .whiskers::before { 
-            right: 50%; margin-right: 5px; 
-            box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; 
-            transform: rotate(0deg); 
-        }
-        .whiskers::after { 
-            left: 50%; margin-left: 5px; 
-            box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; 
-            transform: rotate(0deg); 
-        }
-        .paws { 
-            position: absolute; 
-            width: 100%; 
-            height: 30px; 
-            bottom: 0; 
-            z-index: 4; 
-            pointer-events: none; 
-        }
-        .paw { 
-            position: absolute; 
-            width: 35px; height: 35px; 
-            background-color: #a0522d; 
-            border: 2px solid #8b4513; 
-            border-radius: 50%; 
-            bottom: 10px; 
-            z-index: 4; 
-            box-shadow: 0 5px 5px rgba(0,0,0,0.2); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        .paw::before { 
-            content: ''; 
-            position: absolute; 
-            width: 10px; height: 5px; 
-            background: radial-gradient(#663300 30%, transparent 30%); 
-            background-size: 5px 5px; 
-            top: 5px; left: 50%; 
-            transform: translateX(-50%); 
-        }
-        .paw.left { left: 15%; transform: rotate(-10deg); } 
-        .paw.right { right: 15%; transform: rotate(10deg); } 
-        .mole:not(.gold):not(.bomb):not(.clock) { background-color: #c28b5e; border-color: #8b4513; }
-        .mole.gold { background: linear-gradient(to bottom, #ffd700, #daa520); border: 4px solid #b8860b; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-        .mole.bomb { background-color: #333; border: 4px solid #ff4500; box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); }
-        .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; box-shadow: 0 0 10px rgba(60, 179, 113, 0.7); }
 
-        /* ゲームオーバーモーダルのCSS (省略) */
+        /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
+        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
+        .mole.bomb .mole-body { fill: #333; stroke: #FF4500; }
+        .mole.clock .mole-body { fill: #4682B4; stroke: #3CB371; }
+        .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
+        .mole.bomb .mole-hand { fill: #222; }
+
+        /* ゲームオーバーモーダルのCSS (変更なし) */
         #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .modal-content { background-color: #fff; margin: 15% auto; padding: 30px; border: 5px solid #d35400; width: 80%; max-width: 400px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s; }
         .modal-content h2 { color: #d35400; font-size: 2.5em; margin-bottom: 10px; }
@@ -265,13 +125,13 @@
         .modal-content button:hover { background-color: #2980b9; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         
-        /* スコアポップアップのCSS (省略) */
+        /* スコアポップアップのCSS (変更なし) */
         .score-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); pointer-events: none; opacity: 0; transition: none; animation: scorePopUp 0.6s ease-out forwards; z-index: 5; }
         @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -100px); } }
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>スペシャルモグラたたき！ </h1>
+    <h1>SVGスペシャルモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -353,6 +213,31 @@
         const finalScoreDisplay = document.getElementById('final-score');
         const difficultySelect = document.getElementById('difficulty-select');
 
+        // SVGモグラのHTML
+        // ViewBoxを調整し、穴のサイズに合うようにモグラの図形を定義
+        const MOLE_SVG = `
+            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
+                <ellipse class="mole-body" cx="50" cy="70" rx="45" ry="40" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                
+                <ellipse class="mole-face" cx="50" cy="75" rx="20" ry="15" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+
+                <circle cx="50" cy="70" r="3" fill="#333"/>
+                
+                <circle cx="40" cy="65" r="1.5" fill="black"/>
+                <circle cx="60" cy="65" r="1.5" fill="black"/>
+
+                <line x1="30" y1="75" x2="40" y2="75" stroke="#6A462F" stroke-width="1"/>
+                <line x1="30" y1="80" x2="40" y2="80" stroke="#6A462F" stroke-width="1"/>
+                <line x1="60" y1="75" x2="70" y2="75" stroke="#6A462F" stroke-width="1"/>
+                <line x1="60" y1="80" x2="70" y2="80" stroke="#6A462F" stroke-width="1"/>
+
+                <path d="M45 40 Q50 30 55 40" fill="none" stroke="#6A462F" stroke-width="2"/>
+
+                <ellipse class="mole-hand" cx="30" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="70" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+            </svg>
+        `;
+
 
         // 難易度に応じて #grid のサイズとレイアウトを動的に設定
         function setGridClass(difficulty) {
@@ -385,22 +270,8 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                // モグラのHTML構造 (変更なし)
-                mole.innerHTML = `
-                    <div class="face-container">
-                        <div class="eyes">
-                            <div class="eye"></div>
-                            <div class="eye"></div>
-                        </div>
-                        <div class="whiskers"></div> <div class="nose"></div>
-                        <div class="cheeks cheek left"></div>
-                        <div class="cheeks cheek right"></div>
-                    </div>
-                    <div class="paws">
-                        <div class="paw left"></div>
-                        <div class="paw right"></div>
-                    </div>
-                `;
+                // 💡 モグラのHTMLをSVGに置き換え
+                mole.innerHTML = MOLE_SVG; 
 
                 hole.addEventListener('click', whack);
 
@@ -409,7 +280,7 @@
             }
         }
         
-        // 2. モグラの出現ロジック (省略)
+        // 2. モグラの出現ロジック
         function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
@@ -434,6 +305,7 @@
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
             
+            // 💡 SVGの色を切り替えるためにクラスを適用
             mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
             switch (moleType) {
@@ -457,7 +329,7 @@
             }, time);
         }
 
-        // 3. プレイヤーの操作ロジック (省略)
+        // 3. プレイヤーの操作ロジック
         function showScorePop(hole, points) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
