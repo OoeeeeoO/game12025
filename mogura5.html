@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (修正済み)</title>
+    <title>モグラたたき - SVGモグラ版 (縦長楕円)</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -130,7 +130,7 @@
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>モグラたたき！ </h1>
+    <h1>SVGスペシャルモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -216,22 +216,22 @@
         // ViewBoxを調整し、穴のサイズに合うようにモグラの図形を定義
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
-                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-body" cx="50" cy="65" rx="40" ry="50" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
                 
-                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+                <ellipse class="mole-face" cx="50" cy="75" rx="20" ry="15" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
 
-                <circle cx="50" cy="70" r="3" fill="#333"/>
+                <circle cx="50" cy="67" r="3" fill="#333"/>
                 
-                <circle cx="38" cy="58" r="3.5" fill="black"/>
-                <circle cx="62" cy="58" r="3.5" fill="black"/>
+                <circle cx="38" cy="50" r="3.5" fill="black"/>
+                <circle cx="62" cy="50" r="3.5" fill="black"/>
 
+                <line x1="28" y1="70" x2="38" y2="70" stroke="#6A462F" stroke-width="1"/>
                 <line x1="28" y1="75" x2="38" y2="75" stroke="#6A462F" stroke-width="1"/>
-                <line x1="28" y1="80" x2="38" y2="80" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="70" x2="72" y2="70" stroke="#6A462F" stroke-width="1"/>
                 <line x1="62" y1="75" x2="72" y2="75" stroke="#6A462F" stroke-width="1"/>
-                <line x1="62" y1="80" x2="72" y2="80" stroke="#6A462F" stroke-width="1"/>
 
-                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="25" cy="85" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="75" cy="85" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
             </svg>
         `;
 
@@ -359,49 +359,6 @@
                 
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
-                delete mole.dataset.type; delete mole.dataset.score;
-            }
-        }
-
-        // 4. ゲームの流れ
-        function startGame() {
-            if (isGameRunning) return;
-            isGameRunning = true;
-            score = 0;
-            
-            const difficulty = difficultySelect.value;
-            const settings = DIFFICULTY_SETTINGS[difficulty];
-            
-            currentMinTime = settings.minTime;
-            currentMaxTime = settings.maxTime;
-            currentHoleCount = settings.holeCount;
-            currentGridColumns = settings.gridColumns;
-            
-            setGridClass(difficulty); 
-            createHoles(); 
-            
-            timeLeft = GAME_DURATION; 
-            scoreDisplay.textContent = score;
-            timeLeftDisplay.textContent = timeLeft;
-            startButton.disabled = true;
-            gameOverModal.style.display = 'none'; 
-            countdownTimerId = setInterval(countdown, 1000);
-            peep();
-        }
-
-        function countdown() {
-            timeLeft--;
-            updateTime();
-        }
-
-        function endGame() {
-            isGameRunning = false;
-            clearInterval(countdownTimerId);
-
-            document.querySelectorAll('.hole.up').forEach(hole => {
-                hole.classList.remove('up');
-                const mole = hole.querySelector('.mole');
-                mole.classList.remove('gold', 'bomb', 'clock');
                 delete mole.dataset.type; delete mole.dataset.score;
             });
 
