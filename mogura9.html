@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>モグラたたき - ドット絵ピクセル風</title>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <style>
+        /* CSS (デザイン) - ドット絵ピクセル風に全面改修 */
+        
+        /* 🎨 基本設定 */
+        :root {
+            --pink-base: #ffc0cb;      /* パステルピンク */
+            --pink-accent: #ff007f;    /* 鮮やかピンク */
+            --pink-dark: #cc0066;      /* 濃いピンク (影やボーダー) */
+            --green-grass: #a0d468;    /* 草地ベース */
+            --green-dark: #6b9e32;     /* 草地ボーダー */
+            --brown-hole: #8e5c46;     /* 穴ベース */
+            --brown-dark: #6a462f;     /* 穴影 */
+            --font-pixel: 'DotGothic16', monospace;
+        }
+
+        body {
+            font-family: var(--font-pixel); 
+            text-align: center;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-color: var(--pink-base); /* 全体的にパステルピンク */
+            image-rendering: pixelated; /* ドット絵感を強調 */
+        }
+
+        h1 { 
+            /* ドット絵風のフチ付きタイトル */
+            font-family: var(--font-pixel);
+            font-size: 2.8em; /* ピクセルフォントに合わせて調整 */
+            color: var(--pink-accent); /* 鮮やかピンク */
+            text-shadow: 
+                -2px -2px 0 var(--pink-dark), /* 濃いピンクのフチ */
+                2px -2px 0 var(--pink-dark),
+                -2px 2px 0 var(--pink-dark),
+                2px 2px 0 var(--pink-dark);
+            margin-bottom: 20px;
+            letter-spacing: 0; 
+            line-height: 1.2;
+            padding: 5px 10px;
+            background-color: #fff; /* 白い背景で目立たせる */
+            border: 2px solid var(--pink-dark);
+            box-shadow: 4px 4px 0 var(--pink-dark); /* ドット絵風の影 */
+        }
+        
+        /* 🕹️ コントロールと情報表示 */
+        #controls, #game-info { 
+            background-color: #fff; /* 白い背景 */
+            padding: 8px 15px;
+            border-radius: 0; /* 角丸をなくす */
+            box-shadow: 3px 3px 0 var(--pink-dark); /* ドット絵風の影 */
+            margin-bottom: 20px; 
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border: 2px solid var(--pink-dark);
+            color: var(--pink-dark);
+            font-size: 1.1em;
+        }
+
+        #game-info p { 
+            margin: 0; 
+            color: var(--pink-dark); 
+        }
+        #score, #time-left { 
+            font-weight: bold; 
+            color: var(--pink-accent); /* ポップな赤ピンク */
+            font-family: var(--font-pixel); 
+            font-size: 1.3em;
+        }
+
+        /* 🔽 セレクトボックス */
+        #difficulty-select {
+            padding: 6px 10px;
+            font-size: 1em;
+            border-radius: 0; 
+            border: 2px solid var(--pink-dark); 
+            background-color: var(--pink-base); 
+            color: var(--pink-dark);
+            font-family: var(--font-pixel);
+            appearance: none; 
+            background-image: none; /* デフォルトの矢印を消す */
+            cursor: pointer;
+            box-shadow: 1px 1px 0 var(--pink-dark);
+        }
+        #difficulty-select:focus {
+            outline: none;
+            box-shadow: 2px 2px 0 var(--pink-accent);
+        }
+
+        /* ▶️ スタートボタン */
+        #start-button {
+            padding: 8px 20px;
+            font-size: 1.3em; 
+            background-color: var(--pink-accent); /* 鮮やかなピンク */
+            color: white;
+            border: 2px solid var(--pink-dark); /* ボーダーを復活 */
+            border-radius: 0; 
+            cursor: pointer;
+            transition: background-color 0.1s, transform 0.05s, box-shadow 0.05s;
+            box-shadow: 4px 4px 0 var(--pink-dark); /* 押しボタン風の影 */
+            font-family: var(--font-pixel);
+            letter-spacing: 0;
+        }
+        #start-button:hover { 
+            background-color: var(--pink-dark); 
+            transform: translate(-1px, -1px); /* 影に近づける */
+            box-shadow: 5px 5px 0 var(--pink-dark);
+        }
+        #start-button:active { 
+            transform: translate(2px, 2px); /* 押した時に影に沈む */
+            box-shadow: 2px 2px 0 var(--pink-dark); 
+        }
+        #start-button:disabled { 
+            background-color: #cccccc; 
+            cursor: not-allowed; 
+            transform: translate(0, 0); 
+            box-shadow: 4px 4px 0 #999; 
+            border: 2px solid #999;
+        }
+
+        /* 🌳 ゲーム盤面 */
+        #grid {
+            display: grid;
+            margin: 0 auto;
+            background-color: var(--green-grass); /* 草地ベース色 */
+            border: 4px solid var(--green-dark); /* 濃い草地色ボーダー */
+            border-radius: 0;
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 6px 6px 0 var(--green-dark);
+            /* size adjustment is in JS but let's ensure holes look like squares */
+            aspect-ratio: 1 / 1; 
+        }
+
+        /* 🕳️ 穴 */
+        .hole {
+            background-color: var(--brown-hole); /* 穴の内部色 */
+            border-radius: 0; /* 角丸をなくす */
+            overflow: hidden; 
+            position: relative; 
+            cursor: pointer;
+            border: none;
+            box-shadow: 
+                inset -2px -2px 0 var(--brown-dark), /* 内側の暗い影 */
+                inset 2px 2px 0 #c08465; /* 内側の明るい影（立体感）*/
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        
+        /* 🐭 モグラ本体 (SVGコンテナ) */
+        .mole {
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            bottom: -100%; 
+            transition: bottom 0.2s linear; /* モーションをより機械的に */
+            pointer-events: none; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2; 
+        }
+        .hole.up .mole { bottom: 0; pointer-events: auto; }
+
+        /* SVG共通スタイル (ドット絵風ベタ塗りに) */
+        .mole svg {
+            width: 100%;
+            height: 100%;
+            transform: translateY(10%); 
+        }
+
+        /* 🌈 特殊モグラの色変更 (ドット絵パレットに合わせる) */
+        .mole-body { fill: #6A462F; stroke: none; } /* 体 - 濃い茶色、線なし */
+        .mole-face { fill: #E6C5A9; stroke: none; } /* 顔 - 明るい肌色、線なし */
+        .mole-hand { fill: #6A462F; stroke: none; } /* 手 */
+        .mole-whisker { stroke: #333; } /* ひげ */
+        .mole-nose { fill: #FF007F; } /* 鼻 - 鮮やかピンク */
+
+        /* ゴールドモグラ */
+        .mole.gold .mole-body { fill: #FFD700; }
+        .mole.gold .mole-face { fill: #FFFF00; }
+        .mole.gold .mole-hand { fill: #FFD700; }
+        .mole.gold .mole-nose { fill: #B8860B; }
+        
+        /* ボムモグラ (黒いボディに赤の差し色) */
+        .mole.bomb .mole-body { fill: #333; }
+        .mole.bomb .mole-face { fill: #888; }
+        .mole.bomb .mole-hand { fill: #FF0000; } 
+        .mole.bomb .mole-nose { fill: #000; }
+        
+        /* クロックモグラ (水色) */
+        .mole.clock .mole-body { fill: #00FFFF; } 
+        .mole.clock .mole-face { fill: #99FFFF; }
+        .mole.clock .mole-hand { fill: #00FFFF; }
+        .mole.clock .mole-nose { fill: #008080; }
+
+        /* 💀 ゲームオーバーモーダル */
+        #game-over-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(2px); 
+        }
+        .modal-content { 
+            background-color: #fff; 
+            margin: 10% auto; 
+            padding: 30px;
+            border: 4px solid var(--pink-dark); 
+            width: 85%; max-width: 350px; 
+            border-radius: 0; 
+            text-align: center; 
+            box-shadow: 6px 6px 0 var(--pink-dark);
+            animation: fadeIn 0.5s; 
+            font-family: var(--font-pixel);
+            color: var(--pink-dark);
+        }
+        .modal-content h2 { 
+            color: var(--pink-accent); 
+            font-size: 2.5em; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 0 var(--pink-dark); 
+        }
+        .final-score { 
+            font-size: 3.5em; 
+            color: #fff;
+            background-color: var(--pink-accent); 
+            border: 3px solid var(--pink-dark);
+            text-shadow: 2px 2px 0 var(--pink-dark);
+            box-shadow: 4px 4px 0 var(--pink-dark);
+        }
+        .modal-content button { 
+            background-color: #00bfff; /* 鮮やか水色 */
+            border: 2px solid #008080; 
+            box-shadow: 3px 3px 0 #008080; 
+            border-radius: 0; 
+        }
+        .modal-content button:hover { 
+            background-color: #008080; 
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0 #008080;
+        }
+        .modal-content button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 #008080;
+        }
+
+        /* 💥 スコアポップアップ */
+        .score-pop { 
+            font-size: 2.5em; 
+            text-shadow: 
+                -2px -2px 0 var(--pink-dark), 
+                2px -2px 0 var(--pink-dark),
+                -2px 2px 0 var(--pink-dark),
+                2px 2px 0 var(--pink-dark);
+            font-family: var(--font-pixel); 
+        }
+        /* スコアの色はJSで設定 */
+
+        /* ⏳ カウントダウンオーバーレイ */
+        #countdown-overlay {
+            background-color: rgba(255, 204, 229, 0.85); /* 濃いめの半透明 */
+        }
+        #countdown-text {
+            font-family: var(--font-pixel);
+            font-size: 8em; 
+            color: var(--pink-accent); 
+            text-shadow: 
+                -4px -4px 0 #fff, 
+                4px -4px 0 #fff,
+                -4px 4px 0 #fff,
+                4px 4px 0 #fff,
+                6px 6px 0 var(--pink-dark); 
+        }
+        /* pulseアニメーションはそのまま利用 */
+    </style>
+</head>
+
+<body onload="initializeGame()">
+    <h1>もぐらdeポン！</h1> <div id="game-info">
+        <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
+    </div>
+
+    <div id="controls">
+        <label for="difficulty-select">難易度: </label>
+        <select id="difficulty-select">
+            <option value="easy">かんたん</option>
+            <option value="normal" selected>ふつう</option>
+            <option value="hard">むずかしい</option>
+        </select>
+        <button id="start-button">ゲームスタート</button>
+    </div>
+
+    <div id="grid">
+        </div>
+        
+    <div id="countdown-overlay">
+        <span id="countdown-text"></span>
+    </div>
+        
+    <div id="game-over-modal">
+        <div class="modal-content">
+            <h2>ゲームオーバー！</h2>
+            <p>最終スコア</p>
+            <span id="final-score" class="final-score">0</span>
+            <button onclick="closeModal()">もういちど</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript (ゲームロジック) - 変更なし
+
+        const GAME_DURATION = 30; 
+        
+        const NORMAL_MOLE_SCORE = 1;
+        const GOLD_MOLE_SCORE = 3;
+        const BOMB_MOLE_SCORE = -5;
+        const CLOCK_MOLE_SCORE = 2;
+
+        const BOMB_TIME_PENALTY = 5; 
+        const CLOCK_TIME_BONUS = 5; 
+
+        const GOLD_MOLE_CHANCE = 0.10; 
+        const BOMB_MOLE_CHANCE = 0.15; 
+        const CLOCK_MOLE_CHANCE = 0.05; 
+        
+        const DIFFICULTY_SETTINGS = {
+            easy: {
+                minTime: 800, maxTime: 1800,
+                holeCount: 9, 
+                gridColumns: 3, 
+            },
+            normal: {
+                minTime: 500, maxTime: 1500,
+                holeCount: 16, 
+                gridColumns: 4, 
+            },
+            hard: {
+                minTime: 300, maxTime: 1000,
+                holeCount: 25, 
+                gridColumns: 5, 
+            }
+        };
+
+        let currentMinTime;
+        let currentMaxTime;
+        let currentHoleCount;
+        let currentGridColumns;
+
+        let score = 0;
+        let timeLeft = GAME_DURATION; 
+        let isGameRunning = false;
+        let countdownTimerId;
+        let moleTimerId; 
+        let lastHole = null;
+
+        const scoreDisplay = document.getElementById('score');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const startButton = document.getElementById('start-button');
+        const grid = document.getElementById('grid');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const difficultySelect = document.getElementById('difficulty-select');
+        const countdownOverlay = document.getElementById('countdown-overlay');
+        const countdownText = document.getElementById('countdown-text');
+
+        // 🐭 SVGモグラのHTML - ドット絵風に配色をCSSで調整するため、HTML構造はそのまま
+        const MOLE_SVG = `
+            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
+                <ellipse class="mole-body" cx="50" cy="80" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                
+                <ellipse class="mole-face" cx="50" cy="92" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+
+                <circle class="mole-nose" cx="50" cy="84" r="3" fill="#333"/>
+                
+                <circle cx="38" cy="72" r="3.5" fill="black"/>
+                <circle cx="62" cy="72" r="3.5" fill="black"/>
+
+                <line class="mole-whisker" x1="23" y1="87" x2="38" y2="87" stroke="#6A462F" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="20" y1="92" x2="38" y2="92" stroke="#6A462F" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="23" y1="97" x2="38" y2="97" stroke="#6A462F" stroke-width="1.5"/>
+                
+                <line class="mole-whisker" x1="62" y1="87" x2="77" y2="87" stroke="#6A462F" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="62" y1="92" x2="80" y2="92" stroke="#6A462F" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="62" y1="97" x2="77" y2="97" stroke="#6A462F" stroke-width="1.5"/>
+
+                <ellipse class="mole-hand" cx="25" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="75" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+            </svg>
+        `;
+
+
+        // ゲーム盤のサイズ調整関数
+        function setGridClass(difficulty) {
+            grid.className = ''; 
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            const columns = settings.gridColumns;
+            
+            const HOLE_SIZE = 100; 
+            const GAP = 8;
+            const BORDER_PADDING = 16; 
+
+            // ドット絵風のデザインは固定サイズで幅を持たせる
+            const newSize = (HOLE_SIZE * columns) + (GAP * (columns - 1)) + BORDER_PADDING;
+
+            grid.style.width = `${newSize}px`;
+            grid.style.height = `${newSize}px`;
+
+            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            
+            grid.classList.add('grid-' + difficulty);
+        }
+
+        function createHoles() {
+            grid.innerHTML = '';
+            for (let i = 0; i < currentHoleCount; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                hole.dataset.id = i;
+
+                const mole = document.createElement('div');
+                mole.classList.add('mole');
+                
+                mole.innerHTML = MOLE_SVG; 
+
+                hole.addEventListener('click', whack);
+
+                hole.appendChild(mole);
+                grid.appendChild(hole);
+            }
+        }
+        
+        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            const idx = Math.floor(Math.random() * holes.length);
+            const hole = holes[idx];
+
+            if (hole === lastHole) { return randomHole(); }
+            lastHole = hole;
+            return hole;
+        }
+        function randomMoleType() {
+            const r = Math.random();
+            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
+            else { return 'normal'; }
+        }
+
+        function peep() {
+            if (!isGameRunning) {
+                clearTimeout(moleTimerId);
+                return;
+            }
+            const time = randomTime(); 
+            const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+            const moleType = randomMoleType();
+            
+            mole.classList.remove('gold', 'bomb', 'clock'); 
+            let scoreValue;
+            switch (moleType) {
+                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
+                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
+                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
+                default: scoreValue = NORMAL_MOLE_SCORE; break;
+            }
+
+            mole.dataset.type = moleType; 
+            mole.dataset.score = scoreValue;
+
+            hole.classList.add('up');
+
+            setTimeout(() => {
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }, time);
+
+            moleTimerId = setTimeout(peep, time);
+        }
+
+        function updateTime() {
+            if (timeLeft < 0) { timeLeft = 0; }
+            timeLeftDisplay.textContent = timeLeft;
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
+        }
+
+        function showScorePop(hole, points) {
+            const pop = document.createElement('div');
+            pop.classList.add('score-pop');
+            let sign = points > 0 ? '+' : '';
+            pop.textContent = sign + points;
+            
+            // ドット絵パレットに合わせた色調整
+            if (points > 0) { 
+                pop.style.color = points >= GOLD_MOLE_SCORE ? '#FFD700' : '#00bfff'; // ゴールドか水色
+            } else { 
+                pop.style.color = '#FF0000'; // 赤
+            }
+            
+            hole.appendChild(pop);
+            setTimeout(() => { pop.remove(); }, 700); 
+        }
+        
+        function whack(event) {
+            if (!isGameRunning) return;
+            const hole = event.currentTarget;
+            const mole = hole.querySelector('.mole');
+            
+            if (hole.classList.contains('up')) {
+                const points = parseInt(mole.dataset.score);
+                const type = mole.dataset.type;
+                
+                showScorePop(hole, points);
+                score += points;
+                scoreDisplay.textContent = score;
+
+                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
+                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                
+                updateTime(); 
+                
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }
+        }
+
+        function startGameLogic() {
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentMinTime = settings.minTime;
+            currentMaxTime = settings.maxTime;
+            currentHoleCount = settings.holeCount; 
+            currentGridColumns = settings.gridColumns; 
+
+            setGridClass(difficulty);
+            createHoles();
+            
+            score = 0;
+            timeLeft = GAME_DURATION; 
+            isGameRunning = true; 
+            scoreDisplay.textContent = score;
+            startButton.disabled = true;
+
+            countdownTimerId = setInterval(() => {
+                timeLeft--;
+                updateTime();
+            }, 1000);
+
+            peep();
+        }
+
+        function startGame() {
+            if (isGameRunning) return;
+
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentHoleCount = settings.holeCount;
+            currentGridColumns = settings.gridColumns;
+            setGridClass(difficulty);
+            createHoles();
+
+            startButton.disabled = true;
+            countdownOverlay.style.display = 'flex';
+            let count = 3;
+
+            const countdownInterval = setInterval(() => {
+                if (count > 0) {
+                    countdownText.textContent = count;
+                    count--;
+                } else if (count === 0) {
+                    countdownText.textContent = 'スタート!';
+                    count--; 
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownOverlay.style.display = 'none';
+                    startGameLogic(); 
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(countdownTimerId);
+            clearTimeout(moleTimerId); 
+
+            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+
+            finalScoreDisplay.textContent = score;
+            gameOverModal.style.display = 'flex'; 
+        }
+        
+        function closeModal() {
+            gameOverModal.style.display = 'none';
+            startButton.disabled = false;
+            
+            score = 0;
+            timeLeft = GAME_DURATION;
+            scoreDisplay.textContent = score;
+            timeLeftDisplay.textContent = timeLeft;
+            
+            initializeGame();
+        }
+
+        function initializeGame() {
+            const initialDifficulty = difficultySelect.value;
+            const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
+            
+            currentMinTime = initialSettings.minTime;
+            currentMaxTime = initialSettings.maxTime;
+            currentHoleCount = initialSettings.holeCount;
+            currentGridColumns = initialSettings.gridColumns;
+            
+            setGridClass(initialDifficulty);
+            createHoles(); 
+            updateTime(); 
+        }
+
+        startButton.addEventListener('click', startGame);
+        difficultySelect.addEventListener('change', () => {
+            if (!isGameRunning) {
+                initializeGame();
+            }
+        }); 
+    </script>
+</body>
+</html>
