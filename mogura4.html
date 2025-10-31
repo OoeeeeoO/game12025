@@ -2,11 +2,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - 正円穴版 (モグラ修正済み)</title>
+    <title>もぐらdeポン！ 〜ポムポムプリン風〜</title>
     <style>
-        /* CSS (デザイン) */
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'M PLUS Rounded 1c', sans-serif; /* 可愛らしいフォントに変更 */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -15,83 +16,100 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background-color: #f0f0f0; 
+            background-color: #ffe6b3; /* クリーム色系の背景 */
+            color: #5a3d00; /* 全体の文字色を茶色系に */
         }
 
         h1 { 
-            color: #333; 
+            color: #ff9900; /* ポムポムプリンのメインカラー */
             margin-bottom: 20px;
-            font-size: 2.5em;
-            text-shadow: none; 
+            font-size: 2.8em; /* 少し大きく */
+            text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.7), 
+                         -3px -3px 0px rgba(255, 255, 255, 0.7),
+                         3px -3px 0px rgba(255, 255, 255, 0.7),
+                         -3px 3px 0px rgba(255, 255, 255, 0.7); /* 白い縁取り */
+            letter-spacing: 2px;
         }
         
         #controls, #game-info { 
-            background-color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px; 
+            background-color: #fffacd; /* レモンシフォン */
+            padding: 12px 25px; /* 少し大きめに */
+            border-radius: 25px; /* 丸みを強く */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* 影を強調 */
+            margin-bottom: 25px; 
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
+            border: 3px solid #ffcc00; /* 黄色い枠線 */
         }
 
         #difficulty-select {
-            padding: 8px 15px;
-            font-size: 1.1em;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            padding: 10px 18px;
+            font-size: 1.2em;
+            border-radius: 15px; /* 丸みを強く */
+            border: 2px solid #ffcc00; /* 黄色い枠線 */
+            background-color: #fff8dc; /* コーンシルク */
+            color: #5a3d00;
         }
 
         #start-button {
-            padding: 10px 25px;
-            font-size: 1.5em;
-            background-color: #4CAF50;
-            color: white;
+            padding: 12px 30px;
+            font-size: 1.6em;
+            background-color: #ffcc00; /* ポムポムプリンの黄色 */
+            color: #7b4a12; /* 濃い茶色の文字 */
             border: none;
-            border-radius: 8px;
+            border-radius: 20px; /* 丸みを強く */
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 8px rgba(0,0,0,0.2);
         }
-        #start-button:hover { background-color: #45a049; transform: translateY(-2px); }
-        #start-button:disabled { background-color: #cccccc; cursor: not-allowed; transform: translateY(0); box-shadow: none; }
+        #start-button:hover { background-color: #ffdb4d; transform: translateY(-3px); }
+        #start-button:disabled { background-color: #cccccc; cursor: not-allowed; transform: translateY(0); box-shadow: none; color: #666; }
 
-        #game-info p { margin: 0; color: #333; }
-        #score, #time-left { font-weight: bold; color: #d35400; }
+        #game-info p { 
+            margin: 0; 
+            color: #5a3d00; /* 茶色系の文字 */
+            font-size: 1.2em;
+        }
+        #score, #time-left { 
+            font-weight: bold; 
+            color: #ff9900; /* ポムポムプリンのメインカラー */
+            font-size: 1.3em;
+            text-shadow: 1px 1px 0px #fff;
+        }
 
         /* ゲーム盤面 */
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: #556b2f; 
-            border: 8px solid #8b4513; 
-            border-radius: 15px;
-            padding: 8px;
-            gap: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background-color: #a0c4ff; /* 水色系の背景 */
+            border: 10px solid #ffb700; /* 濃いオレンジ色の縁取り */
+            border-radius: 20px; /* 角丸を強く */
+            padding: 10px;
+            gap: 10px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
         }
 
         /* 穴 */
         .hole {
-            background-color: #a0522d; 
+            background-color: #8b4513; /* 土色、カラメル色 */
             border-radius: 50%;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 4px solid #696969; 
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
+            border: 5px solid #663300; /* 濃い茶色の縁取り */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6); 
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* モグラが下から出てくるように */
+            align-items: flex-end;
         }
 
-        /* モグラ本体 */
+        /* モグラ本体（ポムポムプリン風） */
         .mole {
-            width: 90%; 
-            height: 90%; 
-            background-color: #c28b5e; 
-            border: 4px solid #8b4513; 
+            width: 95%; /* 穴に対して少し大きめに */
+            height: 95%; 
+            background-color: #ffd700; /* ポムポムプリンの体色（黄色） */
+            border: 4px solid #ccaa00; /* 少し濃い黄色 */
             border-radius: 50%;
             position: absolute; 
             bottom: -100%; 
@@ -104,7 +122,6 @@
             box-sizing: border-box; 
             z-index: 2; 
             overflow: visible; 
-            /* 💡 手が顔を隠さないように顔の領域を上に押し上げる */
             padding-bottom: 25px; 
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
@@ -122,18 +139,20 @@
             box-sizing: border-box; 
             transform: translateY(10%); 
         }
+
+        /* ポムポムプリンの目 */
         .eyes { 
             display: flex; 
-            justify-content: space-between; 
-            width: 60%; 
+            justify-content: space-around; /* 間隔を広げる */
+            width: 70%; /* 目の間隔を広げる */
             position: absolute; 
-            top: 25%; 
+            top: 30%; /* 少し下に */
             z-index: 3; 
         }
         .eye { 
-            width: 20px; height: 20px; 
-            background-color: white; 
-            border: 2px solid black; 
+            width: 15px; height: 15px; /* 少し小さく */
+            background-color: black; /* 黒目 */
+            border: none; /* 枠線なし */
             border-radius: 50%; 
             position: relative; 
             box-sizing: border-box; 
@@ -141,27 +160,23 @@
         .eye::before { 
             content: ''; 
             position: absolute; 
-            width: 8px; height: 8px; 
-            background-color: black; 
-            border-radius: 50%; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%); 
-        }
-        .eye::after { 
-            content: ''; 
-            position: absolute; 
-            width: 5px; height: 5px; 
+            width: 6px; height: 6px; /* 白い光沢 */
             background-color: white; 
             border-radius: 50%; 
-            top: 15%; left: 15%; 
+            top: 20%; left: 20%; 
+            transform: none; 
         }
-        /* 💡 鼻の修正 */
+        .eye::after { /* もう一つの光沢はなし */
+            content: none;
+        }
+
+        /* ポムポムプリンの鼻 */
         .nose { 
-            width: 16px; height: 10px; 
-            background-color: #333; /* 濃い色 */
+            width: 25px; height: 15px; /* 大きく、横長に */
+            background-color: #7b4a12; /* 濃い茶色 */
             border-radius: 50%; 
             position: absolute; 
-            top: 45%; 
+            top: 50%; /* 目と口の間に */
             z-index: 4; 
             display: flex; 
             justify-content: center; 
@@ -170,111 +185,213 @@
         .nose::before { 
             content: ''; 
             position: absolute; 
-            width: 4px; height: 2px; 
+            width: 8px; height: 4px; /* 白い光沢 */
             background-color: white; 
             border-radius: 50%; 
-            top: 15%; 
+            top: 20%; 
         }
         .nose::after { 
-            content: ''; /* Uの字を削除 */
+            content: ''; 
             position: absolute; 
-            bottom: -10px; 
-            line-height: 0; 
+            width: 15px; /* 口の線 */
+            height: 2px;
+            background-color: #7b4a12;
+            border-radius: 2px;
+            bottom: -10px; /* 鼻の下に */
         }
-        /* 頬の位置調整 */
-        .cheeks { 
-            position: absolute; 
-            width: 25px; height: 15px; 
-            background-color: #ffb6c1; 
-            border-radius: 50%; 
-            top: 40%; 
-            z-index: 2; 
-            box-shadow: 0 0 5px rgba(255, 182, 193, 0.5); 
-        }
-        .cheek.left { left: 15%; } 
-        .cheek.right { right: 15%; } 
-        /* ひげの定義 */
+        /* 頬は削除 */
+        .cheeks { display: none; } 
+
+        /* ポムポムプリンの口元ひげ (ドット) */
         .whiskers { 
             position: absolute; 
             width: 80%; 
             height: 1px; 
-            top: 55%; 
+            top: 65%; /* 鼻の下、口の横あたり */
             z-index: 3; 
         }
         .whiskers::before, .whiskers::after { 
             content: ''; 
             position: absolute; 
-            width: 20px; 
-            height: 1px; 
-            background: #8b4513; 
+            width: 5px; /* ドットのサイズ */
+            height: 5px; 
+            background: #7b4a12; /* 茶色 */
+            border-radius: 50%; /* ドットに */
             top: 0; 
-            transform-origin: 100% 50%; 
+            transform-origin: 50% 50%; 
+            box-shadow: none; /* 影はなし */
         }
         .whiskers::before { 
-            right: 50%; margin-right: 5px; 
-            box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; 
-            transform: rotate(0deg); 
+            right: 50%; margin-right: 15px; /* 鼻から離す */
+            box-shadow: 0 -10px 0 0 #7b4a12, 0 10px 0 0 #7b4a12; /* 上下にドット */
+            transform: none;
         }
         .whiskers::after { 
-            left: 50%; margin-left: 5px; 
-            box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513; 
-            transform: rotate(0deg); 
+            left: 50%; margin-left: 15px; /* 鼻から離す */
+            box-shadow: 0 -10px 0 0 #7b4a12, 0 10px 0 0 #7b4a12; /* 上下にドット */
+            transform: none;
         }
-        
-        /* 💡 手の修正: z-indexを低くし、bottom位置を調整 */
+
+        /* ポムポムプリンのベレー帽 */
+        .mole::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: #7b4a12; /* 茶色 */
+            border-radius: 50%;
+            top: -15px; /* 頭の上に配置 */
+            left: 50%;
+            transform: translateX(-50%) rotate(15deg); /* 少し傾ける */
+            z-index: 4;
+            box-shadow: 0 5px 8px rgba(0,0,0,0.2);
+        }
+        .mole::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #ff9900; /* 黄色 */
+            border-radius: 50%;
+            top: -20px; /* 帽子の上部 */
+            left: calc(50% + 15px); /* 少し右にずらす */
+            transform: translateX(-50%) rotate(15deg);
+            z-index: 5;
+            border: 2px solid #5a3d00;
+        }
+
+        /* ポムポムプリンの手 */
         .paws { 
             position: absolute; 
             width: 100%; 
             height: 30px; 
             bottom: 0; 
-            z-index: 1; /* 顔(z-index: 2以上)より下に描画 */
+            z-index: 1; 
             pointer-events: none; 
         }
         .paw { 
             position: absolute; 
-            width: 35px; height: 35px; 
-            background-color: #a0522d; 
-            border: 2px solid #8b4513; 
+            width: 40px; height: 40px; /* 少し大きめに */
+            background-color: #ffd700; /* ポムポムプリンの体色 */
+            border: 3px solid #ccaa00; /* 少し濃い黄色 */
             border-radius: 50%; 
-            bottom: 5px; /* padding-bottom に合わせて調整 */
-            z-index: 1; /* 顔(z-index: 2以上)より下に描画 */
+            bottom: 5px; 
+            z-index: 1; 
             box-shadow: 0 5px 5px rgba(0,0,0,0.2); 
             display: flex; 
             justify-content: center; 
             align-items: center; 
         }
-        .paw::before { 
+        .paw::before { /* 肉球 */
             content: ''; 
             position: absolute; 
-            width: 10px; height: 5px; 
-            background: radial-gradient(#663300 30%, transparent 30%); 
-            background-size: 5px 5px; 
-            top: 5px; left: 50%; 
+            width: 15px; height: 8px; 
+            background: #e6a700; /* 少し濃い黄色 */
+            border-radius: 50%; 
+            top: 8px; 
+            left: 50%; 
             transform: translateX(-50%); 
         }
-        .paw.left { left: 15%; transform: rotate(-10deg); } 
-        .paw.right { right: 15%; transform: rotate(10deg); } 
-        .mole:not(.gold):not(.bomb):not(.clock) { background-color: #c28b5e; border-color: #8b4513; }
-        .mole.gold { background: linear-gradient(to bottom, #ffd700, #daa520); border: 4px solid #b8860b; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-        .mole.bomb { background-color: #333; border: 4px solid #ff4500; box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); }
-        .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; box-shadow: 0 0 10px rgba(60, 179, 113, 0.7); }
+        .paw.left { left: 10%; transform: rotate(-20deg); } /* 回転を強める */
+        .paw.right { right: 10%; transform: rotate(20deg); } /* 回転を強める */
+        
+        /* 特殊モグラの色もポムポムプリン風に */
+        .mole:not(.gold):not(.bomb):not(.clock) { background-color: #ffd700; border-color: #ccaa00; }
+        .mole.gold { 
+            background: linear-gradient(to bottom, #f2e307, #ffcc00); 
+            border: 4px solid #e6a700; 
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); 
+        }
+        .mole.bomb { 
+            background-color: #5a3d00; /* 焦げ茶色 */
+            border: 4px solid #ff4500; 
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); 
+        }
+        .mole.clock { 
+            background-color: #9bd7ea; /* 水色 */
+            border: 4px solid #48b7d4; 
+            box-shadow: 0 0 10px rgba(72, 183, 212, 0.7); 
+        }
 
-        /* ゲームオーバーモーダルのCSS (省略) */
-        #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
-        .modal-content { background-color: #fff; margin: 15% auto; padding: 30px; border: 5px solid #d35400; width: 80%; max-width: 400px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s; }
-        .modal-content h2 { color: #d35400; font-size: 2.5em; margin-bottom: 10px; }
-        .final-score { font-size: 3.5em; color: #27ae60; font-weight: bold; display: block; margin: 15px 0; padding: 10px; background-color: #ecf0f1; border-radius: 8px; }
-        .modal-content button { background-color: #3498db; color: white; border: none; padding: 10px 20px; font-size: 1.2em; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
-        .modal-content button:hover { background-color: #2980b9; }
+        /* ゲームオーバーモーダルのCSS */
+        #game-over-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; top: 0; 
+            width: 100%; height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            background-color: #fffacd; /* レモンシフォン */
+            margin: 10% auto; /* 上からの位置を調整 */
+            padding: 40px; /* パディングを増やす */
+            border: 5px solid #ff9900; /* ポムポムプリンのメインカラー */
+            width: 80%; max-width: 450px; /* サイズを調整 */
+            border-radius: 25px; /* 丸みを強く */
+            text-align: center; 
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5); 
+            animation: fadeIn 0.5s; 
+            color: #5a3d00;
+        }
+        .modal-content h2 { 
+            color: #ff9900; 
+            font-size: 3em; /* 大きく */
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+        }
+        .modal-content p {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+        .final-score { 
+            font-size: 4.5em; /* さらに大きく */
+            color: #ff9900; 
+            font-weight: bold; 
+            display: block; 
+            margin: 20px 0; 
+            padding: 15px; 
+            background-color: #fff8dc; /* コーンシルク */
+            border-radius: 12px; 
+            border: 2px solid #ffcc00;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+        }
+        .modal-content button { 
+            background-color: #ff9900; 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            font-size: 1.5em; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            transition: background-color 0.3s, transform 0.1s; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .modal-content button:hover { background-color: #ffb700; transform: translateY(-2px); }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         
-        /* スコアポップアップのCSS (省略) */
-        .score-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); pointer-events: none; opacity: 0; transition: none; animation: scorePopUp 0.6s ease-out forwards; z-index: 5; }
-        @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -100px); } }
+        /* スコアポップアップのCSS */
+        .score-pop { 
+            position: absolute; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 3em; /* 大きく */
+            font-weight: bold; 
+            color: #fff; 
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8); 
+            pointer-events: none; 
+            opacity: 0; 
+            transition: none; 
+            animation: scorePopUp 0.7s ease-out forwards; 
+            z-index: 5; 
+        }
+        @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -120px); } }
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>モグラたたき！ </h1>
+    <h1>もぐらdeポン！ 〜ポムポムプリン風〜</h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -303,7 +420,7 @@
     </div>
 
     <script>
-        // JavaScript (ゲームロジック)
+        // JavaScript (ゲームロジック) - 変更なし
 
         const GAME_DURATION = 30; 
         
@@ -364,8 +481,8 @@
             const columns = settings.gridColumns;
             
             const baseSize = 100; 
-            const gap = 8;
-            const borderPadding = 16; 
+            const gap = 10; /* CSSに合わせて変更 */
+            const borderPadding = 20; /* CSSに合わせて変更 */
 
             const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
 
@@ -396,9 +513,7 @@
                             <div class="eye"></div>
                         </div>
                         <div class="whiskers"></div> <div class="nose"></div>
-                        <div class="cheeks cheek left"></div>
-                        <div class="cheeks cheek right"></div>
-                    </div>
+                        </div>
                     <div class="paws">
                         <div class="paw left"></div>
                         <div class="paw right"></div>
@@ -468,7 +583,7 @@
             pop.textContent = sign + points;
             if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
             hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 600); 
+            setTimeout(() => { pop.remove(); }, 700); /* アニメーション時間に合わせる */ 
         }
         
         function updateTime() {
