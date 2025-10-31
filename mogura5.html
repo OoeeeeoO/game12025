@@ -2,11 +2,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (最終修正)</title>
+    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
     <style>
         /* CSS (デザイン) */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Mochiy Pop P One', 'Arial', sans-serif; /* サンリオ風フォントを優先 */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -15,78 +16,130 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background-color: #f0f0f0; 
+            background-color: #fce4ec; /* 全体的にパステルピンク */
         }
 
         h1 { 
-            color: #333; 
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            text-shadow: none; 
+            /* サンリオ風の大きなフチ付きタイトル */
+            font-family: 'Mochiy Pop P One', cursive;
+            font-size: 3.8em; /* 大きく */
+            color: #ff80ab; /* 濃いピンク */
+            text-shadow: 
+                -2px -2px 0 #fff,  /* 白いフチ */
+                2px -2px 0 #fff,
+                -2px 2px 0 #fff,
+                2px 2px 0 #fff,
+                4px 4px 0 #ffc1e3, /* ピンクの影で立体感 */
+                6px 6px 0 #ffb3d9,
+                8px 8px 0 #ff99c8,
+                10px 10px 0 #ff80b3;
+            margin-bottom: 25px;
+            letter-spacing: 2px; /* 少し字間を広げる */
+            line-height: 1.2;
         }
         
         #controls, #game-info { 
-            background-color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px; 
+            background-color: #ffe0f0; /* 明るいピンクの背景 */
+            padding: 12px 25px;
+            border-radius: 20px; /* 角丸を強調 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* 少し強めの影 */
+            margin-bottom: 25px; 
             display: flex;
-            gap: 15px;
+            gap: 20px; /* 間隔を広げる */
             align-items: center;
+            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
+            color: #6a053c; /* 濃い文字色 */
+        }
+
+        #game-info p { 
+            margin: 0; 
+            color: #6a053c; 
+            font-size: 1.2em; /* 文字を大きく */
+        }
+        #score, #time-left { 
+            font-weight: bold; 
+            color: #ff3366; /* ポップな赤ピンク */
+            font-family: 'Nikukyu', cursive; /* 専用フォント */
+            font-size: 1.5em; /* さらに大きく */
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
 
         #difficulty-select {
-            padding: 8px 15px;
+            padding: 10px 18px;
             font-size: 1.1em;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            border-radius: 10px; /* 角丸 */
+            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
+            background-color: #fff0f5; /* 薄いピンクの背景 */
+            color: #6a053c;
+            font-family: 'Mochiy Pop P One', sans-serif;
+            appearance: none; /* デフォルトのスタイルをリセット */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#ff80ab" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印 */
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            cursor: pointer;
+        }
+        #difficulty-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px #ffc1e3;
         }
 
         #start-button {
-            padding: 10px 25px;
-            font-size: 1.5em;
-            background-color: #4CAF50;
+            padding: 12px 30px;
+            font-size: 1.8em; /* 非常に大きく */
+            background-color: #ff66b2; /* 鮮やかなピンク */
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 15px; /* さらに角丸 */
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 6px 0 #e04b9b, 0 8px 15px rgba(0,0,0,0.25); /* 押しボタン風の影 */
+            font-family: 'Mochiy Pop P One', cursive;
+            letter-spacing: 1px;
         }
-        #start-button:hover { background-color: #45a049; transform: translateY(-2px); }
-        #start-button:disabled { background-color: #cccccc; cursor: not-allowed; transform: translateY(0); box-shadow: none; }
+        #start-button:hover { 
+            background-color: #ff4d9b; 
+            transform: translateY(-3px); 
+            box-shadow: 0 9px 0 #e04b9b, 0 12px 20px rgba(0,0,0,0.3);
+        }
+        #start-button:active { /* 押した時に沈む表現 */
+            transform: translateY(3px); 
+            box-shadow: 0 3px 0 #e04b9b, 0 5px 10px rgba(0,0,0,0.2);
+        }
+        #start-button:disabled { 
+            background-color: #cccccc; 
+            cursor: not-allowed; 
+            transform: translateY(0); 
+            box-shadow: 0 6px 0 #b3b3b3, 0 8px 15px rgba(0,0,0,0.25); 
+        }
 
-        #game-info p { margin: 0; color: #333; }
-        #score, #time-left { font-weight: bold; color: #d35400; }
-
-        /* ゲーム盤面 */
+        /* ゲーム盤面 (変更なし - 色味は可愛らしいのでこのままでOK) */
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: #556b2f; 
-            border: 8px solid #8b4513; 
-            border-radius: 15px;
-            padding: 8px;
-            gap: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            background-color: #a0d468; /* 明るい緑 */
+            border: 8px solid #6b9e32; /* 濃い緑のボーダー */
+            border-radius: 20px; /* 少し大きめの角丸 */
+            padding: 10px;
+            gap: 10px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
         }
 
         /* 穴 */
         .hole {
-            background-color: #a0522d; 
+            background-color: #c08465; /* 明るい茶色 */
             border-radius: 50%;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 4px solid #696969; 
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
+            border: 4px solid #8e5c46; /* 濃い茶色のボーダー */
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.4); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* モグラ本体 (SVGコンテナ) */
+        /* モグラ本体 (SVGコンテナ) - ここは見た目の変更なしで良いかと */
         .mole {
             width: 100%; 
             height: 100%; 
@@ -116,35 +169,100 @@
         .mole.bomb .mole-hand { fill: #222; }
 
         /* ゲームオーバーモーダルのCSS */
-        #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
-        .modal-content { background-color: #fff; margin: 15% auto; padding: 30px; border: 5px solid #d35400; width: 80%; max-width: 400px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s; }
-        .modal-content h2 { color: #d35400; font-size: 2.5em; margin-bottom: 10px; }
-        .final-score { font-size: 3.5em; color: #27ae60; font-weight: bold; display: block; margin: 15px 0; padding: 10px; background-color: #ecf0f1; border-radius: 8px; }
-        .modal-content button { background-color: #3498db; color: white; border: none; padding: 10px 20px; font-size: 1.2em; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
-        .modal-content button:hover { background-color: #2980b9; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-        
+        #game-over-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            background-color: #fff0f5; /* 明るいピンク背景 */
+            margin: 10% auto; /* 少し上に表示 */
+            padding: 35px;
+            border: 5px solid #ff80ab; /* 濃いピンクボーダー */
+            width: 85%; max-width: 450px; 
+            border-radius: 25px; /* 大きな角丸 */
+            text-align: center; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
+            animation: fadeIn 0.5s; 
+            font-family: 'Mochiy Pop P One', sans-serif;
+            color: #6a053c;
+        }
+        .modal-content h2 { 
+            color: #ff66b2; /* 鮮やかなピンク */
+            font-size: 3em; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 0 #fff; /* 白いフチ */
+        }
+        .final-score { 
+            font-size: 4.5em; /* 最終スコアを非常に大きく */
+            color: #ff3366; /* ポップな赤ピンク */
+            font-weight: bold; 
+            display: block; 
+            margin: 20px 0; 
+            padding: 15px; 
+            background-color: #fff; /* 白背景 */
+            border-radius: 15px; /* 角丸 */
+            border: 3px solid #ff80ab;
+            font-family: 'Nikukyu', cursive; /* 専用フォント */
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+        }
+        .modal-content button { 
+            background-color: #80c0ff; /* パステルブルー */
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            font-size: 1.5em; 
+            border-radius: 10px; /* 角丸 */
+            cursor: pointer; 
+            transition: background-color 0.3s, transform 0.1s; 
+            font-family: 'Mochiy Pop P One', sans-serif;
+            box-shadow: 0 4px 0 #66aaff; /* 押しボタン風の影 */
+        }
+        .modal-content button:hover { 
+            background-color: #66aaff; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 0 #66aaff;
+        }
+        .modal-content button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #66aaff;
+        }
+
         /* スコアポップアップのCSS */
         .score-pop { 
             position: absolute; 
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            font-size: 2.5em; 
+            font-size: 3em; /* 大きく */
             font-weight: bold; 
             color: #fff; 
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+            text-shadow: 
+                -2px -2px 0 #ff66b2, /* ピンクのフチ */
+                2px -2px 0 #ff66b2,
+                -2px 2px 0 #ff66b2,
+                2px 2px 0 #ff66b2,
+                3px 3px 0 rgba(0,0,0,0.4); /* 黒い影 */
             pointer-events: none; 
             opacity: 0; 
-            animation: scorePopUp 0.6s ease-out forwards; 
+            animation: scorePopUp 0.7s ease-out forwards; /* アニメーション時間を少し長く */
             z-index: 5; 
+            font-family: 'Nikukyu', cursive; /* 専用フォント */
         }
         @keyframes scorePopUp { 
-            0% { opacity: 1; transform: translate(-50%, 0); } 
-            100% { opacity: 0; transform: translate(-50%, -100px); } 
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } /* 開始時に少し小さく */
+            50% { transform: translate(-50%, -50px) scale(1.1); } /* 途中で少し膨らむ */
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
-        /* カウントダウンオーバーレイのCSS (新規追加) */
+        /* カウントダウンオーバーレイのCSS */
         #countdown-overlay {
             display: none; 
             position: fixed;
@@ -152,29 +270,35 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(255, 204, 229, 0.7); /* パステルピンクの半透明 */
             z-index: 90;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px); /* ぼかしを少し強調 */
         }
 
         #countdown-text {
-            font-size: 8em;
-            color: white;
+            font-family: 'Mochiy Pop P One', cursive;
+            font-size: 9em; /* さらに大きく */
+            color: #ff3366; /* ポップな赤ピンク */
             font-weight: bold;
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
-            animation: pulse 1s ease-in-out infinite alternate;
+            text-shadow: 
+                -4px -4px 0 #fff, 
+                4px -4px 0 #fff,
+                -4px 4px 0 #fff,
+                4px 4px 0 #fff,
+                6px 6px 0 #ffb3d9; /* ピンクの影 */
+            animation: pulse 0.8s ease-in-out infinite alternate; /* アニメーション速度調整 */
         }
 
         @keyframes pulse {
-            from { transform: scale(1); opacity: 0.8; }
+            from { transform: scale(1); opacity: 0.9; }
             to { transform: scale(1.1); opacity: 1; }
         }
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>もぐらdeポン！ </h1>
+    <h1>SVGスペシャルモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -291,7 +415,6 @@
         `;
 
 
-        // 難易度に応じて #grid のサイズとレイアウトを動的に設定
         function setGridClass(difficulty) {
             grid.className = ''; 
             const settings = DIFFICULTY_SETTINGS[difficulty];
@@ -311,7 +434,6 @@
             grid.classList.add('grid-' + difficulty);
         }
 
-        // 1. 盤面の初期化 (穴の生成)
         function createHoles() {
             grid.innerHTML = '';
             for (let i = 0; i < currentHoleCount; i++) {
@@ -331,7 +453,6 @@
             }
         }
         
-        // 2. モグラの出現ロジック
         function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
@@ -390,7 +511,6 @@
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
         }
 
-        // 3. プレイヤーの操作ロジック
         function showScorePop(hole, points) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
@@ -398,7 +518,7 @@
             pop.textContent = sign + points;
             if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
             hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 600); 
+            setTimeout(() => { pop.remove(); }, 700); /* アニメーション時間に合わせる */
         }
         
         function whack(event) {
@@ -426,7 +546,6 @@
             }
         }
 
-        // 実際にゲームを開始するロジック（タイマーとモグラ出現）
         function startGameLogic() {
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
@@ -435,7 +554,6 @@
             currentHoleCount = settings.holeCount; 
             currentGridColumns = settings.gridColumns; 
 
-            // 盤面を再作成して新しい難易度を適用
             setGridClass(difficulty);
             createHoles();
             
@@ -445,21 +563,17 @@
             scoreDisplay.textContent = score;
             startButton.disabled = true;
 
-            // 1秒ごとにタイマーを更新
             countdownTimerId = setInterval(() => {
                 timeLeft--;
                 updateTime();
             }, 1000);
 
-            // モグラ出現ループを開始
             peep();
         }
 
-        // ゲーム開始（カウントダウン処理を含む）
         function startGame() {
             if (isGameRunning) return;
 
-            // ゲーム準備（盤面設定の適用）
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentHoleCount = settings.holeCount;
@@ -471,7 +585,6 @@
             countdownOverlay.style.display = 'flex';
             let count = 3;
 
-            // カウントダウン処理
             const countdownInterval = setInterval(() => {
                 if (count > 0) {
                     countdownText.textContent = count;
@@ -482,13 +595,11 @@
                 } else {
                     clearInterval(countdownInterval);
                     countdownOverlay.style.display = 'none';
-                    // カウントダウン終了後、実際のゲームロジックを開始
                     startGameLogic(); 
                 }
             }, 1000);
         }
 
-        // ゲーム終了
         function endGame() {
             isGameRunning = false;
             clearInterval(countdownTimerId);
@@ -504,7 +615,6 @@
             gameOverModal.style.display = 'none';
             startButton.disabled = false;
             
-            // スコアと時間をリセット
             score = 0;
             timeLeft = GAME_DURATION;
             scoreDisplay.textContent = score;
@@ -513,7 +623,6 @@
             initializeGame();
         }
 
-        // 初期設定とイベントリスナー
         function initializeGame() {
             const initialDifficulty = difficultySelect.value;
             const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
