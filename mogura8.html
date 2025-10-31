@@ -228,7 +228,7 @@
 
 
 
-        /* ゲーム盤面 (変更なし - 色味は可愛らしいのでこのままでOK) */
+        /* ゲーム盤面 */
 
         #grid {
             display: grid;
@@ -251,8 +251,7 @@
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            /* 修正点: borderを削除し、box-shadowで外枠と立体感を表現 */
-            border: none; /* 既存のborderを削除 */
+            border: none;
             box-shadow: 
                 inset 0 0 12px rgba(0,0,0,0.4), /* 内側の影で深さを表現 */
                 0 0 0 4px #8e5c46, /* 外側のボーダー風の影（4px） */
@@ -786,7 +785,7 @@
 
 
 
-        // SVGモグラのHTML (丸い体型に修正済み、目を少し上に移動)
+        // SVGモグラのHTML (丸い体型、目を少し上に移動、目の間隔を広げ、顔の楕円を小さく)
 
         const MOLE_SVG = `
 
@@ -796,7 +795,7 @@
 
                 
 
-                <ellipse class="mole-face" cx="50" cy="80" rx="28" ry="22" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+                <ellipse class="mole-face" cx="50" cy="80" rx="24" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
 
 
 
@@ -804,9 +803,9 @@
 
                 
 
-                <circle cx="38" cy="58" r="4" fill="black"/>
+                <circle cx="35" cy="58" r="4" fill="black"/>
 
-                <circle cx="62" cy="58" r="4" fill="black"/>
+                <circle cx="65" cy="58" r="4" fill="black"/>
 
 
 
