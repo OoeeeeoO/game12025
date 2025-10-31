@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (ドット絵風デザイン)</title>
-    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>モグラたたき - SVGモグラ版 (ジョジョ風デザイン)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Shippori+Mincho+B1:wght@700&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         /* CSS (デザイン) */
         body {
-            font-family: 'DotGothic16', sans-serif; /* ドット絵フォントを優先 */
+            font-family: 'Shippori Mincho B1', serif; /* 力強い明朝体 */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -16,139 +16,188 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background-color: #333333; /* 暗めの背景でレトロ感を強調 */
-            background-image: 
-                linear-gradient(45deg, rgba(0,0,0,0.2) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.2) 100%),
-                linear-gradient(45deg, rgba(0,0,0,0.2) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.2) 100%);
-            background-size: 16px 16px; /* 小さなドット柄 */
-            background-position: 0 0, 8px 8px;
-            color: #eee;
+            background: 
+                linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d); /* ジョジョ風のビビッドなグラデーション */
+            background-size: 400% 400%; /* グラデーションを大きくして動きを出す */
+            animation: gradientAnimation 15s ease infinite; /* ゆっくりと動くアニメーション */
+            color: #fff;
+            overflow-x: hidden; /* 横スクロール防止 */
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         h1 { 
-            /* ドット絵風タイトル */
-            font-family: 'Press Start 2P', cursive; /* ドット絵感の強いフォント */
-            font-size: 3em; 
-            color: #ffee58; /* 鮮やかな黄色 */
+            /* ジョジョ風タイトル */
+            font-family: 'Staatliches', cursive; /* 力強いゴシック体風 */
+            font-size: 5em; /* 非常に大きく */
+            background: linear-gradient(90deg, #8a2be2, #ee82ee, #ff1493); /* 鮮やかな紫からピンクのグラデーション */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-shadow: 
-                -4px -4px 0px #e0e0e0, /* 広い白いフチ */
-                4px -4px 0px #e0e0e0,
-                -4px 4px 0px #e0e0e0,
-                4px 4px 0px #e0e0e0,
-                8px 8px 0px #ff6f00; /* オレンジ色の深い影 */
-            margin-bottom: 30px;
-            letter-spacing: 0.15em; /* 字間を広げてピクセル感を強調 */
+                -4px -4px 0px #fff, /* 白いフチ */
+                4px -4px 0px #fff,
+                -4px 4px 0px #fff,
+                4px 4px 0px #fff,
+                8px 8px 0px #000, /* 黒い深めの影 */
+                12px 12px 0px #333; /* さらに深い影 */
+            margin-bottom: 40px;
+            letter-spacing: 5px; /* 字間を広げて迫力を出す */
             line-height: 1.2;
-            padding: 10px 20px;
-            border: 4px solid #ff6f00; /* 太いオレンジ色のボーダー */
-            border-radius: 0; /* カクカクに */
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
-            background-color: #424242; /* 暗い背景色 */
+            padding: 15px 30px;
+            border: 5px solid #000; /* 太い黒のボーダー */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.3);
+            background-color: rgba(0,0,0,0.5); /* タイトル部分の背景を半透明に */
+            position: relative;
+            z-index: 10;
+        }
+        h1::before { /* 擬音「ドドドド」のような背景 */
+            content: "ドドドド"; /* CSSでは表現が難しいが、イメージとして */
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.1);
+            transform: rotate(-5deg);
+            z-index: -1;
         }
         
         #controls, #game-info { 
-            background-color: #424242; /* 暗い液晶画面風 */
-            padding: 15px 25px;
-            border-radius: 0; /* カクカクに */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2), inset 0 0 10px rgba(0,0,0,0.3); /* 影と内側の暗い光 */
-            margin-bottom: 25px; 
+            background: linear-gradient(135deg, #424242, #212121); /* メタリックな質感 */
+            padding: 20px 35px;
+            border-radius: 8px; /* 少し角丸 */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4), inset 0 0 15px rgba(255,255,255,0.2); 
+            margin-bottom: 30px; 
             display: flex;
-            gap: 25px; 
+            gap: 30px; 
             align-items: center;
-            border: 3px solid #757575; /* グレーのボーダー */
-            color: #eee; /* 明るい文字色 */
+            border: 4px solid #fdbb2d; /* 鮮やかな黄色のボーダー */
+            color: #e0e0e0;
+            position: relative;
+        }
+        #controls::before, #game-info::before { /* 斜めの装飾ライン */
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            border: 2px dashed #b21f1f; /* 赤い点線 */
+            transform: skew(-10deg);
+            pointer-events: none;
+            z-index: 0;
         }
 
         #game-info p { 
             margin: 0; 
-            color: #eee; 
-            font-size: 1.3em; 
+            color: #e0e0e0; 
+            font-size: 1.5em; 
+            font-family: 'Shippori Mincho B1', serif;
         }
         #score, #time-left { 
             font-weight: bold; 
-            color: #00ff00; /* 鮮やかな緑 */
-            font-family: 'Press Start 2P', cursive; 
-            font-size: 1.6em; 
-            text-shadow: 2px 2px 0px #009900; /* 濃い緑の影 */
+            color: #00ffff; /* 鮮やかなシアン */
+            font-family: 'Staatliches', cursive; 
+            font-size: 2em; 
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.5), -1px -1px 0px #fff; /* 白いフチと影 */
         }
 
         #difficulty-select {
-            padding: 10px 18px;
-            font-size: 1.1em;
-            border-radius: 0; /* カクカクに */
-            border: 2px solid #00ff00; 
-            background-color: #212121; /* 暗い背景 */
-            color: #00ff00; /* 緑色の文字 */
-            font-family: 'DotGothic16', sans-serif;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            border-radius: 5px; 
+            border: 2px solid #00ffff; 
+            background-color: #000; 
+            color: #00ffff;
+            font-family: 'Shippori Mincho B1', serif;
             appearance: none; 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="#00ff00" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印も緑 */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#00ffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 20px;
+            background-position: right 15px center;
+            background-size: 24px;
             cursor: pointer;
-            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.4);
+            box-shadow: inset 1px 1px 5px rgba(0,0,0,0.4);
         }
         #difficulty-select:focus {
             outline: none;
-            box-shadow: 0 0 0 3px #00cc00;
+            box-shadow: 0 0 0 4px #00aaff;
         }
 
         #start-button {
-            padding: 12px 30px;
-            font-size: 1.6em; 
-            background-color: #ff0000; /* 鮮やかな赤 */
-            color: white;
+            padding: 15px 40px;
+            font-size: 2.2em; 
+            background: linear-gradient(180deg, #ff4500, #ff8c00); /* 鮮やかなオレンジ */
+            color: #fff;
             border: none;
-            border-radius: 0; /* カクカクに */
+            border-radius: 10px; 
             cursor: pointer;
-            transition: background-color 0.1s, transform 0.1s, box-shadow 0.1s;
-            box-shadow: 0 5px 0 #cc0000, 0 7px 10px rgba(0,0,0,0.3); /* 押しボタン風の影 */
-            font-family: 'Press Start 2P', cursive;
-            letter-spacing: 0.05em;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 10px 0 #cc3700, 0 12px 25px rgba(0,0,0,0.5); /* 強い立体感と影 */
+            font-family: 'Staatliches', cursive;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        #start-button::after { /* ボタンの光沢 */
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.1) 100%);
+            transform: translateX(-100%) skewX(-30deg);
+            transition: transform 0.3s ease;
+        }
+        #start-button:hover::after {
+            transform: translateX(100%) skewX(-30deg);
         }
         #start-button:hover { 
-            background-color: #e60000; 
-            transform: translateY(-2px); 
-            box-shadow: 0 7px 0 #cc0000, 0 9px 12px rgba(0,0,0,0.35);
+            background: linear-gradient(180deg, #ff5511, #ff9911); 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 0 #cc3700, 0 20px 30px rgba(0,0,0,0.6);
         }
         #start-button:active { 
-            transform: translateY(3px); 
-            box-shadow: 0 2px 0 #cc0000, 0 3px 5px rgba(0,0,0,0.2);
+            transform: translateY(5px); 
+            box-shadow: 0 5px 0 #cc3700, 0 8px 15px rgba(0,0,0,0.4);
         }
         #start-button:disabled { 
-            background-color: #757575; 
+            background: linear-gradient(180deg, #757575, #616161); 
             cursor: not-allowed; 
             transform: translateY(0); 
-            box-shadow: 0 5px 0 #616161, 0 7px 10px rgba(0,0,0,0.3); 
+            box-shadow: 0 10px 0 #555, 0 12px 25px rgba(0,0,0,0.5); 
         }
 
-        /* ゲーム盤面 (ドット絵風の色調) */
+        /* ゲーム盤面 (ジョジョ風の色調) */
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: #757575; /* グレーの盤面 */
-            border: 8px solid #424242; /* 暗いボーダー */
-            border-radius: 0; /* カクカクに */
-            padding: 8px;
-            gap: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            background-color: #4a148c; /* 深い紫 */
+            border: 8px solid #ffeb3b; /* 鮮やかな黄色のボーダー */
+            border-radius: 10px; 
+            padding: 10px;
+            gap: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            transform: skewY(-5deg); /* 斜めの構図 */
+            position: relative;
+            z-index: 5;
         }
 
         /* 穴 */
         .hole {
             background-color: #212121; /* 暗い穴 */
-            border-radius: 0; /* 四角い穴 */
+            border-radius: 50%;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 4px solid #424242; /* 暗いボーダー */
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.6); 
+            border: 4px solid #6a1b9a; /* 紫のボーダー */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.7); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* モグラ本体 (SVGコンテナ) - ドット絵に馴染む色に */
+        /* モグラ本体 (SVGコンテナ) - ジョジョ風に色とデザイン調整 */
         .mole {
             width: 100%; 
             height: 100%; 
@@ -163,25 +212,25 @@
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* SVG共通スタイル (ドット絵のようにシンプルに) */
+        /* SVG共通スタイル */
         .mole svg {
             width: 100%;
             height: 100%;
             transform: translateY(10%); 
         }
-        /* モグラの色をドット絵風に調整 */
-        .mole-body { fill: #8b4513; stroke: #6a2e0a; stroke-width: 2; } /* 暗めの茶色 */
-        .mole-face { fill: #e0b284; stroke: #6a2e0a; stroke-width: 1.5; } /* 薄い肌色 */
+        /* モグラの色をジョジョ風にビビッドに調整 */
+        .mole-body { fill: #c62828; stroke: #880e4f; stroke-width: 2; } /* 鮮やかな赤 */
+        .mole-face { fill: #f8bbd0; stroke: #880e4f; stroke-width: 1.5; } /* 薄いピンク */
         .mole circle, .mole line { fill: #000; stroke: #000; } /* 目や鼻は黒 */
-        .mole-hand { fill: #8b4513; stroke: #6a2e0a; stroke-width: 2; }
+        .mole-hand { fill: #c62828; stroke: #880e4f; stroke-width: 2; }
 
 
         /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
-        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; } /* ゴールドモグラ */
-        .mole.bomb .mole-body { fill: #424242; stroke: #c62828; } /* 爆弾モグラ */
-        .mole.clock .mole-body { fill: #64b5f6; stroke: #4fc3f7; } /* 時計モグラ */
-        .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
-        .mole.bomb .mole-hand { fill: #333; }
+        .mole.gold .mole-body { fill: #ffd700; stroke: #b8860b; } /* ゴールドモグラ */
+        .mole.bomb .mole-body { fill: #212121; stroke: #f44336; } /* 爆弾モグラ */
+        .mole.clock .mole-body { fill: #00bcd4; stroke: #0097a7; } /* 時計モグラ */
+        .mole.gold .mole-face, .mole.gold .mole-hand { fill: #ffe082; }
+        .mole.bomb .mole-hand { fill: #000; }
 
         /* ゲームオーバーモーダルのCSS */
         #game-over-modal { 
@@ -193,62 +242,63 @@
             width: 100%; 
             height: 100%; 
             overflow: auto; 
-            background-color: rgba(0, 0, 0, 0.8); 
-            backdrop-filter: blur(3px); 
+            background-color: rgba(0, 0, 0, 0.9); 
+            backdrop-filter: blur(8px); 
         }
         .modal-content { 
-            background-color: #212121; /* 暗い背景 */
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f); /* グラデーション背景 */
             margin: 10% auto; 
-            padding: 30px;
-            border: 5px solid #00ff00; /* 鮮やかな緑のボーダー */
-            width: 85%; max-width: 450px; 
-            border-radius: 0; /* カクカクに */
+            padding: 40px;
+            border: 5px solid #ffeb3b; /* 鮮やかな黄色のボーダー */
+            width: 85%; max-width: 500px; 
+            border-radius: 10px; 
             text-align: center; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); 
             animation: fadeIn 0.5s; 
-            font-family: 'DotGothic16', sans-serif;
-            color: #eee;
+            font-family: 'Shippori Mincho B1', serif;
+            color: #fff;
+            position: relative;
         }
         .modal-content h2 { 
-            color: #ffee58; /* 鮮やかな黄色 */
-            font-size: 2.5em; 
-            margin-bottom: 15px; 
-            text-shadow: 2px 2px 0 #ff6f00; 
-            font-family: 'Press Start 2P', cursive;
+            color: #ff1493; /* 鮮やかなピンク */
+            font-size: 3.5em; 
+            margin-bottom: 20px; 
+            text-shadow: 2px 2px 0 #fff, 4px 4px 0 #000; 
+            font-family: 'Staatliches', cursive;
         }
         .final-score { 
-            font-size: 4em; 
-            color: #00ff00; /* 鮮やかな緑 */
+            font-size: 4.5em; 
+            color: #00ffff; /* 鮮やかなシアン */
             font-weight: bold; 
             display: block; 
-            margin: 20px 0; 
-            padding: 15px; 
-            background-color: #004d00; /* 暗い緑の背景 */
-            border-radius: 0; /* カクカクに */
-            border: 3px solid #00ff00;
-            font-family: 'Press Start 2P', cursive; 
-            text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+            margin: 25px 0; 
+            padding: 20px; 
+            background-color: rgba(0,0,0,0.6); 
+            border-radius: 8px; 
+            border: 3px solid #ffeb3b;
+            font-family: 'Staatliches', cursive; 
+            text-shadow: 3px 3px 4px rgba(0,0,0,0.5), -2px -2px 0px #fff;
         }
         .modal-content button { 
-            background-color: #ff0000; /* 鮮やかな赤 */
+            background: linear-gradient(180deg, #ff4500, #ff8c00); 
             color: white; 
             border: none; 
-            padding: 12px 25px; 
-            font-size: 1.3em; 
-            border-radius: 0; /* カクカクに */
+            padding: 15px 30px; 
+            font-size: 1.5em; 
+            border-radius: 10px; 
             cursor: pointer; 
-            transition: background-color 0.1s, transform 0.1s; 
-            font-family: 'DotGothic16', sans-serif;
-            box-shadow: 0 4px 0 #cc0000; 
+            transition: background-color 0.2s, transform 0.1s; 
+            font-family: 'Staatliches', cursive;
+            box-shadow: 0 5px 0 #cc3700; 
         }
         .modal-content button:hover { 
-            background-color: #e60000; 
+            background: linear-gradient(180deg, #ff5511, #ff9911); 
             transform: translateY(-2px); 
-            box-shadow: 0 6px 0 #cc0000;
+            box-shadow: 0 7px 0 #cc3700;
         }
         .modal-content button:active {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #cc0000;
+            box-shadow: 0 3px 0 #cc3700;
         }
 
         /* スコアポップアップのCSS */
@@ -257,25 +307,25 @@
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            font-size: 2.8em; 
+            font-size: 3.5em; 
             font-weight: bold; 
-            color: #ffee58; /* 鮮やかな黄色 */
+            color: #ffeb3b; /* 鮮やかな黄色 */
             text-shadow: 
-                -2px -2px 0 #000, 
-                2px -2px 0 #000,
-                -2px 2px 0 #000,
-                2px 2px 0 #000,
-                3px 3px 0 rgba(0,0,0,0.8); 
+                -3px -3px 0 #000, 
+                3px -3px 0 #000,
+                -3px 3px 0 #000,
+                3px 3px 0 #000,
+                5px 5px 0 rgba(0,0,0,0.8); 
             pointer-events: none; 
             opacity: 0; 
-            animation: scorePopUp 0.7s ease-out forwards; 
+            animation: scorePopUp 0.8s ease-out forwards; 
             z-index: 5; 
-            font-family: 'Press Start 2P', cursive; 
+            font-family: 'Staatliches', cursive; 
         }
         @keyframes scorePopUp { 
-            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } 
-            50% { transform: translate(-50%, -50px) scale(1.1); } 
-            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
+            50% { transform: translate(-50%, -60px) scale(1.2); } 
+            100% { opacity: 0; transform: translate(-50%, -120px) scale(1); } 
         }
         
         /* カウントダウンオーバーレイのCSS */
@@ -286,25 +336,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* 暗い半透明 */
+            background-color: rgba(0, 0, 0, 0.8); 
             z-index: 90;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(2px); 
+            backdrop-filter: blur(5px); 
         }
 
         #countdown-text {
-            font-family: 'Press Start 2P', cursive; 
-            font-size: 7.5em; 
-            color: #ffee58; /* 鮮やかな黄色 */
+            font-family: 'Press Start 2P', cursive; /* 擬音風フォント */
+            font-size: 8.5em; 
+            color: #ffeb3b; /* 鮮やかな黄色 */
             font-weight: bold;
             text-shadow: 
-                -3px -3px 0 #ff6f00, 
-                3px -3px 0 #ff6f00,
-                -3px 3px 0 #ff6f00,
-                3px 3px 0 #ff6f00,
-                5px 5px 0 #cc0000; /* オレンジ〜赤の影 */
-            animation: pulse 0.8s ease-in-out infinite alternate; 
+                -5px -5px 0 #b21f1f, 
+                5px -5px 0 #b21f1f,
+                -5px 5px 0 #b21f1f,
+                5px 5px 0 #b21f1f,
+                8px 8px 0 #000; /* 黒い影 */
+            animation: pulse 0.9s ease-in-out infinite alternate; 
         }
 
         @keyframes pulse {
@@ -532,9 +582,9 @@
             pop.classList.add('score-pop');
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
-            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#fff'; } else { pop.style.color = '#fff'; }
+            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffeb3b' : '#fff'; } else { pop.style.color = '#ff1493'; } /* スコアポップアップの色もジョジョ風に */
             hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 700); 
+            setTimeout(() => { pop.remove(); }, 800); 
         }
         
         function whack(event) {
@@ -606,7 +656,7 @@
                     countdownText.textContent = count;
                     count--;
                 } else if (count === 0) {
-                    countdownText.textContent = 'スタート!';
+                    countdownText.textContent = 'ラッシュ！'; /* カウントダウンをジョジョ風に */
                     count--; 
                 } else {
                     clearInterval(countdownInterval);
