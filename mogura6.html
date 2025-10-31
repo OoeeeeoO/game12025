@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>モグラたたき - SVGモグラ版 (たまごっち風デザイン)</title>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* CSS (デザイン) */
+        body {
+            font-family: 'DotGothic16', sans-serif; /* たまごっち風ドット絵フォントを優先 */
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-color: #e0e7e9; /* 淡いレトロなグレーブルー */
+        }
+
+        h1 { 
+            /* たまごっち風タイトル */
+            font-family: 'Press Start 2P', cursive; /* よりドット絵感の強いフォント */
+            font-size: 2.2em; /* ドット絵感を出すため、少し小さめに */
+            color: #4a4a4a; /* 暗めのグレー */
+            text-shadow: 
+                2px 2px 0px #90a4ae, /* 少しずらした影 */
+                4px 4px 0px #607d8b; /* さらに深い影 */
+            margin-bottom: 25px;
+            letter-spacing: 0.1em; /* 字間を広げてドット絵感を強調 */
+            line-height: 1.5;
+            padding: 10px 20px;
+            background-color: #cfd8dc; /* 少し明るいグレーの背景 */
+            border: 4px solid #78909c; /* 濃いめのボーダー */
+            border-radius: 8px; /* 少し角丸 */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 8px 15px rgba(0,0,0,0.2);
+        }
+        
+        #controls, #game-info { 
+            background-color: #f0f4c3; /* 淡い黄緑色のゲーム画面風 */
+            padding: 15px 25px;
+            border-radius: 5px; /* 角をあまり丸めない */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset 0 0 10px rgba(0,0,0,0.1); /* 内側と外側に影 */
+            margin-bottom: 25px; 
+            display: flex;
+            gap: 25px; /* 間隔を広げる */
+            align-items: center;
+            border: 3px solid #a7b75b; /* 緑のボーダー */
+            color: #333333; /* 暗い文字色 */
+        }
+
+        #game-info p { 
+            margin: 0; 
+            color: #333333; 
+            font-size: 1.3em; 
+        }
+        #score, #time-left { 
+            font-weight: bold; 
+            color: #2e7d32; /* 液晶画面のような緑 */
+            font-family: 'Press Start 2P', cursive; /* 専用フォント */
+            font-size: 1.6em; 
+            text-shadow: 1px 1px 0px #aed581; /* 少し明るい影 */
+        }
+
+        #difficulty-select {
+            padding: 10px 18px;
+            font-size: 1.1em;
+            border-radius: 3px; /* カクカク */
+            border: 2px solid #a7b75b; 
+            background-color: #fffde7; /* 白っぽい背景 */
+            color: #333333;
+            font-family: 'DotGothic16', sans-serif;
+            appearance: none; 
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#a7b75b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        #difficulty-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px #aed581;
+        }
+
+        #start-button {
+            padding: 12px 30px;
+            font-size: 1.6em; 
+            background-color: #ff9933; /* オレンジ */
+            color: white;
+            border: none;
+            border-radius: 5px; /* カクカク */
+            cursor: pointer;
+            transition: background-color 0.1s, transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 5px 0 #cc7a29, 0 7px 10px rgba(0,0,0,0.2); /* 押しボタン風の影 */
+            font-family: 'Press Start 2P', cursive;
+            letter-spacing: 0.05em;
+        }
+        #start-button:hover { 
+            background-color: #e68a2e; 
+            transform: translateY(-2px); 
+            box-shadow: 0 7px 0 #cc7a29, 0 9px 12px rgba(0,0,0,0.25);
+        }
+        #start-button:active { 
+            transform: translateY(3px); 
+            box-shadow: 0 2px 0 #cc7a29, 0 3px 5px rgba(0,0,0,0.2);
+        }
+        #start-button:disabled { 
+            background-color: #cccccc; 
+            cursor: not-allowed; 
+            transform: translateY(0); 
+            box-shadow: 0 5px 0 #b3b3b3, 0 7px 10px rgba(0,0,0,0.2); 
+        }
+
+        /* ゲーム盤面 (色調をレトロに調整) */
+        #grid {
+            display: grid;
+            margin: 0 auto;
+            background-color: #aed581; /* 明るい黄緑 */
+            border: 8px solid #558b2f; /* 濃い緑のボーダー */
+            border-radius: 10px; /* 少し角丸 */
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* 穴 */
+        .hole {
+            background-color: #8d6e63; /* 少し暗めの茶色 */
+            border-radius: 50%;
+            overflow: hidden; 
+            position: relative; 
+            cursor: pointer;
+            border: 4px solid #5d4037; /* 濃い茶色のボーダー */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* モグラ本体 (SVGコンテナ) - 色調を全体に合わせるため少し修正 */
+        .mole {
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            bottom: -100%; 
+            transition: bottom 0.2s ease-out; 
+            pointer-events: none; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2; 
+        }
+        .hole.up .mole { bottom: 0; pointer-events: auto; }
+
+        /* SVG共通スタイル */
+        .mole svg {
+            width: 100%;
+            height: 100%;
+            transform: translateY(10%); 
+        }
+
+        /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
+        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
+        .mole.bomb .mole-body { fill: #424242; stroke: #c62828; } /* より暗めのグレーと赤 */
+        .mole.clock .mole-body { fill: #64b5f6; stroke: #4fc3f7; } /* 明るい青 */
+        .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
+        .mole.bomb .mole-hand { fill: #333; }
+
+        /* ゲームオーバーモーダルのCSS */
+        #game-over-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            background-color: #eceff1; /* 明るいグレー */
+            margin: 10% auto; 
+            padding: 30px;
+            border: 5px solid #607d8b; /* 濃いグレーのボーダー */
+            width: 85%; max-width: 450px; 
+            border-radius: 10px; /* カクカク */
+            text-align: center; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
+            animation: fadeIn 0.5s; 
+            font-family: 'DotGothic16', sans-serif;
+            color: #333333;
+        }
+        .modal-content h2 { 
+            color: #4a4a4a; 
+            font-size: 2.5em; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 0 #90a4ae; 
+            font-family: 'Press Start 2P', cursive;
+        }
+        .final-score { 
+            font-size: 4em; 
+            color: #2e7d32; /* 液晶画面のような緑 */
+            font-weight: bold; 
+            display: block; 
+            margin: 20px 0; 
+            padding: 15px; 
+            background-color: #c8e6c9; /* 淡い緑の背景 */
+            border-radius: 8px; /* 角丸 */
+            border: 3px solid #558b2f;
+            font-family: 'Press Start 2P', cursive; 
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+        }
+        .modal-content button { 
+            background-color: #7986cb; /* 少し落ち着いた青 */
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            font-size: 1.3em; 
+            border-radius: 5px; /* カクカク */
+            cursor: pointer; 
+            transition: background-color 0.1s, transform 0.1s; 
+            font-family: 'DotGothic16', sans-serif;
+            box-shadow: 0 4px 0 #5c6bc0; 
+        }
+        .modal-content button:hover { 
+            background-color: #6c79bd; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 0 #5c6bc0;
+        }
+        .modal-content button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #5c6bc0;
+        }
+
+        /* スコアポップアップのCSS */
+        .score-pop { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 2.8em; 
+            font-weight: bold; 
+            color: #fff; 
+            text-shadow: 
+                -2px -2px 0 #333, 
+                2px -2px 0 #333,
+                -2px 2px 0 #333,
+                2px 2px 0 #333,
+                3px 3px 0 rgba(0,0,0,0.6); 
+            pointer-events: none; 
+            opacity: 0; 
+            animation: scorePopUp 0.7s ease-out forwards; 
+            z-index: 5; 
+            font-family: 'Press Start 2P', cursive; 
+        }
+        @keyframes scorePopUp { 
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } 
+            50% { transform: translate(-50%, -50px) scale(1.1); } 
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
+        }
+        
+        /* カウントダウンオーバーレイのCSS */
+        #countdown-overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(189, 189, 189, 0.6); /* 淡いグレーの半透明 */
+            z-index: 90;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px); 
+        }
+
+        #countdown-text {
+            font-family: 'Press Start 2P', cursive; /* ドット絵フォント */
+            font-size: 7.5em; 
+            color: #2e7d32; /* 液晶画面のような緑 */
+            font-weight: bold;
+            text-shadow: 
+                -3px -3px 0 #fff, 
+                3px -3px 0 #fff,
+                -3px 3px 0 #fff,
+                3px 3px 0 #fff,
+                5px 5px 0 #aed581; /* 淡い緑の影 */
+            animation: pulse 0.8s ease-in-out infinite alternate; 
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.9; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+    </style>
+</head>
+<body onload="initializeGame()">
+    <h1>SVGスペシャルモグラたたき！ </h1>
+
+    <div id="game-info">
+        <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
+    </div>
+
+    <div id="controls">
+        <label for="difficulty-select">難易度: </label>
+        <select id="difficulty-select">
+            <option value="easy">かんたん</option>
+            <option value="normal" selected>ふつう</option>
+            <option value="hard">むずかしい</option>
+        </select>
+        <button id="start-button">ゲームスタート</button>
+    </div>
+
+    <div id="grid">
+    </div>
+        
+    <div id="countdown-overlay">
+        <span id="countdown-text"></span>
+    </div>
+        
+    <div id="game-over-modal">
+        <div class="modal-content">
+            <h2>ゲームオーバー！</h2>
+            <p>最終スコア</p>
+            <span id="final-score" class="final-score">0</span>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript (ゲームロジック)
+
+        const GAME_DURATION = 30; 
+        
+        const NORMAL_MOLE_SCORE = 1;
+        const GOLD_MOLE_SCORE = 3;
+        const BOMB_MOLE_SCORE = -5;
+        const CLOCK_MOLE_SCORE = 2;
+
+        const BOMB_TIME_PENALTY = 5; 
+        const CLOCK_TIME_BONUS = 5; 
+
+        const GOLD_MOLE_CHANCE = 0.10; 
+        const BOMB_MOLE_CHANCE = 0.15; 
+        const CLOCK_MOLE_CHANCE = 0.05; 
+        
+        const DIFFICULTY_SETTINGS = {
+            easy: {
+                minTime: 800, maxTime: 1800,
+                holeCount: 9, 
+                gridColumns: 3, 
+            },
+            normal: {
+                minTime: 500, maxTime: 1500,
+                holeCount: 16, 
+                gridColumns: 4, 
+            },
+            hard: {
+                minTime: 300, maxTime: 1000,
+                holeCount: 25, 
+                gridColumns: 5, 
+            }
+        };
+
+        let currentMinTime;
+        let currentMaxTime;
+        let currentHoleCount;
+        let currentGridColumns;
+
+        let score = 0;
+        let timeLeft = GAME_DURATION; 
+        let isGameRunning = false;
+        let countdownTimerId;
+        let moleTimerId; 
+        let lastHole = null;
+
+        const scoreDisplay = document.getElementById('score');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const startButton = document.getElementById('start-button');
+        const grid = document.getElementById('grid');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const difficultySelect = document.getElementById('difficulty-select');
+        const countdownOverlay = document.getElementById('countdown-overlay');
+        const countdownText = document.getElementById('countdown-text');
+
+        // SVGモグラのHTML 
+        const MOLE_SVG = `
+            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
+                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                
+                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+
+                <circle cx="50" cy="70" r="3" fill="#333"/>
+                
+                <circle cx="38" cy="58" r="3.5" fill="black"/>
+                <circle cx="62" cy="58" r="3.5" fill="black"/>
+
+                
+                <line x1="23" y1="73" x2="38" y2="73" stroke="#6A462F" stroke-width="1"/>
+                <line x1="20" y1="78" x2="38" y2="78" stroke="#6A462F" stroke-width="1"/>
+                <line x1="23" y1="83" x2="38" y2="83" stroke="#6A462F" stroke-width="1"/>
+                
+                
+                <line x1="62" y1="73" x2="77" y2="73" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="78" x2="80" y2="78" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="83" x2="77" y2="83" stroke="#6A462F" stroke-width="1"/>
+
+                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+            </svg>
+        `;
+
+
+        function setGridClass(difficulty) {
+            grid.className = ''; 
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            const columns = settings.gridColumns;
+            
+            const baseSize = 100; 
+            const gap = 8;
+            const borderPadding = 16; 
+
+            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
+
+            grid.style.width = `${newSize}px`;
+            grid.style.height = `${newSize}px`;
+
+            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            
+            grid.classList.add('grid-' + difficulty);
+        }
+
+        function createHoles() {
+            grid.innerHTML = '';
+            for (let i = 0; i < currentHoleCount; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                hole.dataset.id = i;
+
+                const mole = document.createElement('div');
+                mole.classList.add('mole');
+                
+                mole.innerHTML = MOLE_SVG; 
+
+                hole.addEventListener('click', whack);
+
+                hole.appendChild(mole);
+                grid.appendChild(hole);
+            }
+        }
+        
+        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            const idx = Math.floor(Math.random() * holes.length);
+            const hole = holes[idx];
+
+            if (hole === lastHole) { return randomHole(); }
+            lastHole = hole;
+            return hole;
+        }
+        function randomMoleType() {
+            const r = Math.random();
+            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
+            else { return 'normal'; }
+        }
+
+        function peep() {
+            if (!isGameRunning) {
+                clearTimeout(moleTimerId);
+                return;
+            }
+            const time = randomTime(); 
+            const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+            const moleType = randomMoleType();
+            
+            mole.classList.remove('gold', 'bomb', 'clock'); 
+            let scoreValue;
+            switch (moleType) {
+                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
+                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
+                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
+                default: scoreValue = NORMAL_MOLE_SCORE; break;
+            }
+
+            mole.dataset.type = moleType; 
+            mole.dataset.score = scoreValue;
+
+            hole.classList.add('up');
+
+            setTimeout(() => {
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }, time);
+
+            moleTimerId = setTimeout(peep, time);
+        }
+
+        function updateTime() {
+            if (timeLeft < 0) { timeLeft = 0; }
+            timeLeftDisplay.textContent = timeLeft;
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
+        }
+
+        function showScorePop(hole, points) {
+            const pop = document.createElement('div');
+            pop.classList.add('score-pop');
+            let sign = points > 0 ? '+' : '';
+            pop.textContent = sign + points;
+            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#fff'; } else { pop.style.color = '#fff'; }
+            hole.appendChild(pop);
+            setTimeout(() => { pop.remove(); }, 700); 
+        }
+        
+        function whack(event) {
+            if (!isGameRunning) return;
+            const hole = event.currentTarget;
+            const mole = hole.querySelector('.mole');
+            
+            if (hole.classList.contains('up')) {
+                const points = parseInt(mole.dataset.score);
+                const type = mole.dataset.type;
+                
+                showScorePop(hole, points);
+                score += points;
+                scoreDisplay.textContent = score;
+
+                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
+                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                
+                updateTime(); 
+                
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }
+        }
+
+        function startGameLogic() {
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentMinTime = settings.minTime;
+            currentMaxTime = settings.maxTime;
+            currentHoleCount = settings.holeCount; 
+            currentGridColumns = settings.gridColumns; 
+
+            setGridClass(difficulty);
+            createHoles();
+            
+            score = 0;
+            timeLeft = GAME_DURATION; 
+            isGameRunning = true; 
+            scoreDisplay.textContent = score;
+            startButton.disabled = true;
+
+            countdownTimerId = setInterval(() => {
+                timeLeft--;
+                updateTime();
+            }, 1000);
+
+            peep();
+        }
+
+        function startGame() {
+            if (isGameRunning) return;
+
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentHoleCount = settings.holeCount;
+            currentGridColumns = settings.gridColumns;
+            setGridClass(difficulty);
+            createHoles();
+
+            startButton.disabled = true;
+            countdownOverlay.style.display = 'flex';
+            let count = 3;
+
+            const countdownInterval = setInterval(() => {
+                if (count > 0) {
+                    countdownText.textContent = count;
+                    count--;
+                } else if (count === 0) {
+                    countdownText.textContent = 'スタート!';
+                    count--; 
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownOverlay.style.display = 'none';
+                    startGameLogic(); 
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(countdownTimerId);
+            clearTimeout(moleTimerId); 
+
+            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+
+            finalScoreDisplay.textContent = score;
+            gameOverModal.style.display = 'flex'; 
+        }
+        
+        function closeModal() {
+            gameOverModal.style.display = 'none';
+            startButton.disabled = false;
+            
+            score = 0;
+            timeLeft = GAME_DURATION;
+            scoreDisplay.textContent = score;
+            timeLeftDisplay.textContent = timeLeft;
+            
+            initializeGame();
+        }
+
+        function initializeGame() {
+            const initialDifficulty = difficultySelect.value;
+            const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
+            
+            currentMinTime = initialSettings.minTime;
+            currentMaxTime = initialSettings.maxTime;
+            currentHoleCount = initialSettings.holeCount;
+            currentGridColumns = initialSettings.gridColumns;
+            
+            setGridClass(initialDifficulty);
+            createHoles(); 
+            updateTime(); 
+        }
+
+        startButton.addEventListener('click', startGame);
+        difficultySelect.addEventListener('change', () => {
+            if (!isGameRunning) {
+                initializeGame();
+            }
+        }); 
+    </script>
+</body>
+</html>
