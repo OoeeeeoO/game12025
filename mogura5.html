@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (ひげ修正)</title>
+    <title>モグラたたき - SVGモグラ版 (修正済み)</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -83,7 +83,7 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* モグラが下から出てくるように */
+            align-items: flex-end;
         }
 
         /* モグラ本体 (SVGコンテナ) */
@@ -105,7 +105,7 @@
         .mole svg {
             width: 100%;
             height: 100%;
-            transform: translateY(10%); /* 穴の底に合わせるため微調整 */
+            transform: translateY(10%); 
         }
 
         /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
@@ -193,15 +193,16 @@
             }
         };
 
-        let currentMinTime = DIFFICULTY_SETTINGS.normal.minTime;
-        let currentMaxTime = DIFFICULTY_SETTINGS.normal.maxTime;
-        let currentHoleCount = DIFFICULTY_SETTINGS.normal.holeCount;
-        let currentGridColumns = DIFFICULTY_SETTINGS.normal.gridColumns;
+        let currentMinTime;
+        let currentMaxTime;
+        let currentHoleCount;
+        let currentGridColumns;
 
         let score = 0;
         let timeLeft = GAME_DURATION; 
         let isGameRunning = false;
         let countdownTimerId;
+        let moleTimerId; // モグラ出現のループ管理用ID
         let lastHole = null;
 
         const scoreDisplay = document.getElementById('score');
@@ -213,7 +214,6 @@
         const difficultySelect = document.getElementById('difficulty-select');
 
         // SVGモグラのHTML
-        // ViewBoxを調整し、穴のサイズに合うようにモグラの図形を定義
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
                 <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
@@ -225,10 +225,10 @@
                 <circle cx="38" cy="58" r="3.5" fill="black"/>
                 <circle cx="62" cy="58" r="3.5" fill="black"/>
 
-                <line x1="23" y1="75" x2="38" y2="75" stroke="#6A462F" stroke-width="1"/>
-                <line x1="23" y1="80" x2="38" y2="80" stroke="#6A462F" stroke-width="1"/>
-                <line x1="62" y1="75" x2="77" y2="75" stroke="#6A462F" stroke-width="1"/>
-                <line x1="62" y1="80" x2="77" y2="80" stroke="#6A462F" stroke-width="1"/>
+                <line x1="23" y1="75" x2="38" y2="75" stroke="#6A462F" stroke-width="1"/><br>
+                <line x1="23" y1="80" x2="38" y2="80" stroke="#6A462F" stroke-width="1"/><br>
+                <line x1="62" y1="75" x2="77" y2="75" stroke="#6A462F" stroke-width="1"/><br>
+                <line x1="62" y1="80" x2="77" y2="80" stroke="#6A462F" stroke-width="1"/><br>
 
                 <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
                 <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
@@ -242,6 +242,7 @@
             const settings = DIFFICULTY_SETTINGS[difficulty];
             const columns = settings.gridColumns;
             
+            // 穴のサイズを計算するためのロジック (元のコードのまま)
             const baseSize = 100; 
             const gap = 8;
             const borderPadding = 16; 
@@ -294,13 +295,20 @@
             else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
             else { return 'normal'; }
         }
+
+        // モグラの出現を制御し、次の出現をスケジュールする再帰関数
         function peep() {
-            if (!isGameRunning) return;
+            if (!isGameRunning) {
+                // ゲーム終了時のクリーンアップ
+                clearTimeout(moleTimerId);
+                return;
+            }
             const time = randomTime(); 
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
             
+            // モグラのタイプを設定
             mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
             switch (moleType) {
@@ -315,13 +323,23 @@
 
             hole.classList.add('up');
 
+            // 一定時間後にモグラを隠す
             setTimeout(() => {
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
-                if (isGameRunning) { peep(); }
             }, time);
+
+            // 次のモグラ出現をスケジュール
+            moleTimerId = setTimeout(peep, time);
+        }
+
+        // 時間表示を更新し、ゲームオーバーをチェック
+        function updateTime() {
+            if (timeLeft < 0) { timeLeft = 0; }
+            timeLeftDisplay.textContent = timeLeft;
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
         }
 
         // 3. プレイヤーの操作ロジック
@@ -335,17 +353,12 @@
             setTimeout(() => { pop.remove(); }, 600); 
         }
         
-        function updateTime() {
-            if (timeLeft < 0) { timeLeft = 0; }
-            timeLeftDisplay.textContent = timeLeft;
-            if (timeLeft <= 0 && isGameRunning) { endGame(); }
-        }
-        
         function whack(event) {
             if (!isGameRunning) return;
             const hole = event.currentTarget;
             const mole = hole.querySelector('.mole');
             
+            // モグラが出ているかチェック
             if (hole.classList.contains('up')) {
                 const points = parseInt(mole.dataset.score);
                 const type = mole.dataset.type;
@@ -354,21 +367,63 @@
                 score += points;
                 scoreDisplay.textContent = score;
 
-                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                // 特殊モグラの処理
+                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
+                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                
                 updateTime(); 
                 
+                // モグラを隠す（即座に隠すことで、ゲームが反応したことを示す）
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
-                delete mole.dataset.type; delete mole.dataset.score;
-            });
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }
+        }
 
-            startButton.disabled = false;
+        // ゲーム開始
+        function startGame() {
+            if (isGameRunning) return;
+
+            // 難易度設定を再適用
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentMinTime = settings.minTime;
+            currentMaxTime = settings.maxTime;
+
+            score = 0;
+            timeLeft = GAME_DURATION; 
+            isGameRunning = true;
+            scoreDisplay.textContent = score;
+            startButton.disabled = true;
+
+            // 1秒ごとにタイマーを更新
+            countdownTimerId = setInterval(() => {
+                timeLeft--;
+                updateTime();
+            }, 1000);
+
+            // モグラ出現ループを開始
+            peep();
+        }
+
+        // ゲーム終了
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(countdownTimerId);
+            clearTimeout(moleTimerId); // モグラ出現を停止
+
+            // すべてのモグラを隠す
+            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+
             finalScoreDisplay.textContent = score;
             gameOverModal.style.display = 'flex'; 
         }
         
         function closeModal() {
             gameOverModal.style.display = 'none';
+            // ゲーム終了後、スタートボタンを有効にして再開できるようにする
+            startButton.disabled = false;
         }
 
         // 初期設定とイベントリスナー
@@ -376,15 +431,24 @@
             const initialDifficulty = difficultySelect.value;
             const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
             
+            // 難易度設定の初期値を反映
+            currentMinTime = initialSettings.minTime;
+            currentMaxTime = initialSettings.maxTime;
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
             
             setGridClass(initialDifficulty);
             createHoles(); 
+            updateTime(); // 初期の残り時間を表示
         }
 
         startButton.addEventListener('click', startGame);
-        difficultySelect.addEventListener('change', initializeGame); 
+        // 難易度変更時に盤面を再作成
+        difficultySelect.addEventListener('change', () => {
+            if (!isGameRunning) {
+                initializeGame();
+            }
+        }); 
     </script>
 </body>
 </html>
