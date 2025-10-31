@@ -2,71 +2,73 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (シンプルデザイン・テキストタイマー)</title>
+    <title>モグラたたき - SVGモグラ版 (ディズニー風デザイン・テキストタイマー)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Potta+One&display=swap" rel="stylesheet">
     <style>
         /* ======================================================= */
-        /* 🔥 シンプル＆モダンな配色とスタイル 🔥 */
+        /* ✨ ディズニー風デザイン ✨ */
         /* ======================================================= */
 
         body {
-            /* ベースカラー: シンプルな青系/グレー */
-            --main-bg-start: #f4f4f9; 
-            --main-bg-end: #e0e0f0; 
-            --title-main-color: #3f51b5; /* インディゴ */
-            --title-shadow-color-1: rgba(0, 0, 0, 0.1); 
+            /* ベースカラー: 夢のあるパステルとグラデーション */
+            --main-bg-start: #fce4ec; /* 薄いピンク */
+            --main-bg-end: #e0f2f7;   /* 薄い水色 */
+            --title-main-color: #d81b60; /* 濃いピンク */
+            --title-shadow-color-1: rgba(255, 255, 255, 0.8); 
+            --title-shadow-color-2: #ef9a9a; /* 淡い赤 */
             --panel-bg: #ffffff;
-            --panel-border: #cccccc; 
-            --panel-text-color: #333;
-            --highlight-color: #3f51b5; /* メイン青 */
-            --select-border: #999;
+            --panel-border: #f8bbd0; /* 薄いピンクのボーダー */
+            --panel-text-color: #424242;
+            --highlight-color: #6a1b9a; /* 紫 */
+            --select-border: #f06292; /* ピンク */
             --select-bg: #fff;
-            --select-text-color: #333;
-            --select-focus-shadow: rgba(63, 81, 181, 0.3);
-            --button-bg-start: #5c6bc0; 
-            --button-bg-end: #3f51b5;
+            --select-text-color: #424242;
+            --select-focus-shadow: rgba(236, 64, 122, 0.3); /* フォーカス時の影 */
+            --button-bg-start: #ff8a65; /* コーラルオレンジ */
+            --button-bg-end: #ffb74d;   /* 明るいオレンジ */
             --button-text-color: white;
-            --button-shadow-color: #303f9f;
-            --button-hover-bg-start: #7986cb;
-            --button-hover-bg-end: #5c6bc0;
-            --button-disabled-bg-start: #ccc;
-            --button-disabled-bg-end: #aaa;
-            --grid-bg: #ffffff;
-            --grid-border: #dddddd;
-            --hole-bg: #e0e0e0; 
-            --hole-border: #bdbdbd;
-            --mole-body-fill: #607d8b; /* スレートグレー */
-            --mole-body-stroke: #455a64;
-            --mole-face-fill: #cfd8dc; 
-            --mole-face-stroke: #455a64;
+            --button-shadow-color: #e64a19; /* 暗いオレンジ */
+            --button-hover-bg-start: #ffab91;
+            --button-hover-bg-end: #ffcc80;
+            --button-disabled-bg-start: #f8bbd0; /* 淡いピンク */
+            --button-disabled-bg-end: #e0e0e0;
+            --grid-bg: #fffde7; /* クリーム色 */
+            --grid-border: #ffccbc; /* 淡いオレンジ */
+            --hole-bg: #ffe0b2; /* 薄いオレンジ */
+            --hole-border: #ffab91; /* コーラルオレンジ */
+            --mole-body-fill: #90a4ae; /* 青みがかったグレー */
+            --mole-body-stroke: #546e7a;
+            --mole-face-fill: #eceff1; /* 薄いグレー */
+            --mole-face-stroke: #546e7a;
             --mole-eyes-nose: #333;
-            --mole-gold-fill: #ffc107;
-            --mole-gold-stroke: #ff8f00;
-            --mole-gold-face-hand: #fff8e1;
-            --mole-bomb-fill: #424242;
-            --mole-bomb-stroke: #212121;
-            --mole-bomb-hand: #212121;
-            --mole-clock-fill: #4caf50;
-            --mole-clock-stroke: #388e3c;
+            --mole-gold-fill: #ffeb3b; /* 黄色 */
+            --mole-gold-stroke: #fbc02d; /* 濃い黄 */
+            --mole-gold-face-hand: #fff9c4; /* 薄い黄 */
+            --mole-bomb-fill: #ef9a9a; /* 赤みがかったピンク */
+            --mole-bomb-stroke: #e57373;
+            --mole-bomb-hand: #ffcdd2; /* 超薄いピンク */
+            --mole-clock-fill: #81c784; /* 明るい緑 */
+            --mole-clock-stroke: #4caf50;
             --modal-bg-start: #fff;
-            --modal-bg-end: #f9f9f9;
-            --modal-border: #3f51b5;
-            --modal-h2-color: #3f51b5;
-            --modal-final-score-bg: #e8eaf6;
-            --modal-final-score-border: #9fa8da;
-            --modal-button-bg-start: #ff9800; 
-            --modal-button-bg-end: #f57c00;
+            --modal-bg-end: #fefefe;
+            --modal-border: #d81b60; /* 濃いピンク */
+            --modal-h2-color: #d81b60;
+            --modal-final-score-bg: #f8bbd0; /* 薄いピンク */
+            --modal-final-score-border: #f06292;
+            --modal-button-bg-start: #ffb74d; /* オレンジ */
+            --modal-button-bg-end: #ff8a65; /* コーラルオレンジ */
             --modal-button-shadow: #e65100;
-            --score-pop-color: #3f51b5;
-            --score-pop-shadow: rgba(0,0,0,0.2);
-            --time-pop-plus-color: #4CAF50; 
-            --time-pop-minus-color: #F44336; 
+            --score-pop-color: #ff4081; /* 強めのピンク */
+            --score-pop-shadow: rgba(0,0,0,0.1);
+            --time-pop-plus-color: #4CAF50; /* 緑 */
+            --time-pop-minus-color: #F44336; /* 赤 */
             --countdown-overlay-bg: rgba(255, 255, 255, 0.8);
-            --countdown-text-color: #3f51b5;
-            --countdown-text-shadow: rgba(0,0,0,0.1);
-            --timer-color: #e53935; /* 警告色（赤）固定 */
-            --timer-track-color: #cccccc;
+            --countdown-text-color: #d81b60; /* 濃いピンク */
+            --countdown-text-shadow: rgba(255, 255, 255, 0.8); /* 白っぽい影 */
+            --timer-alert-color: #ef5350; /* 赤系の警告色 */
 
-            font-family: sans-serif; /* シンプルなフォント */
+
+            font-family: 'Kiwi Maru', sans-serif; /* ディズニー風フォント */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -79,129 +81,166 @@
             background-attachment: fixed;
             color: var(--panel-text-color);
             transition: background 0.5s ease-in-out; 
+            overflow-x: hidden; /* 横スクロールバーを非表示 */
         }
 
         h1 { 
-            font-family: sans-serif; 
-            font-size: 3em; 
+            font-family: 'Potta One', cursive; /* ポップなタイトルフォント */
+            font-size: 3.8em; 
             color: var(--title-main-color);
-            text-shadow: 2px 2px 0px var(--title-shadow-color-1); 
+            text-shadow: 
+                -2px -2px 0 var(--title-shadow-color-1),
+                2px 2px 0 var(--title-shadow-color-2),
+                4px 4px 0px rgba(0,0,0,0.1); /* 柔らかい多層影 */
             margin-bottom: 30px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             line-height: 1.2;
             padding: 10px 0;
             position: relative;
             display: inline-block;
             z-index: 10;
             transition: color 0.3s ease;
+            animation: bounceIn 0.8s ease-out;
         }
-        h1::after { content: none; }
+
+        /* ✨ タイトルにキラキラを追加 ✨ */
+        h1::before, h1::after {
+            content: '⭐'; /* キラキラの星 */
+            position: absolute;
+            font-size: 0.5em;
+            opacity: 0.7;
+            animation: twinkle 1.5s infinite alternate ease-in-out;
+        }
+        h1::before { top: 10%; left: -10%; transform: rotate(-20deg); }
+        h1::after { bottom: 5%; right: -8%; transform: rotate(15deg); animation-delay: 0.5s; }
+
+        @keyframes twinkle {
+            from { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+            to { opacity: 1; transform: scale(1.2) rotate(30deg); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
         
         #controls, #game-info { 
             background: var(--panel-bg);
-            padding: 15px 30px;
-            border-radius: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-            margin-bottom: 25px; 
+            padding: 18px 35px;
+            border-radius: 15px; /* 丸みを強調 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15), 0 0 0 5px var(--panel-border); /* 柔らかな影とボーダー */
+            margin-bottom: 28px; 
             display: flex;
-            gap: 20px; 
+            gap: 25px; 
             align-items: center;
-            border: 1px solid var(--panel-border); 
+            /* border: 1px solid var(--panel-border); */ /* 影でボーダーを表現 */
             color: var(--panel-text-color);
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
             position: relative; 
-            font-size: 1.1em;
+            font-size: 1.2em;
+            max-width: 90%;
+            flex-wrap: wrap; /* 小さい画面で折り返す */
+            justify-content: center;
         }
-
-        #game-info p { margin: 0; }
         
         #score { 
             font-weight: bold; 
             color: var(--highlight-color);
-            font-size: 1.4em; 
-            text-shadow: none; 
+            font-size: 1.6em; 
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); /* 明るい影 */
             transition: color 0.3s ease;
         }
 
-        /* 🔥 テキストタイマーのスタイル 🔥 */
         #time-display {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 1.1em; 
+            gap: 8px;
+            font-size: 1.2em; 
+            color: var(--panel-text-color);
         }
 
         #time-left {
             font-weight: bold;
             color: var(--highlight-color); 
-            transition: color 0.3s ease, font-size 0.2s ease;
+            font-size: 1.6em; /* 大きく */
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); /* 明るい影 */
+            transition: color 0.3s ease, font-size 0.2s ease, transform 0.2s ease;
         }
         
         /* セレクトボックスのスタイル */
         #difficulty-select {
-            padding: 8px 15px;
-            font-size: 1em;
-            border-radius: 4px; 
-            border: 1px solid var(--select-border); 
+            padding: 10px 20px;
+            font-size: 1.1em;
+            border-radius: 8px; /* 角丸 */
+            border: 2px solid var(--select-border); 
             background-color: var(--select-bg); 
             color: var(--select-text-color);
             appearance: none; 
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 15px;
+            background-position: right 12px center;
+            background-size: 18px;
             cursor: pointer;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-            transition: border-color 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Kiwi Maru', sans-serif;
+            min-width: 120px;
         }
+        /* 矢印をディズニー風の星に */
         #difficulty-select { 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="#666666" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23d81b60" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'); 
         }
         #difficulty-select:focus {
             outline: none;
             border-color: var(--highlight-color);
-            box-shadow: 0 0 0 3px var(--select-focus-shadow);
+            box-shadow: 0 0 0 4px var(--select-focus-shadow);
         }
 
         /* スタートボタンのスタイル */
         #start-button {
-            padding: 10px 25px;
-            font-size: 1.2em; 
+            padding: 12px 30px;
+            font-size: 1.3em; 
             background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
-            color: var(--button-text-color, white);
+            color: var(--button-text-color);
             border: none;
-            border-radius: 4px; 
+            border-radius: 25px; /* 丸みを強調 */
             cursor: pointer;
             transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 2px 0 var(--button-shadow-color), 0 3px 5px rgba(0,0,0,0.1);
-            font-family: sans-serif;
-            text-shadow: none;
+            box-shadow: 0 5px 0 var(--button-shadow-color), 0 8px 15px rgba(0,0,0,0.15);
+            font-family: 'Potta One', cursive; /* タイトルと同じフォント */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* 軽く影 */
+            letter-spacing: 1px;
+            min-width: 150px;
         }
         #start-button:hover { 
             background: linear-gradient(180deg, var(--button-hover-bg-start), var(--button-hover-bg-end)); 
-            transform: translateY(-1px); 
-            box-shadow: 0 3px 0 var(--button-shadow-color), 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px); 
+            box-shadow: 0 7px 0 var(--button-shadow-color), 0 10px 20px rgba(0,0,0,0.2);
         }
         #start-button:active { 
-            transform: translateY(1px); 
-            box-shadow: 0 1px 0 var(--button-shadow-color), 0 1px 3px rgba(0,0,0,0.1);
+            transform: translateY(2px); 
+            box-shadow: 0 3px 0 var(--button-shadow-color), 0 2px 5px rgba(0,0,0,0.1);
         }
         #start-button:disabled { 
-            background: linear-gradient(180deg, var(--button-disabled-bg-start, #ccc), var(--button-disabled-bg-end, #aaa)); 
+            background: linear-gradient(180deg, var(--button-disabled-bg-start), var(--button-disabled-bg-end)); 
             cursor: not-allowed; 
             transform: translateY(0); 
-            box-shadow: 0 2px 0 var(--button-disabled-shadow, #999), 0 3px 5px rgba(0,0,0,0.1); 
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.1); 
+            color: #757575;
         }
 
         #grid {
             display: grid;
             margin: 0 auto;
             background: var(--grid-bg);
-            border: 1px solid var(--grid-border); 
-            border-radius: 4px;
-            padding: 8px;
-            gap: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 3px solid var(--grid-border); /* 太めのボーダー */
+            border-radius: 20px; /* 丸みを強調 */
+            padding: 15px;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 0 0 8px rgba(255,255,255,0.7) inset; /* 外側に柔らかな影、内側に白い縁 */
             transition: background 0.3s ease, border-color 0.3s ease;
+            max-width: calc(100% - 40px); /* 画面幅に合わせて調整 */
+            box-sizing: border-box;
         }
 
         .hole {
@@ -210,21 +249,23 @@
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 1px solid var(--hole-border);
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.1); 
+            border: 3px dashed var(--hole-border); /* 破線ボーダー */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 0 0 5px rgba(255,255,255,0.5); /* 内側に影、外側に白い縁 */
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
         }
-        .hole::before { content: none; }
+        .hole:hover {
+            transform: scale(1.02);
+        }
 
         .mole {
             width: 100%; 
             height: 100%; 
             position: absolute; 
             bottom: -100%; 
-            transition: bottom 0.2s ease-out; 
+            transition: bottom 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* バウンドするようなアニメーション */
             pointer-events: none; 
             display: flex;
             justify-content: center;
@@ -238,6 +279,7 @@
             height: 100%;
             transform: translateY(10%); 
         }
+        /* モグラのSVG要素の基本スタイル */
         .mole-body { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
         .mole-face { fill: var(--mole-face-fill); stroke: var(--mole-face-stroke); stroke-width: 1.5; transition: fill 0.3s ease, stroke 0.3s ease; }
         .mole circle, .mole line { fill: var(--mole-eyes-nose); stroke: var(--mole-eyes-nose); transition: fill 0.3s ease, stroke 0.3s ease; }
@@ -259,61 +301,100 @@
             top: 0; 
             width: 100%; 
             height: 100%; 
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(4px); 
+            background-color: rgba(0, 0, 0, 0.5); /* やや濃い背景 */
+            backdrop-filter: blur(5px); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .modal-content { 
-            background: var(--modal-bg-start); 
-            margin: 15% auto; 
-            padding: 25px;
-            border: 1px solid var(--modal-border);
-            width: 90%; max-width: 400px; 
-            border-radius: 8px; 
+            background: linear-gradient(135deg, var(--modal-bg-start), var(--modal-bg-end));
+            margin: auto; 
+            padding: 30px;
+            border: 3px dashed var(--modal-border); /* ディズニー風の破線 */
+            width: 90%; max-width: 450px; 
+            border-radius: 20px; /* 丸みを強調 */
             text-align: center; 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
-            animation: fadeIn 0.5s; 
-            font-family: sans-serif;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25), 0 0 0 8px rgba(255,255,255,0.7) inset; 
+            animation: modalPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            font-family: 'Kiwi Maru', sans-serif;
             color: var(--panel-text-color);
+            position: relative;
         }
+        /* ✨ モーダルにキラキラと飾り枠 ✨ */
+        .modal-content::before, .modal-content::after {
+            content: '';
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+        }
+        .modal-content::before {
+            content: '✨';
+            font-size: 2em;
+            top: -15px; left: -15px;
+            animation: twinkle 2s infinite alternate ease-in-out;
+        }
+        .modal-content::after {
+            content: '🌟';
+            font-size: 2em;
+            bottom: -15px; right: -15px;
+            animation: twinkle 2s infinite alternate ease-in-out reverse;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.7) translateY(-50px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
         .modal-content h2 { 
+            font-family: 'Potta One', cursive;
             color: var(--modal-h2-color);
-            font-size: 2.5em; 
-            margin-bottom: 15px; 
-            text-shadow: none; 
-            font-family: sans-serif;
+            font-size: 3em; 
+            margin-bottom: 20px; 
+            text-shadow: 2px 2px 0 var(--title-shadow-color-1); 
         }
         .final-score { 
-            font-size: 3em; 
+            font-size: 3.5em; 
             color: var(--modal-h2-color);
             font-weight: bold; 
             display: block; 
-            margin: 20px 0; 
-            padding: 10px; 
+            margin: 25px 0; 
+            padding: 12px; 
             background-color: var(--modal-final-score-bg); 
-            border-radius: 4px; 
-            border: 1px solid var(--modal-final-score-border); 
-            font-family: sans-serif; 
-            text-shadow: none;
+            border-radius: 10px; 
+            border: 2px solid var(--modal-final-score-border); 
+            font-family: 'Potta One', cursive; 
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+            animation: scoreScale 0.8s ease-out;
         }
+        @keyframes scoreScale {
+            0% { transform: scale(0.8); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
         .modal-content button { 
             background: linear-gradient(180deg, var(--modal-button-bg-start), var(--modal-button-bg-end));
             color: white; 
             border: none; 
-            padding: 10px 20px; 
-            font-size: 1.1em; 
-            border-radius: 4px; 
+            padding: 12px 25px; 
+            font-size: 1.2em; 
+            border-radius: 25px; 
             cursor: pointer; 
-            transition: background 0.2s, transform 0.1s; 
-            font-family: sans-serif;
-            box-shadow: 0 2px 0 var(--modal-button-shadow); 
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s; 
+            font-family: 'Potta One', cursive;
+            box-shadow: 0 4px 0 var(--modal-button-shadow), 0 6px 10px rgba(0,0,0,0.15); 
+            margin-top: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
         .modal-content button:hover { 
-            transform: translateY(-1px); 
-            box-shadow: 0 3px 0 var(--modal-button-shadow);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 0 var(--modal-button-shadow), 0 8px 15px rgba(0,0,0,0.2);
         }
         .modal-content button:active {
-            transform: translateY(1px);
-            box-shadow: 0 1px 0 var(--modal-button-shadow);
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--modal-button-shadow), 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .score-pop { 
@@ -321,36 +402,43 @@
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            font-size: 2.5em; 
+            font-size: 3em; 
             font-weight: bold; 
             color: var(--score-pop-color);
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); 
+            text-shadow: 
+                -1px -1px 0 #fff,
+                1px 1px 0 #fff,
+                -2px -2px 0 var(--score-pop-shadow),
+                2px 2px 0 var(--score-pop-shadow); /* ディズニー風の輪郭と影 */
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.9s ease-out forwards; 
             z-index: 5; 
-            font-family: sans-serif; 
+            font-family: 'Potta One', cursive; /* ポップなフォント */
         }
         @keyframes scorePopUp { 
             0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
-            50% { transform: translate(-50%, -40px) scale(1.1); } 
-            100% { opacity: 0; transform: translate(-50%, -80px) scale(1); } 
+            50% { transform: translate(-50%, -50px) scale(1.2); } /* 大きく弾む */
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
         .time-pop {
             position: absolute;
             top: 50%; 
-            /* スコア表示の右側に出すための調整 */
-            left: calc(50% + 150px); 
+            left: calc(50% + 150px); /* スコア表示の右側に出すための調整 */
             transform: translate(-50%, -50%);
-            font-size: 2em; 
+            font-size: 2.2em; 
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            text-shadow: 
+                -1px -1px 0 #fff,
+                1px 1px 0 #fff,
+                -2px -2px 0 rgba(0,0,0,0.1),
+                2px 2px 0 rgba(0,0,0,0.1); 
             pointer-events: none;
             opacity: 0;
             animation: timePopUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
             z-index: 20;
-            font-family: sans-serif;
+            font-family: 'Potta One', cursive; /* ポップなフォント */
         }
 
         .time-pop.plus { color: var(--time-pop-plus-color); }
@@ -358,8 +446,8 @@
 
         @keyframes timePopUp {
             0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
-            10% { opacity: 1; transform: translate(-50%, -20px) scale(1.1); }
-            100% { opacity: 0; transform: translate(-50%, -80px) scale(0.9); }
+            10% { opacity: 1; transform: translate(-50%, -30px) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
         }
 
         #countdown-overlay {
@@ -373,15 +461,18 @@
             z-index: 90;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(3px); 
+            backdrop-filter: blur(4px); 
         }
 
         #countdown-text {
-            font-family: sans-serif; 
-            font-size: 6em; 
+            font-family: 'Potta One', cursive; 
+            font-size: 8em; 
             color: var(--countdown-text-color);
             font-weight: bold;
-            text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.8); 
+            text-shadow: 
+                -3px -3px 0 var(--countdown-text-shadow),
+                3px 3px 0 var(--countdown-text-shadow),
+                6px 6px 0px rgba(0,0,0,0.1); /* 柔らかい影 */
             animation: pulse 0.9s ease-in-out infinite alternate; 
         }
 
@@ -389,15 +480,29 @@
             from { transform: scale(1); opacity: 0.9; }
             to { transform: scale(1.1); opacity: 1; }
         }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5em; }
+            #controls, #game-info { flex-direction: column; gap: 15px; padding: 15px 20px; }
+            #score, #time-left { font-size: 1.4em; }
+            #start-button { font-size: 1.1em; padding: 10px 20px; }
+            .modal-content h2 { font-size: 2em; }
+            .final-score { font-size: 2.5em; }
+            .score-pop { font-size: 2em; }
+            .time-pop { font-size: 1.8em; left: 50%; top: 70%; } /* 位置調整 */
+            #countdown-text { font-size: 5em; }
+        }
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>モグラdeポン！</h1>
+    <h1>モグラたたき</h1>
 
     <div id="game-info">
-        <p>スコア: <span id="score">0</span> |
-            <span id="time-display"
-                >時間: <span id="time-left">30</span>
+        <p>スコア: <span id="score">0</span> | 
+            <span id="time-display">
+                時間: 
+                <span id="time-left">30</span>
                 秒
             </span>
         </p>
@@ -513,8 +618,8 @@
             const columns = settings.gridColumns;
             
             const baseSize = 100; 
-            const gap = 8;
-            const borderPadding = 16; 
+            const gap = 12; // ディズニー風で広めのギャップ
+            const borderPadding = 30; // 太いボーダーとシャドウ分の調整
 
             const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
 
@@ -667,13 +772,13 @@
             
             // 残り時間が少ない場合の警告色
             if (timeLeft <= 5) {
-                // 警告色（赤）を適用
-                timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--timer-color'); 
-                timeLeftDisplay.style.fontSize = '1.4em'; // 目立たせる
+                timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--timer-alert-color'); 
+                timeLeftDisplay.style.fontSize = '1.8em'; 
+                timeLeftDisplay.style.transform = 'scale(1.1)'; // 少し大きく
             } else {
-                // 通常の色（--highlight-color）に戻す
                 timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
-                timeLeftDisplay.style.fontSize = ''; 
+                timeLeftDisplay.style.fontSize = '1.6em'; 
+                timeLeftDisplay.style.transform = 'scale(1)'; // 元に戻す
             }
 
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
@@ -685,8 +790,10 @@
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
             
-            pop.style.color = getComputedStyle(document.body).getPropertyValue('--score-pop-color');
-            pop.style.textShadow = getComputedStyle(document.body).getPropertyValue('--score-pop-shadow');
+            // CSS変数を直接参照してスタイルを設定
+            pop.style.setProperty('--score-pop-color', getComputedStyle(document.body).getPropertyValue('--score-pop-color'));
+            pop.style.setProperty('--score-pop-shadow', getComputedStyle(document.body).getPropertyValue('--score-pop-shadow'));
+
 
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 900); 
@@ -805,15 +912,14 @@
             const countdownInterval = setInterval(() => {
                 if (count > 0) {
                     countdownText.textContent = count;
-                    count--;
                 } else if (count === 0) {
                     countdownText.textContent = 'スタート！'; 
-                    count--; 
                 } else {
                     clearInterval(countdownInterval);
                     countdownOverlay.style.display = 'none';
                     startGameLogic(); 
                 }
+                count--; 
             }, 1000);
         }
 
