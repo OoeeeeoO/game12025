@@ -5,12 +5,13 @@
     <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
     <style>
-        /* CSS (デザイン) - ほとんど変更なし */
+        /* CSS (デザイン) */
         body {
             font-family: 'Mochiy Pop P One', 'Arial', sans-serif;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            /* 修正: paddingを調整。要素のbox-sizingがborder-boxなので、paddingは内部に影響 */
+            padding: 20px 0; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,7 +21,6 @@
         }
 
         h1 { 
-            /* サンリオ風の大きなフチ付きタイトル */
             font-family: 'Mochiy Pop P One', cursive;
             font-size: 3.8em;
             color: #ff80ab;
@@ -29,10 +29,11 @@
                 2px -2px 0 #fff,
                 -2px 2px 0 #fff,
                 2px 2px 0 #fff,
-                4px 4px 0 #ffc1e3,
-                6px 6px 0 #ffb3d9,
-                8px 8px 0 #ff99c8,
-                10px 10px 0 #ff80b3;
+                /* 修正: シャドウを少し控えめに */
+                3px 3px 0 #ffc1e3,
+                5px 5px 0 #ffb3d9,
+                7px 7px 0 #ff99c8,
+                9px 9px 0 #ff80b3;
             margin-bottom: 25px;
             letter-spacing: 2px;
             line-height: 1.2;
@@ -83,7 +84,6 @@
             outline: none;
             box-shadow: 0 0 0 3px #ffc1e3;
         }
-        /* 追加: 無効時のスタイル */
         #difficulty-select:disabled {
             opacity: 0.7;
             cursor: not-allowed;
@@ -145,7 +145,7 @@
                 0 4px 6px rgba(0,0,0,0.2); /* 穴自体の少し浮いたような影 */
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: flex-end; /* モグラを下端に配置 */
             /* widthとheightはJavaScriptで設定される */
         }
         
@@ -154,17 +154,19 @@
             width: 100%; 
             height: 100%; 
             position: absolute; 
+            /* 修正: 穴の高さと完全に一致するように-100%からbottom: -currentHoleSize + 誤差調整 に変更 */
+            /* ただし、holeのheightが動的なので、ここでは相対的な-100%を維持し、
+               SVG自体のviewBoxと中の要素のY座標で調整する方が安全 */
             bottom: -100%; 
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: flex-end; /* SVGも下端に揃える */
             z-index: 2; 
         }
         .hole.up .mole { 
             bottom: 0; 
-            /* クリックを穴からモグラに渡す */
             pointer-events: auto; 
         } 
 
@@ -172,8 +174,8 @@
         .mole svg {
             width: 100%;
             height: 100%;
-            /* 修正: モグラが穴の底にいるような位置に調整 */
-            transform: translateY(15%); 
+            /* 修正: transformを削除。SVGのviewBoxと内部の要素の位置で調整する */
+            /* transform: translateY(15%); */ 
         }
 
         /* --- 特殊モグラの色変更 (SVG内の要素を直接操作) --- */
@@ -221,7 +223,6 @@
             font-size: 3em;
             font-weight: bold; 
             color: #fff; /* ベース色を白に変更 */
-            /* CSS変数の --pop-color をフチ色に使用 */
             text-shadow: 
                 -2px -2px 0 var(--pop-color, #ff66b2),
                 2px -2px 0 var(--pop-color, #ff66b2),
@@ -330,7 +331,7 @@
         let isGameRunning = false;
         let countdownTimerId;
         let moleTimerId;
-        let lastHole = null; // 直前にモグラが出た穴を保持 (なくても問題ないが、ランダム性向上のため維持)
+        let lastHole = null; 
 
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
@@ -342,28 +343,9 @@
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
 
-        // SVGモグラのHTML
+        // SVGモグラのHTML (修正箇所: viewBoxの調整、および各パーツのcy調整)
         const MOLE_SVG = `
-            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
-                <ellipse class="mole-body" cx="50" cy="80" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-face" cx="50" cy="92" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
-
-                <circle class="mole-nose" cx="50" cy="84" r="3" fill="#333"/>
-                
-                <circle cx="38" cy="72" r="3.5" fill="black"/>
-                <circle cx="62" cy="72" r="3.5" fill="black"/>
-
-                <line class="mole-whisker" x1="23" y1="87" x2="38" y2="87" stroke="#6A462F" stroke-width="1"/>
-                <line class="mole-whisker" x1="20" y1="92" x2="38" y2="92" stroke="#6A462F" stroke-width="1"/>
-                <line class="mole-whisker" x1="23" y1="97" x2="38" y2="97" stroke="#6A462F" stroke-width="1"/>
-                
-                <line class="mole-whisker" x1="62" y1="87" x2="77" y2="87" stroke="#6A462F" stroke-width="1"/>
-                <line class="mole-whisker" x1="62" y1="92" x2="80" y2="92" stroke="#6A462F" stroke-width="1"/>
-                <line class="mole-whisker" x1="62" y1="97" x2="77" y2="97" stroke="#6A462F" stroke-width="1"/>
-
-                <ellipse class="mole-hand" cx="25" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-hand" cx="75" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-            </svg>
+            <svg viewBox="0 0 100 110" preserveAspectRatio="xMidYMax meet"> <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> <ellipse class="mole-face" cx="50" cy="80" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/> <circle class="mole-nose" cx="50" cy="78" r="3" fill="#333"/> <circle cx="38" cy="66" r="3.5" fill="black"/> <circle cx="62" cy="66" r="3.5" fill="black"/> <line class="mole-whisker" x1="23" y1="81" x2="38" y2="81" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="20" y1="86" x2="38" y2="86" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="23" y1="91" x2="38" y2="91" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="62" y1="81" x2="77" y2="81" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="62" y1="86" x2="80" y2="86" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="62" y1="91" x2="77" y2="91" stroke="#6A462F" stroke-width="1"/> <ellipse class="mole-hand" cx="25" cy="95" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> <ellipse class="mole-hand" cx="75" cy="95" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> </svg>
         `;
 
 
@@ -373,7 +355,7 @@
             const holeSize = settings.holeSize; 
             
             const gap = 10; 
-            const gridBorderPadding = (8 + 10) * 2; // (border: 8px + padding: 10px) * 2
+            const gridBorderPadding = (8 + 10) * 2; 
 
             // グリッド全体の幅を計算
             const newGridSize = (holeSize * columns) + (gap * (columns - 1)) + gridBorderPadding;
@@ -384,7 +366,7 @@
             grid.style.gridTemplateColumns = `repeat(${columns}, ${holeSize}px)`; 
             grid.style.gridTemplateRows = `repeat(${columns}, ${holeSize}px)`;  
             
-            currentHoleSize = holeSize; // 現在の穴のサイズを保持
+            currentHoleSize = holeSize; 
         }
 
         function createHoles() {
@@ -394,7 +376,6 @@
                 hole.classList.add('hole');
                 hole.dataset.id = i;
 
-                // 穴のwidthとheightをJavaScriptで直接設定して正方形を保証
                 hole.style.width = `${currentHoleSize}px`;
                 hole.style.height = `${currentHoleSize}px`;
 
@@ -403,7 +384,6 @@
                 
                 mole.innerHTML = MOLE_SVG;
 
-                // クリックイベントは穴（hole）に設定
                 hole.addEventListener('click', whack); 
 
                 hole.appendChild(mole);
@@ -415,22 +395,19 @@
         
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
-            // まだモグラが出ていない穴（.hole.upがない）のみを対象にする
             const availableHoles = Array.from(holes).filter(hole => !hole.classList.contains('up'));
 
             if (availableHoles.length === 0) {
-                // 全ての穴にモグラが出ている場合はnullを返す
                 return null; 
             }
             
             let hole;
             let idx;
 
-            // 直前の穴と同じ穴を選ぶことを避ける（完全に避けられない場合もあるが、ランダム性を向上）
             do {
                 idx = Math.floor(Math.random() * availableHoles.length);
                 hole = availableHoles[idx];
-            } while (hole === lastHole && availableHoles.length > 1); // 1つ以上の穴が利用可能な場合
+            } while (hole === lastHole && availableHoles.length > 1); 
 
             lastHole = hole;
             return hole;
@@ -452,17 +429,14 @@
             const time = randomTime();
             const hole = randomHole();
             
-            // 【重要バグ修正】: holeがnullになる可能性があるためチェック
             if (!hole) {
-                // すべての穴にモグラが出ているか、穴が取得できなかった場合
-                moleTimerId = setTimeout(peep, 200); // 短い時間で再試行
+                moleTimerId = setTimeout(peep, 200); 
                 return;
             }
 
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
             
-            // モグラ出現前にクラスとデータ属性を必ずリセット
             mole.classList.remove('gold', 'bomb', 'clock');
             delete mole.dataset.type;
             delete mole.dataset.score;
@@ -478,15 +452,11 @@
             mole.dataset.type = moleType;
             mole.dataset.score = scoreValue;
 
-            // モグラを出す
             hole.classList.add('up');
 
-            // モグラが引っ込む処理
             setTimeout(() => {
-                // 【バグ修正のポイント】: たたかれていなければ引っ込める
                 if (hole.classList.contains('up')) {
                     hole.classList.remove('up');
-                    // 引っ込む際もリセット (たたかれていない場合はpeepが処理を担当)
                     mole.classList.remove('gold', 'bomb', 'clock'); 
                     delete mole.dataset.type; 
                     delete mole.dataset.score;
@@ -510,31 +480,28 @@
             
             let popColor;
             if (points >= GOLD_MOLE_SCORE) { 
-                popColor = '#FFD700'; // ゴールド
+                popColor = '#FFD700'; 
             } else if (points > 0) { 
-                popColor = '#27ae60'; // グリーン
+                popColor = '#27ae60'; 
             } else { 
-                popColor = '#e74c3c'; // レッド
+                popColor = '#e74c3c'; 
             }
             
-            // CSS変数でフチ色を設定
             pop.style.setProperty('--pop-color', popColor);
             
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 700);
         }
         
-        // 時間の増減をポップアップで表示する補助関数（追加）
         function showTimePop(hole, amount, isBonus) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
             pop.textContent = isBonus ? `+${amount}s` : `-${amount}s`;
             
-            const popColor = isBonus ? '#00BFFF' : '#FF4500'; // 青か赤
+            const popColor = isBonus ? '#00BFFF' : '#FF4500'; 
             pop.style.setProperty('--pop-color', popColor);
-            pop.style.fontSize = '2.5em'; // スコアより少し小さめに
+            pop.style.fontSize = '2.5em'; 
             
-            // ポップアップの出現位置を調整（スコアと重ならないように）
             pop.style.transform = isBonus ? 'translate(-50%, -70%)' : 'translate(-50%, -30%)'; 
             pop.style.animation = 'scorePopUp 0.7s ease-out forwards'; 
 
@@ -547,14 +514,11 @@
             const hole = event.currentTarget;
             const mole = hole.querySelector('.mole');
             
-            // upクラスが付いていない、つまりモグラがいない/たたき済み
             if (!hole.classList.contains('up')) return; 
 
-            // たたかれたモグラの処理
             const points = parseInt(mole.dataset.score);
             const type = mole.dataset.type;
             
-            // スコアと時間ボーナスの処理
             showScorePop(hole, points);
             score += points;
             scoreDisplay.textContent = score;
@@ -570,7 +534,6 @@
             
             updateTime();
             
-            // 【バグ修正箇所】: たたかれたモグラを即座に引っ込め、属性をリセット
             hole.classList.remove('up');
             mole.classList.remove('gold', 'bomb', 'clock');
             delete mole.dataset.type;
@@ -583,15 +546,11 @@
             currentMinTime = settings.minTime;
             currentMaxTime = settings.maxTime;
             
-            // setGridClassとcreateHolesはstartGameのカウントダウン前で実行済み
-
             score = 0;
             timeLeft = GAME_DURATION;
             isGameRunning = true;
             scoreDisplay.textContent = score;
             
-            // startButton.disabledはstartGameの最初に実行済み
-
             countdownTimerId = setInterval(() => {
                 timeLeft--;
                 updateTime();
@@ -610,10 +569,10 @@
             currentHoleSize = settings.holeSize; 
             
             setGridClass(difficulty);
-            createHoles(); // 難易度変更がなくても、グリッドをリセットして穴のイベントリスナーを再設定
+            createHoles();
 
             startButton.disabled = true;
-            difficultySelect.disabled = true; // ゲーム開始時とカウントダウン中は難易度変更を禁止
+            difficultySelect.disabled = true; 
             countdownOverlay.style.display = 'flex';
             let count = 3;
 
@@ -639,7 +598,6 @@
             clearInterval(countdownTimerId);
             clearTimeout(moleTimerId);
 
-            // 全てのモグラを引っ込め、属性をリセット
             document.querySelectorAll('.hole.up').forEach(hole => {
                 hole.classList.remove('up');
                 const mole = hole.querySelector('.mole');
@@ -651,7 +609,6 @@
             finalScoreDisplay.textContent = score;
             gameOverModal.style.display = 'flex';
             
-            // ゲーム終了後は難易度変更を許可
             difficultySelect.disabled = false;
         }
         
@@ -665,7 +622,6 @@
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
             
-            // 初期状態に戻すためにグリッドを再描画
             initializeGame();
         }
 
@@ -684,11 +640,9 @@
             updateTime();
         }
 
-        // イベントリスナーの設定
         startButton.addEventListener('click', startGame);
         difficultySelect.addEventListener('change', () => {
             if (!isGameRunning) {
-                // ゲーム中でない場合のみグリッドを更新
                 initializeGame();
             }
         });
