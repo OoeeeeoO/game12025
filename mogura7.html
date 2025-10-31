@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>モグラたたき - SVGモグラ版 (円形タイマー)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Hachi+Maru+Pop&family=Potta+One&display=swap" rel="stylesheet">
+    <style>
+        /* CSSカスタムプロパティの定義 (デフォルトはNormal) */
+        body.difficulty-normal {
+            /* (前回の配色プロパティはそのまま) */
+            --main-bg-start: #ffe0f0; 
+            --main-bg-end: #fefefe; 
+            --title-main-color: #ff69b4; 
+            --title-shadow-color-1: rgba(255, 105, 180, 0.3);
+            --title-shadow-color-2: #fff;
+            --title-blob-color: rgba(255, 105, 180, 0.1);
+            --panel-bg: rgba(255, 255, 255, 0.7);
+            --panel-border: #f0b0c0; 
+            --panel-text-color: #666;
+            --highlight-color: #ff69b4; 
+            --highlight-font: 'Potta One', cursive;
+            --select-border: #f0b0c0;
+            --select-bg: #fff;
+            --select-text-color: #666;
+            --select-arrow-color: #f0b0c0;
+            --select-focus-shadow: #f5d3db;
+            --button-bg-start: #ff99cc; 
+            --button-bg-end: #ff6699;
+            --button-text-color: white;
+            --button-shadow-color: #e05c8c;
+            --button-hover-bg-start: #ffadc2;
+            --button-hover-bg-end: #ff7ba0;
+            --button-active-shadow: #e05c8c;
+            --button-disabled-bg-start: #ccc;
+            --button-disabled-bg-end: #bbb;
+            --button-disabled-shadow: #aaa;
+            --grid-bg: rgba(255, 255, 255, 0.8);
+            --grid-border: #f0b0c0;
+            --hole-bg: #d2b48c; 
+            --hole-border: #b39b7a;
+            --hole-inner-border: rgba(179, 155, 122, 0.3);
+            --mole-body-fill: #f0a0a0; 
+            --mole-body-stroke: #d08080;
+            --mole-face-fill: #ffebee; 
+            --mole-face-stroke: #d08080;
+            --mole-eyes-nose: #888;
+            --mole-gold-fill: #ffdf00;
+            --mole-gold-stroke: #e0b000;
+            --mole-gold-face-hand: #fff3a0;
+            --mole-bomb-fill: #a0a0a0;
+            --mole-bomb-stroke: #808080;
+            --mole-bomb-hand: #808080;
+            --mole-clock-fill: #87ceeb;
+            --mole-clock-stroke: #6aabcb;
+            --modal-bg-start: #fefefe;
+            --modal-bg-end: #fcfcfc;
+            --modal-border: #ff99cc;
+            --modal-h2-color: #ff69b4;
+            --modal-final-score-bg: #fff0f5;
+            --modal-final-score-border: #ff99cc;
+            --modal-button-bg-start: #99ccff; 
+            --modal-button-bg-end: #6699ff;
+            --modal-button-shadow: #5c8ae0;
+            --score-pop-color: #ff69b4;
+            --score-pop-shadow: rgba(0,0,0,0.2);
+            --time-pop-plus-color: #4CAF50; 
+            --time-pop-minus-color: #F44336; 
+            --countdown-overlay-bg: rgba(255, 240, 245, 0.7);
+            --countdown-text-color: #ff69b4;
+            --countdown-text-shadow: rgba(0,0,0,0.2);
+
+            /* 🔥 タイマー色 (Normal) 🔥*/
+            --timer-color: #ff69b4; 
+            --timer-track-color: rgba(0,0,0,0.1);
+        }
+
+        /* 難易度：かんたん (Easy) */
+        body.difficulty-easy {
+            /* (前回の配色プロパティはそのまま) */
+            --main-bg-start: #e0f2f7; 
+            --main-bg-end: #f0fdfc; 
+            --title-main-color: #4fc3f7; 
+            --title-shadow-color-1: rgba(79, 195, 247, 0.3);
+            --title-shadow-color-2: #fff;
+            --title-blob-color: rgba(79, 195, 247, 0.1);
+            --panel-bg: rgba(255, 255, 255, 0.8);
+            --panel-border: #a7d9f7; 
+            --panel-text-color: #555;
+            --highlight-color: #4fc3f7; 
+            --highlight-font: 'Potta One', cursive;
+            --select-border: #a7d9f7;
+            --select-bg: #fff;
+            --select-text-color: #555;
+            --select-arrow-color: #a7d9f7;
+            --select-focus-shadow: #b3e5fc;
+            --button-bg-start: #81d4fa; 
+            --button-bg-end: #4fc3f7;
+            --button-shadow-color: #389cd1;
+            --button-hover-bg-start: #9be0ff;
+            --button-hover-bg-end: #6ecdfd;
+            --button-active-shadow: #389cd1;
+            --grid-bg: rgba(255, 255, 255, 0.9);
+            --grid-border: #a7d9f7;
+            --hole-bg: #b2dfdb; 
+            --hole-border: #80cbc4;
+            --hole-inner-border: rgba(128, 203, 196, 0.3);
+            --mole-body-fill: #a7d9f7; 
+            --mole-body-stroke: #79bccd;
+            --mole-face-fill: #e8f5e9; 
+            --mole-face-stroke: #79bccd;
+            --mole-eyes-nose: #777;
+            --mole-gold-fill: #ffeb3b;
+            --mole-gold-stroke: #fbc02d;
+            --mole-gold-face-hand: #fff9c4;
+            --mole-bomb-fill: #ef9a9a;
+            --mole-bomb-stroke: #e57373;
+            --mole-bomb-hand: #e57373;
+            --mole-clock-fill: #a5d6a7;
+            --mole-clock-stroke: #81c784;
+            --modal-border: #a7d9f7;
+            --modal-h2-color: #4fc3f7;
+            --modal-final-score-bg: #e1f5fe;
+            --modal-final-score-border: #a7d9f7;
+            --modal-button-bg-start: #ffb74d; 
+            --modal-button-bg-end: #ff9800;
+            --modal-button-shadow: #e68900;
+            --score-pop-color: #4fc3f7;
+            --score-pop-shadow: rgba(0,0,0,0.1);
+            --time-pop-plus-color: #4CAF50;
+            --time-pop-minus-color: #F44336;
+            --countdown-overlay-bg: rgba(224, 247, 250, 0.7);
+            --countdown-text-color: #4fc3f7;
+            --countdown-text-shadow: rgba(0,0,0,0.1);
+
+            /* 🔥 タイマー色 (Easy) 🔥*/
+            --timer-color: #f06292; 
+            --timer-track-color: rgba(0,0,0,0.1);
+        }
+
+        /* 難易度：むずかしい (Hard) */
+        body.difficulty-hard {
+            /* (前回の配色プロパティはそのまま) */
+            --main-bg-start: #212121; 
+            --main-bg-end: #424242; 
+            --title-main-color: #00e676; 
+            --title-shadow-color-1: rgba(0, 230, 118, 0.3);
+            --title-shadow-color-2: #fff;
+            --title-blob-color: rgba(0, 230, 118, 0.1);
+            --panel-bg: rgba(0, 0, 0, 0.7);
+            --panel-border: #6200ea; 
+            --panel-text-color: #eee;
+            --highlight-color: #00e676; 
+            --highlight-font: 'Potta One', cursive;
+            --select-border: #6200ea;
+            --select-bg: #000;
+            --select-text-color: #00e676;
+            --select-arrow-color: #00e676;
+            --select-focus-shadow: #7c4dff;
+            --button-bg-start: #6200ea; 
+            --button-bg-end: #3f0097;
+            --button-shadow-color: #4a00af;
+            --button-hover-bg-start: #7c4dff;
+            --button-hover-bg-end: #5100c8;
+            --button-active-shadow: #4a00af;
+            --grid-bg: rgba(0, 0, 0, 0.8);
+            --grid-border: #00e676;
+            --hole-bg: #424242; 
+            --hole-border: #212121;
+            --hole-inner-border: rgba(33, 33, 33, 0.3);
+            --mole-body-fill: #ff6e40; 
+            --mole-body-stroke: #e64a19;
+            --mole-face-fill: #ffccbc; 
+            --mole-face-stroke: #e64a19;
+            --mole-eyes-nose: #fff; 
+            --mole-gold-fill: #ffd700;
+            --mole-gold-stroke: #b8860b;
+            --mole-gold-face-hand: #ffe082;
+            --mole-bomb-fill: #e53935;
+            --mole-bomb-stroke: #c62828;
+            --mole-bomb-hand: #c62828;
+            --mole-clock-fill: #29b6f6;
+            --mole-clock-stroke: #0288d1;
+            --modal-bg-start: #333;
+            --modal-bg-end: #111;
+            --modal-border: #00e676;
+            --modal-h2-color: #00e676;
+            --modal-final-score-bg: #000;
+            --modal-final-score-border: #00e676;
+            --modal-button-bg-start: #ffeb3b; 
+            --modal-button-bg-end: #fdd835;
+            --modal-button-shadow: #fbc02d;
+            --score-pop-color: #00e676;
+            --score-pop-shadow: rgba(255,255,255,0.2);
+            --time-pop-plus-color: #00e676;
+            --time-pop-minus-color: #e53935;
+            --countdown-overlay-bg: rgba(0, 0, 0, 0.8);
+            --countdown-text-color: #00e676;
+            --countdown-text-shadow: rgba(255,255,255,0.2);
+
+            /* 🔥 タイマー色 (Hard) 🔥*/
+            --timer-color: #e53935; 
+            --timer-track-color: rgba(255,255,255,0.2);
+        }
+
+        /* --- 共通スタイル（省略）--- */
+        body {
+            font-family: 'Hachi Maru Pop', cursive;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, var(--main-bg-start) 0%, var(--main-bg-end) 50%, var(--main-bg-start) 100%);
+            background-attachment: fixed;
+            color: var(--panel-text-color);
+            transition: background 0.5s ease-in-out; 
+        }
+
+        h1 { 
+            font-family: 'Potta One', cursive;
+            font-size: 4.5em; 
+            color: var(--title-main-color);
+            text-shadow: 
+                3px 3px 0px var(--title-shadow-color-1),
+                -2px -2px 0px var(--title-shadow-color-2);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            padding: 10px 25px;
+            position: relative;
+            display: inline-block;
+            z-index: 10;
+            transition: color 0.3s ease;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px;
+            right: -5px; bottom: -5px;
+            background-color: var(--title-blob-color);
+            border-radius: 50% 30% 40% 60% / 60% 40% 50% 30%;
+            filter: blur(8px);
+            z-index: -1;
+            transition: background-color 0.3s ease;
+        }
+        
+        #controls, #game-info { 
+            background: var(--panel-bg);
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            margin-bottom: 25px; 
+            display: flex;
+            gap: 25px; 
+            align-items: center;
+            border: 2px dashed var(--panel-border);
+            color: var(--panel-text-color);
+            font-family: 'Hachi Maru Pop', cursive;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            position: relative; 
+        }
+
+        #game-info p { 
+            margin: 0; 
+            color: var(--panel-text-color); 
+            font-size: 1.4em; 
+        }
+        /* スコア表示 */
+        #score { 
+            font-weight: bold; 
+            color: var(--highlight-color);
+            font-family: var(--highlight-font); 
+            font-size: 1.8em; 
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+            transition: color 0.3s ease;
+        }
+        
+        /* 🔥 円形タイマーのCSS 🔥*/
+        #time-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em; 
+        }
+        #timer-ring {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: grid; /* 中心の数字を重ねるため */
+            place-content: center;
+            position: relative;
+            font-family: var(--highlight-font);
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--highlight-color);
+            box-shadow: 0 0 0 3px var(--timer-track-color);
+            transition: box-shadow 0.3s ease;
+        }
+        #timer-ring::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: inherit;
+            background: var(--timer-track-color);
+            background: conic-gradient(
+                var(--timer-color) 0%, /* JSで上書きされる */
+                var(--timer-track-color) 0% 
+            );
+            transition: background 0.3s ease;
+        }
+        #timer-ring span {
+            z-index: 10;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            transition: color 0.3s ease;
+        }
+
+        #difficulty-select {
+            padding: 10px 18px;
+            font-size: 1.1em;
+            border-radius: 20px;
+            border: 2px solid var(--select-border); 
+            background-color: var(--select-bg); 
+            color: var(--select-text-color);
+            font-family: 'Hachi Maru Pop', cursive;
+            appearance: none; 
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            cursor: pointer;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        #difficulty-select.select-arrow-easy { background-image: url('data:image/svg+xml;utf8,<svg fill="#a7d9f7" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
+        #difficulty-select.select-arrow-normal { background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
+        #difficulty-select.select-arrow-hard { background-image: url('data:image/svg+xml;utf8,<svg fill="#00e676" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
+        #difficulty-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--select-focus-shadow);
+        }
+
+        #start-button {
+            padding: 12px 30px;
+            font-size: 1.6em; 
+            background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
+            color: var(--button-text-color, white);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 3px 0 var(--button-shadow-color), 0 5px 10px rgba(0,0,0,0.15);
+            font-family: 'Potta One', cursive;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        #start-button:hover { 
+            background: linear-gradient(180deg, var(--button-hover-bg-start), var(--button-hover-bg-end)); 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 0 var(--button-shadow-color), 0 7px 12px rgba(0,0,0,0.2);
+        }
+        #start-button:active { 
+            transform: translateY(2px); 
+            box-shadow: 0 1px 0 var(--button-active-shadow), 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #start-button:disabled { 
+            background: linear-gradient(180deg, var(--button-disabled-bg-start, #ccc), var(--button-disabled-bg-end, #bbb)); 
+            cursor: not-allowed; 
+            transform: translateY(0); 
+            box-shadow: 0 3px 0 var(--button-disabled-shadow, #aaa), 0 5px 10px rgba(0,0,0,0.15); 
+        }
+
+        #grid {
+            display: grid;
+            margin: 0 auto;
+            background: var(--grid-bg);
+            border: 4px dashed var(--grid-border);
+            border-radius: 20px;
+            padding: 10px;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .hole {
+            background-color: var(--hole-bg);
+            border-radius: 50%;
+            overflow: hidden; 
+            position: relative; 
+            cursor: pointer;
+            border: 3px solid var(--hole-border);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2); 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .hole::before {
+            content: '';
+            position: absolute;
+            top: -5%; left: -5%;
+            width: 110%; height: 110%;
+            border: 2px solid var(--hole-inner-border);
+            border-radius: 40% 60% 50% 50% / 50% 50% 40% 60%;
+            pointer-events: none;
+            z-index: 1;
+            transition: border-color 0.3s ease;
+        }
+
+        .mole {
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            bottom: -100%; 
+            transition: bottom 0.2s ease-out; 
+            pointer-events: none; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2; 
+        }
+        .hole.up .mole { bottom: 0; pointer-events: auto; }
+
+        .mole svg {
+            width: 100%;
+            height: 100%;
+            transform: translateY(10%); 
+        }
+        .mole-body { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
+        .mole-face { fill: var(--mole-face-fill); stroke: var(--mole-face-stroke); stroke-width: 1.5; transition: fill 0.3s ease, stroke 0.3s ease; }
+        .mole circle, .mole line { fill: var(--mole-eyes-nose); stroke: var(--mole-eyes-nose); transition: fill 0.3s ease, stroke 0.3s ease; }
+        .mole-hand { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
+
+
+        .mole.gold .mole-body { fill: var(--mole-gold-fill); stroke: var(--mole-gold-stroke); }
+        .mole.bomb .mole-body { fill: var(--mole-bomb-fill); stroke: var(--mole-bomb-stroke); }
+        .mole.clock .mole-body { fill: var(--mole-clock-fill); stroke: var(--mole-clock-stroke); }
+        .mole.gold .mole-face, .mole.gold .mole-hand { fill: var(--mole-gold-face-hand); }
+        .mole.bomb .mole-hand { fill: var(--mole-bomb-hand); }
+
+        #game-over-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            background: linear-gradient(180deg, var(--modal-bg-start, #fefefe), var(--modal-bg-end, #fcfcfc)); 
+            margin: 10% auto; 
+            padding: 30px;
+            border: 3px solid var(--modal-border);
+            width: 85%; max-width: 450px; 
+            border-radius: 25px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
+            animation: fadeIn 0.5s; 
+            font-family: 'Hachi Maru Pop', cursive;
+            color: var(--panel-text-color);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        .modal-content h2 { 
+            color: var(--modal-h2-color);
+            font-size: 3em; 
+            margin-bottom: 15px; 
+            text-shadow: 1px 1px 0 #fff; 
+            font-family: 'Potta One', cursive;
+            transition: color 0.3s ease;
+        }
+        .final-score { 
+            font-size: 4em; 
+            color: var(--modal-h2-color);
+            font-weight: bold; 
+            display: block; 
+            margin: 20px 0; 
+            padding: 15px; 
+            background-color: var(--modal-final-score-bg); 
+            border-radius: 15px; 
+            border: 2px dashed var(--modal-final-score-border);
+            font-family: 'Potta One', cursive; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        .modal-content button { 
+            background: linear-gradient(180deg, var(--modal-button-bg-start), var(--modal-button-bg-end));
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            font-size: 1.3em; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: background 0.2s, transform 0.1s; 
+            font-family: 'Hachi Maru Pop', cursive;
+            box-shadow: 0 3px 0 var(--modal-button-shadow); 
+        }
+        .modal-content button:hover { 
+            background: linear-gradient(180deg, var(--modal-button-hover-bg-start, #aaddff), var(--modal-button-hover-bg-end, #7bbaff)); 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 0 var(--modal-button-shadow);
+        }
+        .modal-content button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 var(--modal-button-shadow);
+        }
+
+        .score-pop { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 3em; 
+            font-weight: bold; 
+            color: var(--score-pop-color);
+            text-shadow: 
+                -1px -1px 0 #fff, 
+                1px -1px 0 #fff,
+                -1px 1px 0 #fff,
+                1px 1px 0 #fff,
+                2px 2px 0 var(--score-pop-shadow); 
+            pointer-events: none; 
+            opacity: 0; 
+            animation: scorePopUp 0.9s ease-out forwards; 
+            z-index: 5; 
+            font-family: 'Potta One', cursive; 
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        @keyframes scorePopUp { 
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
+            50% { transform: translate(-50%, -50px) scale(1.1); } 
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
+        }
+        
+        .time-pop {
+            position: absolute;
+            top: 50%; 
+            left: calc(50% + 150px); 
+            transform: translate(-50%, -50%);
+            font-size: 2.5em; 
+            font-weight: bold;
+            text-shadow: 
+                -1px -1px 0 #fff, 
+                1px -1px 0 #fff,
+                -1px 1px 0 #fff,
+                1px 1px 0 #fff;
+            pointer-events: none;
+            opacity: 0;
+            animation: timePopUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            z-index: 20;
+            font-family: 'Potta One', cursive;
+        }
+
+        .time-pop.plus {
+            color: var(--time-pop-plus-color); 
+        }
+        .time-pop.minus {
+            color: var(--time-pop-minus-color); 
+        }
+
+        @keyframes timePopUp {
+            0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+            10% { opacity: 1; transform: translate(-50%, -20px) scale(1.1); }
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
+        }
+
+        #countdown-overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--countdown-overlay-bg); 
+            z-index: 90;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px); 
+            transition: background-color 0.3s ease;
+        }
+
+        #countdown-text {
+            font-family: 'Potta One', cursive; 
+            font-size: 7.5em; 
+            color: var(--countdown-text-color);
+            font-weight: bold;
+            text-shadow: 
+                -3px -3px 0 #fff, 
+                3px -3px 0 #fff,
+                -3px 3px 0 #fff,
+                3px 3px 0 #fff,
+                5px 5px 0 var(--countdown-text-shadow); 
+            animation: pulse 0.9s ease-in-out infinite alternate; 
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.9; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="difficulty-normal" onload="initializeGame()">
+    <h1>もぐらdeポン！ </h1>
+
+    <div id="game-info">
+        <p>スコア: <span id="score">0</span> | 
+            <span id="time-display">
+                時間: 
+                <div id="timer-ring">
+                    <span id="time-left">30</span>
+                </div>
+                秒
+            </span>
+        </p>
+    </div>
+
+    <div id="controls">
+        <label for="difficulty-select">難易度: </label>
+        <select id="difficulty-select">
+            <option value="easy">かんたん</option>
+            <option value="normal" selected>ふつう</option>
+            <option value="hard">むずかしい</option>
+        </select>
+        <button id="start-button">ゲームスタート</button>
+    </div>
+
+    <div id="grid">
+    </div>
+        
+    <div id="countdown-overlay">
+        <span id="countdown-text"></span>
+    </div>
+        
+    <div id="game-over-modal">
+        <div class="modal-content">
+            <h2>ゲームオーバー！</h2>
+            <p>最終スコア</p>
+            <span id="final-score" class="final-score">0</span>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript (ゲームロジック)
+
+        const GAME_DURATION = 30; // 基準となるゲーム時間
+        
+        const NORMAL_MOLE_SCORE = 1;
+        const GOLD_MOLE_SCORE = 3;
+        const BOMB_MOLE_SCORE = -5;
+        const CLOCK_MOLE_SCORE = 2;
+
+        const BOMB_TIME_PENALTY = 5; 
+        const CLOCK_TIME_BONUS = 5; 
+
+        const GOLD_MOLE_CHANCE = 0.10; 
+        const BOMB_MOLE_CHANCE = 0.15; 
+        const CLOCK_MOLE_CHANCE = 0.05; 
+        
+        const DIFFICULTY_SETTINGS = {
+            easy: {
+                minTime: 800, maxTime: 1800,
+                holeCount: 9, 
+                gridColumns: 3, 
+            },
+            normal: {
+                minTime: 500, maxTime: 1500,
+                holeCount: 16, 
+                gridColumns: 4, 
+            },
+            hard: {
+                minTime: 300, maxTime: 1000,
+                holeCount: 25, 
+                gridColumns: 5, 
+            }
+        };
+
+        let currentMinTime;
+        let currentMaxTime;
+        let currentHoleCount;
+        let currentGridColumns;
+
+        let score = 0;
+        let timeLeft = GAME_DURATION; 
+        let isGameRunning = false;
+        let countdownTimerId;
+        let moleTimerId; 
+        let lastHole = null;
+
+        const scoreDisplay = document.getElementById('score');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const timerRing = document.getElementById('timer-ring'); // 🔥 追加
+        const startButton = document.getElementById('start-button');
+        const grid = document.getElementById('grid');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const difficultySelect = document.getElementById('difficulty-select');
+        const countdownOverlay = document.getElementById('countdown-overlay');
+        const countdownText = document.getElementById('countdown-text');
+        const gameInfoPanel = document.getElementById('game-info'); 
+
+        // SVGモグラのHTML (省略)
+        const MOLE_SVG = `
+            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
+                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" />
+                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" />
+                <circle cx="50" cy="70" r="3" />
+                <circle cx="38" cy="58" r="3.5" />
+                <circle cx="62" cy="58" r="3.5" />
+                <line x1="23" y1="73" x2="38" y2="73" />
+                <line x1="20" y1="78" x2="38" y2="78" />
+                <line x1="23" y1="83" x2="38" y2="83" />
+                <line x1="62" y1="73" x2="77" y2="73" />
+                <line x1="62" y1="78" x2="80" y2="78" />
+                <line x1="62" y1="83" x2="77" y2="83" />
+                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" />
+                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" />
+            </svg>
+        `;
+
+
+        function setGridClass(difficulty) {
+            grid.className = ''; 
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            const columns = settings.gridColumns;
+            
+            const baseSize = 100; 
+            const gap = 8;
+            const borderPadding = 16; 
+
+            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
+
+            grid.style.width = `${newSize}px`;
+            grid.style.height = `${newSize}px`;
+
+            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            
+            grid.classList.add('grid-' + difficulty);
+        }
+
+        function createHoles() {
+            grid.innerHTML = '';
+            for (let i = 0; i < currentHoleCount; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                hole.dataset.id = i;
+
+                const mole = document.createElement('div');
+                mole.classList.add('mole');
+                
+                mole.innerHTML = MOLE_SVG; 
+
+                hole.addEventListener('click', whack);
+
+                hole.appendChild(mole);
+                grid.appendChild(hole);
+            }
+        }
+        
+        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        function randomHole() {
+            const holes = document.querySelectorAll('.hole');
+            const idx = Math.floor(Math.random() * holes.length);
+            const hole = holes[idx];
+
+            if (hole === lastHole) { return randomHole(); }
+            lastHole = hole;
+            return hole;
+        }
+        function randomMoleType() {
+            const r = Math.random();
+            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
+            else { return 'normal'; }
+        }
+
+        function peep() {
+            if (!isGameRunning) {
+                clearTimeout(moleTimerId);
+                return;
+            }
+            const time = randomTime(); 
+            const hole = randomHole();
+            const mole = hole.querySelector('.mole');
+            
+            // モグラのクラスと配色をリセット/適用 (中略)
+
+            const moleType = randomMoleType();
+            
+            let scoreValue;
+            switch (moleType) {
+                case 'gold': 
+                    mole.classList.add('gold'); 
+                    scoreValue = GOLD_MOLE_SCORE; 
+                    // (ゴールドモグラの配色設定 - 中略)
+                    break;
+                case 'bomb': 
+                    mole.classList.add('bomb'); 
+                    scoreValue = BOMB_MOLE_SCORE; 
+                    // (爆弾モグラの配色設定 - 中略)
+                    break;
+                case 'clock': 
+                    mole.classList.add('clock'); 
+                    scoreValue = CLOCK_MOLE_SCORE; 
+                    // (時計モグラの配色設定 - 中略)
+                    break;
+                default: 
+                    scoreValue = NORMAL_MOLE_SCORE; 
+                    break;
+            }
+
+            // --- モグラの配色設定 (前回のコードからコピペ) ---
+            mole.classList.remove('gold', 'bomb', 'clock'); 
+            mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
+            mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
+            mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-face-fill');
+            mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-face-stroke');
+            mole.querySelectorAll('circle, line').forEach(el => {
+                if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
+                     el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-eyes-nose');
+                     el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-eyes-nose');
+                }
+            });
+            mole.querySelectorAll('.mole-hand').forEach(el => {
+                el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
+                el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
+            });
+
+            if (moleType === 'gold') {
+                mole.classList.add('gold'); 
+                mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-fill');
+                mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
+                mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
+                mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
+                mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
+                    el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
+                });
+            } else if (moleType === 'bomb') {
+                mole.classList.add('bomb'); 
+                mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-fill');
+                mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
+                mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
+                 mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-hand');
+                    el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
+                });
+            } else if (moleType === 'clock') {
+                mole.classList.add('clock'); 
+                mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
+                mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
+                mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
+                 mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
+                    el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
+                });
+            }
+            // --------------------------------------------------
+
+            mole.dataset.type = moleType; 
+            mole.dataset.score = scoreValue;
+
+            hole.classList.add('up');
+
+            setTimeout(() => {
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                
+                // モグラを隠すときに色をリセット (中略)
+
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }, time);
+
+            moleTimerId = setTimeout(peep, time);
+        }
+
+        // 🔥 updateTimeを円形タイマー対応に修正 🔥
+        function updateTime() {
+            if (timeLeft < 0) { timeLeft = 0; }
+            
+            timeLeftDisplay.textContent = timeLeft;
+            
+            // 経過時間を計算
+            const percentage = (timeLeft / GAME_DURATION) * 100;
+            const progressDegree = percentage * 3.6; // 360度中の角度
+
+            const timerColor = getComputedStyle(document.body).getPropertyValue('--timer-color').trim();
+            const timerTrackColor = getComputedStyle(document.body).getPropertyValue('--timer-track-color').trim();
+
+            timerRing.style.setProperty('--_timer-color', timerColor); // カスタムプロパティを一時的に設定
+            
+            // conic-gradientで円形プログレスバーを更新
+            timerRing.style.setProperty('--_timer-track-color', timerTrackColor);
+
+            // 塗りつぶしの割合が時間の経過とともに減るように設定
+            timerRing.style.setProperty('background', `conic-gradient(
+                var(--timer-color) ${progressDegree}deg,
+                var(--timer-track-color) ${progressDegree}deg 360deg
+            )`);
+            
+            // 🚨 残り時間が少ない場合の警告色
+            if (timeLeft <= 5) {
+                // 赤色を強制的に適用
+                timeLeftDisplay.style.color = '#e53935'; 
+                timeLeftDisplay.style.fontSize = '1.3em'; 
+                timerRing.style.transform = 'scale(1.1)';
+            } else {
+                // 難易度ごとの色に戻す
+                timeLeftDisplay.style.color = ''; 
+                timeLeftDisplay.style.fontSize = ''; 
+                timerRing.style.transform = 'scale(1.0)';
+            }
+
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
+        }
+
+        function showScorePop(hole, points) {
+            const pop = document.createElement('div');
+            pop.classList.add('score-pop');
+            let sign = points > 0 ? '+' : '';
+            pop.textContent = sign + points;
+            
+            pop.style.color = getComputedStyle(document.body).getPropertyValue('--score-pop-color');
+            pop.style.textShadow = getComputedStyle(document.body).getPropertyValue('--score-pop-shadow');
+
+            hole.appendChild(pop);
+            setTimeout(() => { pop.remove(); }, 900); 
+        }
+
+        function showTimePop(seconds) {
+            const pop = document.createElement('div');
+            pop.classList.add('time-pop');
+            
+            let sign = seconds > 0 ? '+' : '';
+            pop.textContent = sign + seconds + '秒';
+
+            if (seconds > 0) {
+                pop.classList.add('plus');
+            } else {
+                pop.classList.add('minus');
+            }
+            
+            gameInfoPanel.appendChild(pop);
+            
+            setTimeout(() => { pop.remove(); }, 1200); 
+        }
+        
+        function whack(event) {
+            if (!isGameRunning) return;
+            const hole = event.currentTarget;
+            const mole = hole.querySelector('.mole');
+            
+            if (hole.classList.contains('up')) {
+                const points = parseInt(mole.dataset.score);
+                const type = mole.dataset.type;
+                
+                showScorePop(hole, points);
+                score += points;
+                scoreDisplay.textContent = score;
+
+                let timeChange = 0;
+                if (type === 'clock') { 
+                    timeChange = CLOCK_TIME_BONUS;
+                    timeLeft += timeChange; 
+                } 
+                else if (type === 'bomb') { 
+                    timeChange = -BOMB_TIME_PENALTY;
+                    timeLeft += timeChange; 
+                }
+                
+                if (timeChange !== 0) {
+                    showTimePop(timeChange);
+                }
+                
+                updateTime(); 
+                
+                hole.classList.remove('up');
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                
+                // モグラが叩かれた時に色をリセット (中略)
+
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            }
+        }
+
+        function startGameLogic() {
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentMinTime = settings.minTime;
+            currentMaxTime = settings.maxTime;
+            currentHoleCount = settings.holeCount; 
+            currentGridColumns = settings.gridColumns; 
+
+            setGridClass(difficulty);
+            createHoles();
+            
+            score = 0;
+            timeLeft = GAME_DURATION; 
+            isGameRunning = true; 
+            scoreDisplay.textContent = score;
+            startButton.disabled = true;
+
+            countdownTimerId = setInterval(() => {
+                timeLeft--;
+                updateTime();
+            }, 1000);
+
+            peep();
+        }
+
+        function startGame() {
+            if (isGameRunning) return;
+
+            const difficulty = difficultySelect.value;
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            currentHoleCount = settings.holeCount;
+            currentGridColumns = settings.gridColumns;
+            setGridClass(difficulty);
+            createHoles();
+
+            startButton.disabled = true;
+            countdownOverlay.style.display = 'flex';
+            let count = 3;
+
+            const countdownInterval = setInterval(() => {
+                if (count > 0) {
+                    countdownText.textContent = count;
+                    count--;
+                } else if (count === 0) {
+                    countdownText.textContent = 'スタート！'; 
+                    count--; 
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownOverlay.style.display = 'none';
+                    startGameLogic(); 
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            isGameRunning = false;
+            clearInterval(countdownTimerId);
+            clearTimeout(moleTimerId); 
+
+            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+
+            finalScoreDisplay.textContent = score;
+            gameOverModal.style.display = 'flex'; 
+        }
+        
+        function closeModal() {
+            gameOverModal.style.display = 'none';
+            startButton.disabled = false;
+            
+            score = 0;
+            timeLeft = GAME_DURATION;
+            scoreDisplay.textContent = score;
+            timeLeftDisplay.textContent = timeLeft;
+            
+            initializeGame();
+        }
+
+        function initializeGame() {
+            const initialDifficulty = difficultySelect.value;
+            const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
+            
+            currentMinTime = initialSettings.minTime;
+            currentMaxTime = initialSettings.maxTime;
+            currentHoleCount = initialSettings.holeCount;
+            currentGridColumns = initialSettings.gridColumns;
+            
+            document.body.className = `difficulty-${initialDifficulty}`;
+            
+            difficultySelect.classList.remove('select-arrow-easy', 'select-arrow-normal', 'select-arrow-hard');
+            difficultySelect.classList.add(`select-arrow-${initialDifficulty}`);
+
+            setGridClass(initialDifficulty);
+            createHoles(); 
+            
+            // 🔥 初期化時にタイマーをリセットして表示 🔥
+            timeLeft = GAME_DURATION;
+            updateTime(); 
+        }
+
+        startButton.addEventListener('click', startGame);
+        difficultySelect.addEventListener('change', () => {
+            if (!isGameRunning) {
+                initializeGame();
+            }
+        }); 
+    </script>
+</body>
+</html>
