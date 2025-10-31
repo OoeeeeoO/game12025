@@ -263,12 +263,24 @@
 
         /* 💥 スコアポップアップ */
         .score-pop { 
-            font-size: 2.5em; 
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            font-size: 3em;
+            font-weight: bold;
+            color: #fff;
             text-shadow: 
                 -2px -2px 0 var(--pink-dark), 
                 2px -2px 0 var(--pink-dark),
                 -2px 2px 0 var(--pink-dark),
-                2px 2px 0 var(--pink-dark);
+                2px 2px 0 var(--pink-dark),
+                3px 3px 0 rgba(0,0,0,0.4);
+            pointer-events: none;
+            opacity: 0;
+            /*アニメーションの調整*/
+            animation: scorePopUp 0.7s ease-out forwards; 
+            z-index: 5;
             font-family: var(--font-pixel); 
         }
         /* スコアの色はJSで設定 */
