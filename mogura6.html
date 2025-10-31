@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (難易度別配色)</title>
+    <title>モグラたたき - SVGモグラ版 (難易度別配色＆時間ポップアップ)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Hachi+Maru+Pop&family=Potta+One&display=swap" rel="stylesheet">
     <style>
         /* CSSカスタムプロパティの定義 (デフォルトはNormal) */
@@ -74,6 +74,8 @@
             /* ポップアップ */
             --score-pop-color: #ff69b4;
             --score-pop-shadow: rgba(0,0,0,0.2);
+            --time-pop-plus-color: #4CAF50; /* 緑 */
+            --time-pop-minus-color: #F44336; /* 赤 */
             /* カウントダウン */
             --countdown-overlay-bg: rgba(255, 240, 245, 0.7);
             --countdown-text-color: #ff69b4;
@@ -100,14 +102,10 @@
             --select-focus-shadow: #b3e5fc;
             --button-bg-start: #81d4fa; /* ライトブルー */
             --button-bg-end: #4fc3f7;
-            --button-text-color: white;
             --button-shadow-color: #389cd1;
             --button-hover-bg-start: #9be0ff;
             --button-hover-bg-end: #6ecdfd;
             --button-active-shadow: #389cd1;
-            --button-disabled-bg-start: #ccc;
-            --button-disabled-bg-end: #bbb;
-            --button-disabled-shadow: #aaa;
             --grid-bg: rgba(255, 255, 255, 0.9);
             --grid-border: #a7d9f7;
             --hole-bg: #b2dfdb; /* 淡いミントグリーン */
@@ -126,8 +124,6 @@
             --mole-bomb-hand: #e57373;
             --mole-clock-fill: #a5d6a7;
             --mole-clock-stroke: #81c784;
-            --modal-bg-start: #fefefe;
-            --modal-bg-end: #fcfcfc;
             --modal-border: #a7d9f7;
             --modal-h2-color: #4fc3f7;
             --modal-final-score-bg: #e1f5fe;
@@ -137,6 +133,8 @@
             --modal-button-shadow: #e68900;
             --score-pop-color: #4fc3f7;
             --score-pop-shadow: rgba(0,0,0,0.1);
+            --time-pop-plus-color: #4CAF50;
+            --time-pop-minus-color: #F44336;
             --countdown-overlay-bg: rgba(224, 247, 250, 0.7);
             --countdown-text-color: #4fc3f7;
             --countdown-text-shadow: rgba(0,0,0,0.1);
@@ -162,14 +160,10 @@
             --select-focus-shadow: #7c4dff;
             --button-bg-start: #6200ea; /* 深い紫 */
             --button-bg-end: #3f0097;
-            --button-text-color: white;
             --button-shadow-color: #4a00af;
             --button-hover-bg-start: #7c4dff;
             --button-hover-bg-end: #5100c8;
             --button-active-shadow: #4a00af;
-            --button-disabled-bg-start: #555;
-            --button-disabled-bg-end: #444;
-            --button-disabled-shadow: #333;
             --grid-bg: rgba(0, 0, 0, 0.8);
             --grid-border: #00e676;
             --hole-bg: #424242; /* 暗いグレー */
@@ -199,10 +193,14 @@
             --modal-button-shadow: #fbc02d;
             --score-pop-color: #00e676;
             --score-pop-shadow: rgba(255,255,255,0.2);
+            --time-pop-plus-color: #00e676;
+            --time-pop-minus-color: #e53935;
             --countdown-overlay-bg: rgba(0, 0, 0, 0.8);
             --countdown-text-color: #00e676;
             --countdown-text-shadow: rgba(255,255,255,0.2);
         }
+
+        /* --- 共通スタイル（省略）--- */
 
         /* 全体共通スタイル (カスタムプロパティを使用) */
         body {
@@ -218,7 +216,7 @@
             background: linear-gradient(135deg, var(--main-bg-start) 0%, var(--main-bg-end) 50%, var(--main-bg-start) 100%);
             background-attachment: fixed;
             color: var(--panel-text-color);
-            transition: background 0.5s ease-in-out; /* 背景色の切り替えアニメーション */
+            transition: background 0.5s ease-in-out; 
         }
 
         h1 { 
@@ -262,6 +260,7 @@
             color: var(--panel-text-color);
             font-family: 'Hachi Maru Pop', cursive;
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            position: relative; /* time popの基準点にするため */
         }
 
         #game-info p { 
@@ -306,7 +305,7 @@
             padding: 12px 30px;
             font-size: 1.6em; 
             background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
-            color: var(--button-text-color);
+            color: var(--button-text-color, white);
             border: none;
             border-radius: 25px;
             cursor: pointer;
@@ -326,10 +325,10 @@
             box-shadow: 0 1px 0 var(--button-active-shadow), 0 2px 5px rgba(0,0,0,0.1);
         }
         #start-button:disabled { 
-            background: linear-gradient(180deg, var(--button-disabled-bg-start), var(--button-disabled-bg-end)); 
+            background: linear-gradient(180deg, var(--button-disabled-bg-start, #ccc), var(--button-disabled-bg-end, #bbb)); 
             cursor: not-allowed; 
             transform: translateY(0); 
-            box-shadow: 0 3px 0 var(--button-disabled-shadow), 0 5px 10px rgba(0,0,0,0.15); 
+            box-shadow: 0 3px 0 var(--button-disabled-shadow, #aaa), 0 5px 10px rgba(0,0,0,0.15); 
         }
 
         #grid {
@@ -400,6 +399,7 @@
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: var(--mole-gold-face-hand); }
         .mole.bomb .mole-hand { fill: var(--mole-bomb-hand); }
 
+        /* ゲームオーバーモーダルのCSS (省略) */
         #game-over-modal { 
             display: none; 
             position: fixed; 
@@ -413,7 +413,7 @@
             backdrop-filter: blur(5px); 
         }
         .modal-content { 
-            background: linear-gradient(180deg, var(--modal-bg-start), var(--modal-bg-end)); 
+            background: linear-gradient(180deg, var(--modal-bg-start, #fefefe), var(--modal-bg-end, #fcfcfc)); 
             margin: 10% auto; 
             padding: 30px;
             border: 3px solid var(--modal-border);
@@ -470,6 +470,7 @@
             box-shadow: 0 1px 0 var(--modal-button-shadow);
         }
 
+        /* スコアポップアップのCSS */
         .score-pop { 
             position: absolute; 
             top: 50%; 
@@ -497,6 +498,41 @@
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
+        /* 🔥 時間増減ポップアップのCSSを新規追加 🔥 */
+        .time-pop {
+            position: absolute;
+            /* time-left要素の右側に配置 */
+            top: 50%; 
+            left: calc(50% + 150px); /* 調整: time-left要素の右側の位置に合わせる */
+            transform: translate(-50%, -50%);
+            font-size: 2.5em; /* スコアより少し小さめ */
+            font-weight: bold;
+            text-shadow: 
+                -1px -1px 0 #fff, 
+                1px -1px 0 #fff,
+                -1px 1px 0 #fff,
+                1px 1px 0 #fff;
+            pointer-events: none;
+            opacity: 0;
+            animation: timePopUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* 弾むようなアニメーション */
+            z-index: 20;
+            font-family: 'Potta One', cursive;
+        }
+
+        .time-pop.plus {
+            color: var(--time-pop-plus-color); /* 緑系 */
+        }
+        .time-pop.minus {
+            color: var(--time-pop-minus-color); /* 赤系 */
+        }
+
+        @keyframes timePopUp {
+            0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+            10% { opacity: 1; transform: translate(-50%, -20px) scale(1.1); }
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
+        }
+
+        /* カウントダウンオーバーレイのCSS (省略) */
         #countdown-overlay {
             display: none; 
             position: fixed;
@@ -622,8 +658,9 @@
         const difficultySelect = document.getElementById('difficulty-select');
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
+        const gameInfoPanel = document.getElementById('game-info'); // 新規追加: 時間ポップアップの親要素
 
-        // SVGモグラのHTML 
+        // SVGモグラのHTML (省略)
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
                 <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" />
@@ -830,6 +867,26 @@
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 900); 
         }
+
+        // 🔥 時間増減ポップアップ表示関数を新規追加 🔥
+        function showTimePop(seconds) {
+            const pop = document.createElement('div');
+            pop.classList.add('time-pop');
+            
+            let sign = seconds > 0 ? '+' : '';
+            pop.textContent = sign + seconds + '秒';
+
+            if (seconds > 0) {
+                pop.classList.add('plus');
+            } else {
+                pop.classList.add('minus');
+            }
+            
+            // time-left要素の横にポップアップを出現させる
+            gameInfoPanel.appendChild(pop);
+            
+            setTimeout(() => { pop.remove(); }, 1200); 
+        }
         
         function whack(event) {
             if (!isGameRunning) return;
@@ -844,8 +901,20 @@
                 score += points;
                 scoreDisplay.textContent = score;
 
-                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
-                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                let timeChange = 0;
+                if (type === 'clock') { 
+                    timeChange = CLOCK_TIME_BONUS;
+                    timeLeft += timeChange; 
+                } 
+                else if (type === 'bomb') { 
+                    timeChange = -BOMB_TIME_PENALTY;
+                    timeLeft += timeChange; 
+                }
+                
+                // 時間が増減した場合、ポップアップを表示
+                if (timeChange !== 0) {
+                    showTimePop(timeChange);
+                }
                 
                 updateTime(); 
                 
@@ -980,3 +1049,7 @@
     </script>
 </body>
 </html>
+
+
+
+
