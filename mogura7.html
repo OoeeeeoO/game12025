@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>もぐらdeポン！ 🐹 - SVGモグラ版 (サンリオ風デザイン)</title>
+    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
     <style>
-        /* CSS (デザイン) */
+        /* CSS (デザイン) - ほとんど変更なし */
         body {
             font-family: 'Mochiy Pop P One', 'Arial', sans-serif;
             text-align: center;
@@ -23,13 +23,13 @@
             /* サンリオ風の大きなフチ付きタイトル */
             font-family: 'Mochiy Pop P One', cursive;
             font-size: 3.8em;
-            color: #ff80ab; /* 濃いピンク */
+            color: #ff80ab;
             text-shadow: 
-                -2px -2px 0 #fff, /* 白いフチ */
+                -2px -2px 0 #fff, 
                 2px -2px 0 #fff,
                 -2px 2px 0 #fff,
                 2px 2px 0 #fff,
-                4px 4px 0 #ffc1e3, /* ピンクの影で立体感 */
+                4px 4px 0 #ffc1e3,
                 6px 6px 0 #ffb3d9,
                 8px 8px 0 #ff99c8,
                 10px 10px 0 #ff80b3;
@@ -39,7 +39,7 @@
         }
         
         #controls, #game-info { 
-            background-color: #ffe0f0; /* 明るいピンクの背景 */
+            background-color: #ffe0f0;
             padding: 12px 25px;
             border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
@@ -47,7 +47,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
-            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
+            border: 2px solid #ff80ab;
             color: #6a053c;
         }
 
@@ -58,8 +58,8 @@
         }
         #score, #time-left { 
             font-weight: bold; 
-            color: #ff3366; /* ポップな赤ピンク */
-            font-family: 'Mochiy Pop P One', cursive;
+            color: #ff3366;
+            font-family: 'Nikukyu', cursive;
             font-size: 1.5em;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
@@ -102,7 +102,7 @@
             transform: translateY(-3px); 
             box-shadow: 0 9px 0 #e04b9b, 0 12px 20px rgba(0,0,0,0.3);
         }
-        #start-button:active { 
+        #start-button:active {
             transform: translateY(3px); 
             box-shadow: 0 3px 0 #e04b9b, 0 5px 10px rgba(0,0,0,0.2);
         }
@@ -123,134 +123,92 @@
             padding: 10px;
             gap: 10px;
             box-shadow: 0 12px 25px rgba(0,0,0,0.35);
-            max-width: 90vw;
         }
-        /* 難易度別のカラム設定 */
-        .grid-easy { grid-template-columns: repeat(3, 100px); }
-        .grid-normal { grid-template-columns: repeat(4, 80px); }
-        .grid-hard { grid-template-columns: repeat(5, 65px); }
 
         /* 穴 */
         .hole {
-            width: 100%;
-            height: 100px;
-            background-color: #c08465;
+            background-color: #c08465; /* 穴の内部色 */
             border-radius: 50%;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 4px solid #8e5c46;
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.4); 
+            border: none;
+            box-shadow: 
+                inset 0 0 12px rgba(0,0,0,0.4), /* 内側の影で深さを表現 */
+                0 0 0 4px #8e5c46,             /* 外側のボーダー風の影（4px） */
+                0 4px 6px rgba(0,0,0,0.2);      /* 穴自体の少し浮いたような影 */
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: flex-end; /* モグラが穴の下部に固定される */
+            /* widthとheightはJavaScriptで設定されるため、CSSでは不要 */
         }
-
+        
         /* モグラ本体 (SVGコンテナ) */
         .mole {
             width: 100%; 
-            height: 150%; /* 穴の高さよりも大きくして、顔だけ見えるように調整 */
+            height: 100%; 
             position: absolute; 
-            /* モグラを完全に隠すため、穴の高さに合わせて調整 */
-            bottom: calc(-100% - 10px); 
+            bottom: -100%; 
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            /* 修正点: モグラを穴の中心に近づけるため、align-itemsを調整 */
+            align-items: center; /* centerにすることでSVGが縦方向中央に配置される */
             z-index: 2; 
         }
-        /* モグラが出ている状態 */
         .hole.up .mole { 
-            /* 穴から顔だけ出すように調整 (SVGの高さと穴の高さに依存) */
-            bottom: -50px; 
+            bottom: 0; 
             pointer-events: auto; 
+            /* 修正点: 穴から少し上に突き出すように調整 */
+            transform: translateY(-5%); /* モグラ全体を少し持ち上げる */
         }
 
         /* SVG共通スタイル */
         .mole svg {
             width: 100%;
             height: 100%;
-            /* モグラの描画基準点が穴の底にくるように調整 */
-            transform: translateY(0); 
+            /* transform: translateY(10%); */ /* このスタイルは不要になるか、調整が必要 */
+            /* viewBoxの変更に伴い、このtranslateYは削除または調整する */
         }
 
-        /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
+        /* --- 特殊モグラの色変更 (SVG内の要素を直接操作) --- */
+        /* 通常モグラのデフォルト色 */
+        .mole-body { fill: #8B5C3D; stroke: #6A462F; } /* 体 */
+        .mole-face { fill: #E6C5A9; stroke: #6A462F; } /* 顔 */
+        .mole-hand { fill: #8B5C3D; stroke: #6A462F; } /* 手 */
+        .mole-whisker { stroke: #6A462F; } /* ひげ */
+        .mole-nose { fill: #333; } /* 鼻 */
+
+        /* ゴールドモグラ */
         .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
-        .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
-        .mole.bomb .mole-body { fill: #333; stroke: #FF4500; }
-        .mole.bomb .mole-face, .mole.bomb .mole-hand { fill: #222; } /* 顔色も暗く */
-        .mole.clock .mole-body { fill: #4682B4; stroke: #3CB371; }
-        .mole.clock .mole-face, .mole.clock .mole-hand { fill: #B0C4DE; }
+        .mole.gold .mole-face { fill: #FFE580; }
+        .mole.gold .mole-hand { fill: #FFD700; }
+        .mole.gold .mole-nose { fill: #B8860B; }
+        
+        /* ボムモグラ */
+        .mole.bomb .mole-body { fill: #333; stroke: #111; }
+        .mole.bomb .mole-face { fill: #555; stroke: #111; }
+        .mole.bomb .mole-hand { fill: #FF4500; stroke: #CC3700; } /* 手を爆弾っぽく */
+        .mole.bomb .mole-nose { fill: #FF4500; }
+        
+        /* クロックモグラ */
+        .mole.clock .mole-body { fill: #80c0ff; stroke: #4682B4; } /* パステルブルー */
+        .mole.clock .mole-face { fill: #c0e0ff; stroke: #4682B4; }
+        .mole.clock .mole-hand { fill: #80c0ff; }
+        .mole.clock .mole-nose { fill: #4682B4; }
+        /* ------------------------------------------------ */
 
-        /* ゲームオーバーモーダル */
-        #game-over-modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 100; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0, 0, 0, 0.7); 
-            backdrop-filter: blur(5px); 
-        }
-        .modal-content { 
-            background-color: #fff0f5;
-            margin: 10% auto;
-            padding: 35px;
-            border: 5px solid #ff80ab;
-            width: 85%; max-width: 450px; 
-            border-radius: 25px;
-            text-align: center; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
-            animation: fadeIn 0.5s; 
-            font-family: 'Mochiy Pop P One', sans-serif;
-            color: #6a053c;
-        }
-        .modal-content h2 { 
-            color: #ff66b2;
-            font-size: 3em;
-            margin-bottom: 15px; 
-            text-shadow: 2px 2px 0 #fff;
-        }
-        .final-score { 
-            font-size: 4.5em;
-            color: #ff3366;
-            font-weight: bold; 
-            display: block; 
-            margin: 20px 0; 
-            padding: 15px; 
-            background-color: #fff;
-            border-radius: 15px;
-            border: 3px solid #ff80ab;
-            font-family: 'Nikukyu', cursive;
-            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
-        }
-        .modal-content button { 
-            background-color: #80c0ff;
-            color: white; 
-            border: none; 
-            padding: 12px 25px; 
-            font-size: 1.5em; 
-            border-radius: 10px;
-            cursor: pointer; 
-            transition: background-color 0.3s, transform 0.1s; 
-            font-family: 'Mochiy Pop P One', sans-serif;
-            box-shadow: 0 4px 0 #66aaff;
-        }
-        .modal-content button:hover { 
-            background-color: #66aaff; 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 0 #66aaff;
-        }
-        .modal-content button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #66aaff;
-        }
+        /* ゲームオーバーモーダルのCSS (変更なし) */
+        #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #fff0f5; margin: 10% auto; padding: 35px; border: 5px solid #ff80ab; width: 85%; max-width: 450px; border-radius: 25px; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); animation: fadeIn 0.5s; font-family: 'Mochiy Pop P One', sans-serif; color: #6a053c; }
+        .modal-content h2 { color: #ff66b2; font-size: 3em; margin-bottom: 15px; text-shadow: 2px 2px 0 #fff; }
+        .final-score { font-size: 4.5em; color: #ff3366; font-weight: bold; display: block; margin: 20px 0; padding: 15px; background-color: #fff; border-radius: 15px; border: 3px solid #ff80ab; font-family: 'Nikukyu', cursive; text-shadow: 2px 2px 3px rgba(0,0,0,0.1); }
+        .modal-content button { background-color: #80c0ff; color: white; border: none; padding: 12px 25px; font-size: 1.5em; border-radius: 10px; cursor: pointer; transition: background-color 0.3s, transform 0.1s; font-family: 'Mochiy Pop P One', sans-serif; box-shadow: 0 4px 0 #66aaff; }
+        .modal-content button:hover { background-color: #66aaff; transform: translateY(-2px); box-shadow: 0 6px 0 #66aaff; }
+        .modal-content button:active { transform: translateY(2px); box-shadow: 0 2px 0 #66aaff; }
 
-        /* スコアポップアップのCSS */
+        /* スコアポップアップのCSS (色指定を汎用的に変更) */
         .score-pop { 
             position: absolute; 
             top: 50%; 
@@ -258,83 +216,34 @@
             transform: translate(-50%, -50%); 
             font-size: 3em;
             font-weight: bold; 
-            color: #fff;
+            color: #fff; /* ベース色を白に変更 */
+            /* CSS変数の --pop-color をフチ色に使用 */
+            text-shadow: 
+                -2px -2px 0 var(--pop-color, #ff66b2),
+                2px -2px 0 var(--pop-color, #ff66b2),
+                -2px 2px 0 var(--pop-color, #ff66b2),
+                2px 2px 0 var(--pop-color, #ff66b2),
+                3px 3px 0 rgba(0,0,0,0.4);
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.7s ease-out forwards;
             z-index: 5; 
             font-family: 'Nikukyu', cursive;
         }
-        /* ポップアップの色定義（クラスでフチの色を変更） */
-        .pop-positive {
-            text-shadow:
-                -2px -2px 0 #27ae60, 
-                2px -2px 0 #27ae60,
-                -2px 2px 0 #27ae60,
-                2px 2px 0 #27ae60,
-                3px 3px 0 rgba(0,0,0,0.4);
-        }
-        .pop-gold { /* ゴールドモグラ用 */
-            text-shadow:
-                -2px -2px 0 #d9a400, /* 濃い黄色 */
-                2px -2px 0 #d9a400,
-                -2px 2px 0 #d9a400,
-                2px 2px 0 #d9a400,
-                3px 3px 0 rgba(0,0,0,0.4);
-        }
-        .pop-negative {
-            color: #fff;
-            text-shadow:
-                -2px -2px 0 #e74c3c, /* 赤色 */
-                2px -2px 0 #e74c3c,
-                -2px 2px 0 #e74c3c,
-                2px 2px 0 #e74c3c,
-                3px 3px 0 rgba(0,0,0,0.4);
-        }
-
         @keyframes scorePopUp { 
             0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); }
             50% { transform: translate(-50%, -50px) scale(1.1); }
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
-        /* カウントダウンオーバーレイのCSS */
-        #countdown-overlay {
-            display: none; 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 204, 229, 0.7);
-            z-index: 90;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(3px);
-        }
-
-        #countdown-text {
-            font-family: 'Mochiy Pop P One', cursive;
-            font-size: 9em;
-            color: #ff3366;
-            font-weight: bold;
-            text-shadow: 
-                -4px -4px 0 #fff, 
-                4px -4px 0 #fff,
-                -4px 4px 0 #fff,
-                4px 4px 0 #fff,
-                6px 6px 0 #ffb3d9;
-            animation: pulse 0.8s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { transform: scale(1); opacity: 0.9; }
-            to { transform: scale(1.1); opacity: 1; }
-        }
+        /* カウントダウンオーバーレイのCSS (変更なし) */
+        #countdown-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 204, 229, 0.7); z-index: 90; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        #countdown-text { font-family: 'Mochiy Pop P One', cursive; font-size: 9em; color: #ff3366; font-weight: bold; text-shadow: -4px -4px 0 #fff, 4px -4px 0 #fff, -4px 4px 0 #fff, 4px 4px 0 #fff, 6px 6px 0 #ffb3d9; animation: pulse 0.8s ease-in-out infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.1); opacity: 1; } }
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>もぐらdeポン！ 🐹</h1>
+    <h1>もぐらdeポン！ 💖</h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -369,35 +278,40 @@
     <script>
         // JavaScript (ゲームロジック)
 
-        const GAME_DURATION = 30; 
+        const GAME_DURATION = 30;
         
+        // --- モグラの種類と点数・効果時間 ---
         const NORMAL_MOLE_SCORE = 1;
-        const GOLD_MOLE_SCORE = 3;
+        const GOLD_MOLE_SCORE = 5; // 3点から5点に増やして価値を強調
         const BOMB_MOLE_SCORE = -5;
-        const CLOCK_MOLE_SCORE = 2;
+        const CLOCK_MOLE_SCORE = 2; // 時間ボーナスモグラにも点数を設定
 
-        const BOMB_TIME_PENALTY = 5; 
-        const CLOCK_TIME_BONUS = 5; 
+        const BOMB_TIME_PENALTY = 5;
+        const CLOCK_TIME_BONUS = 5;
 
-        const GOLD_MOLE_CHANCE = 0.10; 
-        const BOMB_MOLE_CHANCE = 0.15; 
-        const CLOCK_MOLE_CHANCE = 0.05; 
+        const GOLD_MOLE_CHANCE = 0.10;
+        const BOMB_MOLE_CHANCE = 0.15;
+        const CLOCK_MOLE_CHANCE = 0.05;
+        // ------------------------------------
         
         const DIFFICULTY_SETTINGS = {
             easy: {
                 minTime: 800, maxTime: 1800,
                 holeCount: 9, 
                 gridColumns: 3, 
+                holeSize: 120 // 穴の基本サイズを定義（ピクセル単位）
             },
             normal: {
                 minTime: 500, maxTime: 1500,
                 holeCount: 16, 
                 gridColumns: 4, 
+                holeSize: 100 // 穴の基本サイズを定義
             },
             hard: {
                 minTime: 300, maxTime: 1000,
                 holeCount: 25, 
                 gridColumns: 5, 
+                holeSize: 80 // 穴の基本サイズを定義
             }
         };
 
@@ -405,14 +319,14 @@
         let currentMaxTime;
         let currentHoleCount;
         let currentGridColumns;
+        let currentHoleSize; // 新しい変数を追加
 
         let score = 0;
-        let timeLeft = GAME_DURATION; 
+        let timeLeft = GAME_DURATION;
         let isGameRunning = false;
         let countdownTimerId;
-        let moleTimerId; 
+        let moleTimerId;
         let lastHole = null;
-        let countdownIntervalId; // カウントダウン用のIDを追加
 
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
@@ -424,35 +338,50 @@
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
 
-        // SVGモグラのHTML (体形を縦長に変更し、顔の位置を調整)
+        // SVGモグラのHTML (顔パーツにクラスを追加してCSSで色を操作可能にする)
         const MOLE_SVG = `
-            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
-                <ellipse class="mole-body" cx="50" cy="70" rx="35" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> 
-                
-                <ellipse class="mole-face" cx="50" cy="80" rx="25" ry="25" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"> <ellipse class="mole-body" cx="50" cy="80" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-face" cx="50" cy="92" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
 
-                <circle cx="50" cy="75" r="3" fill="#333"/>
+                <circle class="mole-nose" cx="50" cy="84" r="3" fill="#333"/>
                 
-                <circle cx="40" cy="65" r="3.5" fill="black"/> 
-                <circle cx="60" cy="65" r="3.5" fill="black"/> 
+                <circle cx="38" cy="72" r="3.5" fill="black"/>
+                <circle cx="62" cy="72" r="3.5" fill="black"/>
 
-                <line x1="25" y1="80" x2="40" y2="80" stroke="#6A462F" stroke-width="1"/>
-                <line x1="22" y1="85" x2="40" y2="85" stroke="#6A462F" stroke-width="1"/>
-                <line x1="25" y1="90" x2="40" y2="90" stroke="#6A462F" stroke-width="1"/>
+                <line class="mole-whisker" x1="23" y1="87" x2="38" y2="87" stroke="#6A462F" stroke-width="1"/>
+                <line class="mole-whisker" x1="20" y1="92" x2="38" y2="92" stroke="#6A462F" stroke-width="1"/>
+                <line class="mole-whisker" x1="23" y1="97" x2="38" y2="97" stroke="#6A462F" stroke-width="1"/>
                 
-                <line x1="60" y1="80" x2="75" y2="80" stroke="#6A462F" stroke-width="1"/>
-                <line x1="60" y1="85" x2="78" y2="85" stroke="#6A462F" stroke-width="1"/>
-                <line x1="60" y1="90" x2="75" y2="90" stroke="#6A462F" stroke-width="1"/>
+                <line class="mole-whisker" x1="62" y1="87" x2="77" y2="87" stroke="#6A462F" stroke-width="1"/>
+                <line class="mole-whisker" x1="62" y1="92" x2="80" y2="92" stroke="#6A462F" stroke-width="1"/>
+                <line class="mole-whisker" x1="62" y1="97" x2="77" y2="97" stroke="#6A462F" stroke-width="1"/>
 
-                <ellipse class="mole-hand" cx="28" cy="110" rx="8" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-hand" cx="72" cy="110" rx="8" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="25" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="75" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
             </svg>
         `;
 
 
         function setGridClass(difficulty) {
-            grid.className = ''; 
+            grid.className = '';
+            const settings = DIFFICULTY_SETTINGS[difficulty];
+            const columns = settings.gridColumns;
+            const holeSize = settings.holeSize; // 新しく定義した穴のサイズを取得
+            
+            const gap = 10; // CSSのgapに合わせて変更
+            const gridBorderPadding = 8 * 2 + 10 * 2; // gridのborderとpaddingの合計
+
+            // グリッド全体の幅を計算
+            const newGridSize = (holeSize * columns) + (gap * (columns - 1)) + gridBorderPadding;
+
+            grid.style.width = `${newGridSize}px`;
+            grid.style.height = `${newGridSize}px`; // グリッドの高さも幅と同じに設定
+
+            grid.style.gridTemplateColumns = `repeat(${columns}, ${holeSize}px)`; // 各列の幅を固定
+            grid.style.gridTemplateRows = `repeat(${columns}, ${holeSize}px)`;    // 各行の高さを固定
+            
             grid.classList.add('grid-' + difficulty);
+            currentHoleSize = holeSize; // 現在の穴のサイズを保持
         }
 
         function createHoles() {
@@ -462,62 +391,56 @@
                 hole.classList.add('hole');
                 hole.dataset.id = i;
 
+                // 穴のwidthとheightをJavaScriptで直接設定して正方形を保証
+                hole.style.width = `${currentHoleSize}px`;
+                hole.style.height = `${currentHoleSize}px`;
+
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                mole.innerHTML = MOLE_SVG; 
+                mole.innerHTML = MOLE_SVG;
 
-                // イベントリスナーをモグラの叩かれる要素（穴）に追加
-                hole.addEventListener('click', whack);
+                hole.addEventListener('click', whack); 
 
                 hole.appendChild(mole);
                 grid.appendChild(hole);
             }
         }
         
-        function randomTime() { 
-            return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); 
-        }
-        
+        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
             const idx = Math.floor(Math.random() * holes.length);
             const hole = holes[idx];
 
-            // 連続して同じ穴を避ける
-            if (hole === lastHole || hole.classList.contains('up')) { 
-                // モグラが出ている穴も避ける
-                return randomHole(); 
-            }
+            if (hole === lastHole || hole.classList.contains('up')) { return randomHole(); } // すでに上がっている穴を避ける
             lastHole = hole;
             return hole;
         }
-
         function randomMoleType() {
             const r = Math.random();
-            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
-            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
-            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
+            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; }
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; }
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; }
             else { return 'normal'; }
         }
 
         function peep() {
             if (!isGameRunning) {
-                // ゲームが終了したら、タイマーをクリアして停止
                 clearTimeout(moleTimerId);
                 return;
             }
-            
-            const time = randomTime(); 
+            const time = randomTime();
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
             
-            // 以前のクラスをリセット
-            mole.classList.remove('gold', 'bomb', 'clock'); 
-            let scoreValue;
+            // モグラ出現前にクラスとデータ属性を必ずリセット
+            mole.classList.remove('gold', 'bomb', 'clock');
+            delete mole.dataset.type;
+            delete mole.dataset.score;
             
-            // モグラの種類を設定
+            let scoreValue;
             switch (moleType) {
                 case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
                 case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
@@ -525,24 +448,20 @@
                 default: scoreValue = NORMAL_MOLE_SCORE; break;
             }
 
-            mole.dataset.type = moleType; 
+            mole.dataset.type = moleType;
             mole.dataset.score = scoreValue;
 
             hole.classList.add('up');
 
-            // モグラが引っ込むタイマー
+            // モグラが引っ込む処理
             setTimeout(() => {
-                // モグラがまだ出ている状態なら引っ込める
-                if (hole.classList.contains('up')) {
-                    hole.classList.remove('up');
-                    // モグラが引っ込んだ後もクラスをリセットしておく
-                    mole.classList.remove('gold', 'bomb', 'clock'); 
-                    delete mole.dataset.type; 
-                    delete mole.dataset.score;
-                }
+                hole.classList.remove('up');
+                // 引っ込む際もリセット
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
             }, time);
 
-            // 次のモグラを出すタイマー
             moleTimerId = setTimeout(peep, time);
         }
 
@@ -558,20 +477,20 @@
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
             
-            // スコアに応じてポップアップのクラスを割り当ててCSSで色を制御
-            if (points > 0) { 
-                if (points >= GOLD_MOLE_SCORE) {
-                    pop.classList.add('pop-gold');
-                } else {
-                    pop.classList.add('pop-positive');
-                }
-            } else { 
-                pop.classList.add('pop-negative');
+            let popColor;
+            if (points >= GOLD_MOLE_SCORE) { // ゴールドモグラなど高得点 (5点以上)
+                popColor = '#FFD700'; // ゴールド
+            } else if (points > 0) { // 通常モグラなど正の点数
+                popColor = '#27ae60'; // グリーン
+            } else { // ボムモグラなど負の点数
+                popColor = '#e74c3c'; // レッド
             }
             
-            // ポップアップを穴の中心に追加
+            // CSS変数でフチ色を設定
+            pop.style.setProperty('--pop-color', popColor);
+            
             hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 700); 
+            setTimeout(() => { pop.remove(); }, 700);
         }
         
         function whack(event) {
@@ -583,84 +502,98 @@
                 const points = parseInt(mole.dataset.score);
                 const type = mole.dataset.type;
                 
-                // スコア計算とポップアップ表示
                 showScorePop(hole, points);
                 score += points;
                 scoreDisplay.textContent = score;
 
-                // 時間ボーナス/ペナルティ
-                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
-                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                if (type === 'clock') { 
+                    timeLeft += CLOCK_TIME_BONUS; 
+                    // 時間が追加されたことをポップアップで強調表示しても良い
+                    showTimePop(hole, CLOCK_TIME_BONUS, true);
+                }
+                else if (type === 'bomb') { 
+                    timeLeft -= BOMB_TIME_PENALTY; 
+                    // 時間が減ったことをポップアップで強調表示しても良い
+                    showTimePop(hole, BOMB_TIME_PENALTY, false);
+                }
                 
-                updateTime(); 
+                updateTime();
                 
-                // 叩かれたモグラは即座に引っ込める
+                // たたかれたモグラを引っ込める
                 hole.classList.remove('up');
-                mole.classList.remove('gold', 'bomb', 'clock'); 
-                delete mole.dataset.type; 
+                // たたかれたモグラのクラスとデータ属性もリセット
+                mole.classList.remove('gold', 'bomb', 'clock');
+                delete mole.dataset.type;
                 delete mole.dataset.score;
-                
-                // モグラ出現の再帰タイマーをリセットする必要はない (連続で出すことで難易度が上がるため)
-                // clearTimeout(moleTimerId); // この行は削除
-                // peep(); // この行も削除
             }
         }
 
+        // 時間の増減をポップアップで表示する補助関数（追加）
+        function showTimePop(hole, amount, isBonus) {
+            const pop = document.createElement('div');
+            pop.classList.add('score-pop');
+            pop.textContent = isBonus ? `+${amount}s` : `-${amount}s`;
+            
+            const popColor = isBonus ? '#00BFFF' : '#FF4500'; // 青か赤
+            pop.style.setProperty('--pop-color', popColor);
+            pop.style.fontSize = '2em'; // 少し小さめに
+            
+            hole.appendChild(pop);
+            setTimeout(() => { pop.remove(); }, 700);
+        }
+
         function startGameLogic() {
-            // 設定値の適用
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentMinTime = settings.minTime;
             currentMaxTime = settings.maxTime;
-            currentHoleCount = settings.holeCount; 
-            currentGridColumns = settings.gridColumns; 
+            currentHoleCount = settings.holeCount;
+            currentGridColumns = settings.gridColumns;
+            currentHoleSize = settings.holeSize; // 現在の穴のサイズを更新
 
-            // ゲームボードの初期化はstartGameで実行済み
-
-            score = 0;
-            timeLeft = GAME_DURATION; 
-            isGameRunning = true; 
-            scoreDisplay.textContent = score;
+            setGridClass(difficulty);
+            createHoles();
             
-            // 時間のカウントダウン開始
+            score = 0;
+            timeLeft = GAME_DURATION;
+            isGameRunning = true;
+            scoreDisplay.textContent = score;
+            startButton.disabled = true;
+
             countdownTimerId = setInterval(() => {
                 timeLeft--;
                 updateTime();
             }, 1000);
 
-            // モグラ出現ロジック開始
             peep();
         }
 
         function startGame() {
             if (isGameRunning) return;
-            
-            // ゲームボードの準備
+
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentHoleCount = settings.holeCount;
             currentGridColumns = settings.gridColumns;
+            currentHoleSize = settings.holeSize; // ここでも更新
             setGridClass(difficulty);
-            createHoles(); // 穴とモグラを難易度に合わせて再生成
+            createHoles();
 
             startButton.disabled = true;
             countdownOverlay.style.display = 'flex';
             let count = 3;
-            countdownText.textContent = count; // 初期の数字を表示
 
-            countdownIntervalId = setInterval(() => { // 新しいIDを使用
+            const countdownInterval = setInterval(() => {
                 if (count > 0) {
+                    countdownText.textContent = count;
                     count--;
-                    countdownText.textContent = count > 0 ? count : 'スタート!';
                 } else if (count === 0) {
-                    // 「スタート!」の表示が終わったらゲーム開始
-                    clearInterval(countdownIntervalId);
+                    countdownText.textContent = 'スタート!';
+                    count--; 
+                } else {
+                    clearInterval(countdownInterval);
                     countdownOverlay.style.display = 'none';
-                    startGameLogic(); 
-                }
-                if (count < 0) {
-                    // 予期せぬエラー防止のため、-1になったら停止
-                    clearInterval(countdownIntervalId);
+                    startGameLogic();
                 }
             }, 1000);
         }
@@ -668,18 +601,19 @@
         function endGame() {
             isGameRunning = false;
             clearInterval(countdownTimerId);
-            clearTimeout(moleTimerId); // モグラ出現タイマーを停止
+            clearTimeout(moleTimerId);
 
-            // カウントダウンがまだ動作している場合は停止
-            if (countdownIntervalId) {
-                clearInterval(countdownIntervalId);
-            }
-
-            // 画面上のモグラを全て引っ込める
-            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+            document.querySelectorAll('.hole.up').forEach(hole => {
+                hole.classList.remove('up');
+                // モグラのクラスとデータ属性もここでリセット
+                const mole = hole.querySelector('.mole');
+                mole.classList.remove('gold', 'bomb', 'clock');
+                delete mole.dataset.type;
+                delete mole.dataset.score;
+            });
 
             finalScoreDisplay.textContent = score;
-            gameOverModal.style.display = 'flex'; 
+            gameOverModal.style.display = 'flex';
         }
         
         function closeModal() {
@@ -691,11 +625,10 @@
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
             
-            initializeGame(); // 難易度設定に基づきボードを再初期化
+            initializeGame();
         }
 
         function initializeGame() {
-            // 初期設定のロード
             const initialDifficulty = difficultySelect.value;
             const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
             
@@ -703,10 +636,11 @@
             currentMaxTime = initialSettings.maxTime;
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
+            currentHoleSize = initialSettings.holeSize; // 初期化時も穴のサイズを設定
             
             setGridClass(initialDifficulty);
-            createHoles(); // 穴とモグラを生成
-            updateTime(); // 時間表示を更新
+            createHoles();
+            updateTime();
         }
 
         startButton.addEventListener('click', startGame);
@@ -714,7 +648,7 @@
             if (!isGameRunning) {
                 initializeGame();
             }
-        }); 
+        });
     </script>
 </body>
 </html>
