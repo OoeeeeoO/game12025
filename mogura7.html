@@ -206,8 +206,9 @@
             font-size: 3em;
             font-weight: bold; 
             color: #fff; /* ベース色を白に変更 */
+            /* CSS変数の --pop-color をフチ色に使用 */
             text-shadow: 
-                -2px -2px 0 var(--pop-color, #ff66b2), /* 変数を使ってフチ色を指定 */
+                -2px -2px 0 var(--pop-color, #ff66b2),
                 2px -2px 0 var(--pop-color, #ff66b2),
                 -2px 2px 0 var(--pop-color, #ff66b2),
                 2px 2px 0 var(--pop-color, #ff66b2),
@@ -414,7 +415,7 @@
             const mole = hole.querySelector('.mole');
             const moleType = randomMoleType();
             
-            // --- 修正点 2: モグラ出現前にクラスとデータ属性を必ずリセット ---
+            // --- 修正点 2-A: モグラ出現前にクラスとデータ属性を必ずリセット ---
             mole.classList.remove('gold', 'bomb', 'clock');
             delete mole.dataset.type;
             delete mole.dataset.score;
@@ -433,12 +434,13 @@
 
             hole.classList.add('up');
 
+            // モグラが引っ込む処理
             setTimeout(() => {
                 hole.classList.remove('up');
-                // モグラが引っ込む際にクラスをリセット（次のモグラ出現でリセットされるが念のため）
-                // mole.classList.remove('gold', 'bomb', 'clock'); 
-                // delete mole.dataset.type; 
-                // delete mole.dataset.score;
+                // モグラが自然に引っ込む際も、クラスとデータ属性をリセットしておくと安心
+                mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
             }, time);
 
             moleTimerId = setTimeout(peep, time);
@@ -457,7 +459,7 @@
             pop.textContent = sign + points;
             
             let popColor;
-            if (points >= GOLD_MOLE_SCORE) { // ゴールドモグラなど高得点
+            if (points >= GOLD_MOLE_SCORE) { // ゴールドモグラなど高得点 (5点以上)
                 popColor = '#FFD700'; // ゴールド
             } else if (points > 0) { // 通常モグラなど正の点数
                 popColor = '#27ae60'; // グリーン
@@ -486,18 +488,41 @@
                 score += points;
                 scoreDisplay.textContent = score;
 
-                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; }
-                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
+                if (type === 'clock') { 
+                    timeLeft += CLOCK_TIME_BONUS; 
+                    // 時間が追加されたことをポップアップで強調表示しても良い
+                    showTimePop(hole, CLOCK_TIME_BONUS, true);
+                }
+                else if (type === 'bomb') { 
+                    timeLeft -= BOMB_TIME_PENALTY; 
+                    // 時間が減ったことをポップアップで強調表示しても良い
+                    showTimePop(hole, BOMB_TIME_PENALTY, false);
+                }
                 
                 updateTime();
                 
                 // たたかれたモグラを引っ込める
                 hole.classList.remove('up');
-                // たたかれたモグラのクラスとデータ属性もリセット（peepのタイムアウトが実行される前にモグラが再出現するのを防ぐ）
+                // --- 修正点 2-B: たたかれたモグラのクラスとデータ属性もリセット ---
                 mole.classList.remove('gold', 'bomb', 'clock');
                 delete mole.dataset.type;
                 delete mole.dataset.score;
+                // -------------------------------------------------------------
             }
+        }
+
+        // 時間の増減をポップアップで表示する補助関数（追加）
+        function showTimePop(hole, amount, isBonus) {
+            const pop = document.createElement('div');
+            pop.classList.add('score-pop');
+            pop.textContent = isBonus ? `+${amount}s` : `-${amount}s`;
+            
+            const popColor = isBonus ? '#00BFFF' : '#FF4500'; // 青か赤
+            pop.style.setProperty('--pop-color', popColor);
+            pop.style.fontSize = '2em'; // 少し小さめに
+            
+            hole.appendChild(pop);
+            setTimeout(() => { pop.remove(); }, 700);
         }
 
         function startGameLogic() {
