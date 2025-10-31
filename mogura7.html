@@ -127,6 +127,8 @@
 
         /* 穴 */
         .hole {
+            /* 修正点: padding-bottomを削除し、heightをflex-growで調整または固定 */
+            /* ここでは、gridアイテムが正方形になるようJavaScriptでwidthとheightを設定 */
             background-color: #c08465;
             border-radius: 50%;
             overflow: hidden; 
@@ -137,7 +139,16 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            /* widthとheightはJavaScriptで設定される */
         }
+        
+        /* 修正点: holeの幅を基準に高さを設定するハック */
+        /* .hole::before {
+            content: '';
+            display: block;
+            padding-bottom: 100%;
+        } */
+
 
         /* モグラ本体 (SVGコンテナ) */
         .mole {
@@ -288,16 +299,19 @@
                 minTime: 800, maxTime: 1800,
                 holeCount: 9, 
                 gridColumns: 3, 
+                holeSize: 120 // 穴の基本サイズを定義（ピクセル単位）
             },
             normal: {
                 minTime: 500, maxTime: 1500,
                 holeCount: 16, 
                 gridColumns: 4, 
+                holeSize: 100 // 穴の基本サイズを定義
             },
             hard: {
                 minTime: 300, maxTime: 1000,
                 holeCount: 25, 
                 gridColumns: 5, 
+                holeSize: 80 // 穴の基本サイズを定義
             }
         };
 
@@ -305,6 +319,7 @@
         let currentMaxTime;
         let currentHoleCount;
         let currentGridColumns;
+        let currentHoleSize; // 新しい変数を追加
 
         let score = 0;
         let timeLeft = GAME_DURATION;
@@ -352,19 +367,22 @@
             grid.className = '';
             const settings = DIFFICULTY_SETTINGS[difficulty];
             const columns = settings.gridColumns;
+            const holeSize = settings.holeSize; // 新しく定義した穴のサイズを取得
             
-            const baseSize = 100;
             const gap = 10; // CSSのgapに合わせて変更
-            const borderPadding = 20; // border+paddingに合わせて変更 (8*2 + 10*2)
+            const gridBorderPadding = 8 * 2 + 10 * 2; // gridのborderとpaddingの合計
 
-            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
+            // グリッド全体の幅を計算
+            const newGridSize = (holeSize * columns) + (gap * (columns - 1)) + gridBorderPadding;
 
-            grid.style.width = `${newSize}px`;
-            // grid.style.height = `${newSize}px`; // widthがあれば不要
+            grid.style.width = `${newGridSize}px`;
+            grid.style.height = `${newGridSize}px`; // グリッドの高さも幅と同じに設定
 
-            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            grid.style.gridTemplateColumns = `repeat(${columns}, ${holeSize}px)`; // 各列の幅を固定
+            grid.style.gridTemplateRows = `repeat(${columns}, ${holeSize}px)`;    // 各行の高さを固定
             
             grid.classList.add('grid-' + difficulty);
+            currentHoleSize = holeSize; // 現在の穴のサイズを保持
         }
 
         function createHoles() {
@@ -374,12 +392,15 @@
                 hole.classList.add('hole');
                 hole.dataset.id = i;
 
+                // 修正点: 穴のwidthとheightをJavaScriptで直接設定して正方形を保証
+                hole.style.width = `${currentHoleSize}px`;
+                hole.style.height = `${currentHoleSize}px`;
+
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
                 mole.innerHTML = MOLE_SVG;
 
-                // モグラのクリックイベントはholeではなくmoleに設定（今回はholeのままでOKだが、moleがupの時だけクリックさせるためにholeのclickイベントで判定するロジックなのでこのままでOK）
                 hole.addEventListener('click', whack); 
 
                 hole.appendChild(mole);
@@ -437,7 +458,7 @@
             // モグラが引っ込む処理
             setTimeout(() => {
                 hole.classList.remove('up');
-                // モグラが自然に引っ込む際も、クラスとデータ属性をリセットしておくと安心
+                // 引っ込む際もリセット
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
@@ -467,9 +488,8 @@
                 popColor = '#e74c3c'; // レッド
             }
             
-            // --- 修正点 1: CSS変数でフチ色を設定 ---
+            // CSS変数でフチ色を設定
             pop.style.setProperty('--pop-color', popColor);
-            // -----------------------------------
             
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 700);
@@ -503,11 +523,10 @@
                 
                 // たたかれたモグラを引っ込める
                 hole.classList.remove('up');
-                // --- 修正点 2-B: たたかれたモグラのクラスとデータ属性もリセット ---
+                // たたかれたモグラのクラスとデータ属性もリセット
                 mole.classList.remove('gold', 'bomb', 'clock');
                 delete mole.dataset.type;
                 delete mole.dataset.score;
-                // -------------------------------------------------------------
             }
         }
 
@@ -532,6 +551,7 @@
             currentMaxTime = settings.maxTime;
             currentHoleCount = settings.holeCount;
             currentGridColumns = settings.gridColumns;
+            currentHoleSize = settings.holeSize; // 現在の穴のサイズを更新
 
             setGridClass(difficulty);
             createHoles();
@@ -557,6 +577,7 @@
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentHoleCount = settings.holeCount;
             currentGridColumns = settings.gridColumns;
+            currentHoleSize = settings.holeSize; // ここでも更新
             setGridClass(difficulty);
             createHoles();
 
@@ -617,6 +638,7 @@
             currentMaxTime = initialSettings.maxTime;
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
+            currentHoleSize = initialSettings.holeSize; // 初期化時も穴のサイズを設定
             
             setGridClass(initialDifficulty);
             createHoles();
