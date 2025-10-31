@@ -133,10 +133,11 @@
             position: relative; 
             cursor: pointer;
             border: none;
+            /* 修正点: Y軸方向のオフセット(0 4px 6px...)を削除するか、オフセットを中央(0 0 6px)に変更 */
             box-shadow: 
-                inset 0 0 12px rgba(0,0,0,0.4), /* 内側の影で深さを表現 */
-                0 0 0 4px #8e5c46,             /* 外側のボーダー風の影（4px） */
-                0 4px 6px rgba(0,0,0,0.2);      /* 穴自体の少し浮いたような影 */
+                inset 0 0 12px rgba(0,0,0,0.4), /* 1. 内側の影で深さを表現 */
+                0 0 0 4px #8e5c46,             /* 2. 外側のボーダー風の影（4px） */
+                0 0 6px rgba(0,0,0,0.2);      /* 3. 穴自体の影。オフセットをなくし、中央に配置 */
             display: flex;
             justify-content: center;
             align-items: flex-end; /* モグラが穴の下部に固定される */
@@ -153,14 +154,12 @@
             pointer-events: none; 
             display: flex;
             justify-content: center;
-            /* 修正点: モグラを穴の中心に近づけるため、align-itemsを調整 */
             align-items: center; /* centerにすることでSVGが縦方向中央に配置される */
             z-index: 2; 
         }
         .hole.up .mole { 
             bottom: 0; 
             pointer-events: auto; 
-            /* 修正点: 穴から少し上に突き出すように調整 */
             transform: translateY(-5%); /* モグラ全体を少し持ち上げる */
         }
 
@@ -168,8 +167,6 @@
         .mole svg {
             width: 100%;
             height: 100%;
-            /* transform: translateY(10%); */ /* このスタイルは不要になるか、調整が必要 */
-            /* viewBoxの変更に伴い、このtranslateYは削除または調整する */
         }
 
         /* --- 特殊モグラの色変更 (SVG内の要素を直接操作) --- */
@@ -282,9 +279,9 @@
         
         // --- モグラの種類と点数・効果時間 ---
         const NORMAL_MOLE_SCORE = 1;
-        const GOLD_MOLE_SCORE = 5; // 3点から5点に増やして価値を強調
+        const GOLD_MOLE_SCORE = 5; 
         const BOMB_MOLE_SCORE = -5;
-        const CLOCK_MOLE_SCORE = 2; // 時間ボーナスモグラにも点数を設定
+        const CLOCK_MOLE_SCORE = 2; 
 
         const BOMB_TIME_PENALTY = 5;
         const CLOCK_TIME_BONUS = 5;
@@ -299,19 +296,19 @@
                 minTime: 800, maxTime: 1800,
                 holeCount: 9, 
                 gridColumns: 3, 
-                holeSize: 120 // 穴の基本サイズを定義（ピクセル単位）
+                holeSize: 120 
             },
             normal: {
                 minTime: 500, maxTime: 1500,
                 holeCount: 16, 
                 gridColumns: 4, 
-                holeSize: 100 // 穴の基本サイズを定義
+                holeSize: 100 
             },
             hard: {
                 minTime: 300, maxTime: 1000,
                 holeCount: 25, 
                 gridColumns: 5, 
-                holeSize: 80 // 穴の基本サイズを定義
+                holeSize: 80 
             }
         };
 
@@ -319,7 +316,7 @@
         let currentMaxTime;
         let currentHoleCount;
         let currentGridColumns;
-        let currentHoleSize; // 新しい変数を追加
+        let currentHoleSize; 
 
         let score = 0;
         let timeLeft = GAME_DURATION;
@@ -338,9 +335,10 @@
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
 
-        // SVGモグラのHTML (顔パーツにクラスを追加してCSSで色を操作可能にする)
+        // SVGモグラのHTML (viewBoxを修正済み)
         const MOLE_SVG = `
-            <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"> <ellipse class="mole-body" cx="50" cy="80" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+            <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"> 
+                <ellipse class="mole-body" cx="50" cy="80" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
                 <ellipse class="mole-face" cx="50" cy="92" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
 
                 <circle class="mole-nose" cx="50" cy="84" r="3" fill="#333"/>
@@ -366,22 +364,22 @@
             grid.className = '';
             const settings = DIFFICULTY_SETTINGS[difficulty];
             const columns = settings.gridColumns;
-            const holeSize = settings.holeSize; // 新しく定義した穴のサイズを取得
+            const holeSize = settings.holeSize; 
             
-            const gap = 10; // CSSのgapに合わせて変更
-            const gridBorderPadding = 8 * 2 + 10 * 2; // gridのborderとpaddingの合計
+            const gap = 10; 
+            const gridBorderPadding = 8 * 2 + 10 * 2; 
 
             // グリッド全体の幅を計算
             const newGridSize = (holeSize * columns) + (gap * (columns - 1)) + gridBorderPadding;
 
             grid.style.width = `${newGridSize}px`;
-            grid.style.height = `${newGridSize}px`; // グリッドの高さも幅と同じに設定
+            grid.style.height = `${newGridSize}px`; 
 
-            grid.style.gridTemplateColumns = `repeat(${columns}, ${holeSize}px)`; // 各列の幅を固定
-            grid.style.gridTemplateRows = `repeat(${columns}, ${holeSize}px)`;    // 各行の高さを固定
+            grid.style.gridTemplateColumns = `repeat(${columns}, ${holeSize}px)`; 
+            grid.style.gridTemplateRows = `repeat(${columns}, ${holeSize}px)`;    
             
             grid.classList.add('grid-' + difficulty);
-            currentHoleSize = holeSize; // 現在の穴のサイズを保持
+            currentHoleSize = holeSize; 
         }
 
         function createHoles() {
@@ -413,7 +411,7 @@
             const idx = Math.floor(Math.random() * holes.length);
             const hole = holes[idx];
 
-            if (hole === lastHole || hole.classList.contains('up')) { return randomHole(); } // すでに上がっている穴を避ける
+            if (hole === lastHole || hole.classList.contains('up')) { return randomHole(); } 
             lastHole = hole;
             return hole;
         }
@@ -478,12 +476,12 @@
             pop.textContent = sign + points;
             
             let popColor;
-            if (points >= GOLD_MOLE_SCORE) { // ゴールドモグラなど高得点 (5点以上)
-                popColor = '#FFD700'; // ゴールド
-            } else if (points > 0) { // 通常モグラなど正の点数
-                popColor = '#27ae60'; // グリーン
-            } else { // ボムモグラなど負の点数
-                popColor = '#e74c3c'; // レッド
+            if (points >= GOLD_MOLE_SCORE) { 
+                popColor = '#FFD700'; 
+            } else if (points > 0) { 
+                popColor = '#27ae60'; 
+            } else { 
+                popColor = '#e74c3c'; 
             }
             
             // CSS変数でフチ色を設定
@@ -508,12 +506,10 @@
 
                 if (type === 'clock') { 
                     timeLeft += CLOCK_TIME_BONUS; 
-                    // 時間が追加されたことをポップアップで強調表示しても良い
                     showTimePop(hole, CLOCK_TIME_BONUS, true);
                 }
                 else if (type === 'bomb') { 
                     timeLeft -= BOMB_TIME_PENALTY; 
-                    // 時間が減ったことをポップアップで強調表示しても良い
                     showTimePop(hole, BOMB_TIME_PENALTY, false);
                 }
                 
@@ -536,7 +532,7 @@
             
             const popColor = isBonus ? '#00BFFF' : '#FF4500'; // 青か赤
             pop.style.setProperty('--pop-color', popColor);
-            pop.style.fontSize = '2em'; // 少し小さめに
+            pop.style.fontSize = '2em'; 
             
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 700);
@@ -549,7 +545,7 @@
             currentMaxTime = settings.maxTime;
             currentHoleCount = settings.holeCount;
             currentGridColumns = settings.gridColumns;
-            currentHoleSize = settings.holeSize; // 現在の穴のサイズを更新
+            currentHoleSize = settings.holeSize; 
 
             setGridClass(difficulty);
             createHoles();
@@ -575,7 +571,7 @@
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentHoleCount = settings.holeCount;
             currentGridColumns = settings.gridColumns;
-            currentHoleSize = settings.holeSize; // ここでも更新
+            currentHoleSize = settings.holeSize; 
             setGridClass(difficulty);
             createHoles();
 
@@ -636,7 +632,7 @@
             currentMaxTime = initialSettings.maxTime;
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
-            currentHoleSize = initialSettings.holeSize; // 初期化時も穴のサイズを設定
+            currentHoleSize = initialSettings.holeSize; 
             
             setGridClass(initialDifficulty);
             createHoles();
