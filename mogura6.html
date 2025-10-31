@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (ディズニー風デザイン)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <title>モグラたたき - SVGモグラ版 (ドット絵風デザイン)</title>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         /* CSS (デザイン) */
         body {
-            font-family: 'Playfair Display', serif; /* ディズニー風の優雅なフォントを優先 */
+            font-family: 'DotGothic16', sans-serif; /* ドット絵フォントを優先 */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -16,137 +16,139 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background: linear-gradient(135deg, #e0f2f7 0%, #c8e6c9 50%, #fce4ec 100%); /* 夢のある淡いグラデーション */
-            background-attachment: fixed; /* 背景を固定 */
+            background-color: #333333; /* 暗めの背景でレトロ感を強調 */
+            background-image: 
+                linear-gradient(45deg, rgba(0,0,0,0.2) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.2) 100%),
+                linear-gradient(45deg, rgba(0,0,0,0.2) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.2) 75%, rgba(0,0,0,0.2) 100%);
+            background-size: 16px 16px; /* 小さなドット柄 */
+            background-position: 0 0, 8px 8px;
+            color: #eee;
         }
 
         h1 { 
-            /* ディズニー風タイトル */
-            font-family: 'Dancing Script', cursive; /* より手書き感のある華やかなフォント */
-            font-size: 4.5em; /* 非常に大きく */
-            background: linear-gradient(180deg, #ffd700, #daa520); /* 金色のグラデーション */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            /* ドット絵風タイトル */
+            font-family: 'Press Start 2P', cursive; /* ドット絵感の強いフォント */
+            font-size: 3em; 
+            color: #ffee58; /* 鮮やかな黄色 */
             text-shadow: 
-                -3px -3px 0 #fff, /* 白いフチ */
-                3px -3px 0 #fff,
-                -3px 3px 0 #fff,
-                3px 3px 0 #fff,
-                5px 5px 0px rgba(0,0,0,0.3), /* 深い影 */
-                7px 7px 15px rgba(0,0,0,0.4); /* さらに大きな影 */
+                -4px -4px 0px #e0e0e0, /* 広い白いフチ */
+                4px -4px 0px #e0e0e0,
+                -4px 4px 0px #e0e0e0,
+                4px 4px 0px #e0e0e0,
+                8px 8px 0px #ff6f00; /* オレンジ色の深い影 */
             margin-bottom: 30px;
-            letter-spacing: 3px; /* 字間を広げてエレガントに */
+            letter-spacing: 0.15em; /* 字間を広げてピクセル感を強調 */
             line-height: 1.2;
             padding: 10px 20px;
-            border-radius: 15px; /* 柔らかな角丸 */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 4px solid #ff6f00; /* 太いオレンジ色のボーダー */
+            border-radius: 0; /* カクカクに */
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            background-color: #424242; /* 暗い背景色 */
         }
         
         #controls, #game-info { 
-            background: linear-gradient(180deg, #fffafa, #f0f0f0); /* 光沢感のある白 */
-            padding: 15px 30px;
-            border-radius: 25px; /* 優雅な角丸 */
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2), inset 0 0 15px rgba(255,255,255,0.8); /* 内側と外側に光沢影 */
-            margin-bottom: 30px; 
+            background-color: #424242; /* 暗い液晶画面風 */
+            padding: 15px 25px;
+            border-radius: 0; /* カクカクに */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2), inset 0 0 10px rgba(0,0,0,0.3); /* 影と内側の暗い光 */
+            margin-bottom: 25px; 
             display: flex;
-            gap: 30px; 
+            gap: 25px; 
             align-items: center;
-            border: 3px solid #b2a45a; /* 落ち着いた金色のボーダー */
-            color: #4a4a4a; /* 暗めの文字色 */
+            border: 3px solid #757575; /* グレーのボーダー */
+            color: #eee; /* 明るい文字色 */
         }
 
         #game-info p { 
             margin: 0; 
-            color: #333333; 
-            font-size: 1.4em; 
-            font-family: 'Playfair Display', serif;
+            color: #eee; 
+            font-size: 1.3em; 
         }
         #score, #time-left { 
             font-weight: bold; 
-            color: #daa520; /* 濃い金色 */
-            font-family: 'Dancing Script', cursive; /* 華やかなフォント */
-            font-size: 1.8em; 
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8), 2px 2px 4px rgba(0,0,0,0.2);
+            color: #00ff00; /* 鮮やかな緑 */
+            font-family: 'Press Start 2P', cursive; 
+            font-size: 1.6em; 
+            text-shadow: 2px 2px 0px #009900; /* 濃い緑の影 */
         }
 
         #difficulty-select {
-            padding: 12px 20px;
-            font-size: 1.2em;
-            border-radius: 12px; /* 優雅な角丸 */
-            border: 2px solid #b2a45a; 
-            background-color: #fff; 
-            color: #333333;
-            font-family: 'Playfair Display', serif;
+            padding: 10px 18px;
+            font-size: 1.1em;
+            border-radius: 0; /* カクカクに */
+            border: 2px solid #00ff00; 
+            background-color: #212121; /* 暗い背景 */
+            color: #00ff00; /* 緑色の文字 */
+            font-family: 'DotGothic16', sans-serif;
             appearance: none; 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="#b2a45a" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印も金色 */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#00ff00" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印も緑 */
             background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 24px;
+            background-position: right 10px center;
+            background-size: 20px;
             cursor: pointer;
-            box-shadow: inset 1px 1px 5px rgba(0,0,0,0.1);
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.4);
         }
         #difficulty-select:focus {
             outline: none;
-            box-shadow: 0 0 0 4px #e0c25a;
+            box-shadow: 0 0 0 3px #00cc00;
         }
 
         #start-button {
-            padding: 15px 35px;
-            font-size: 2em; 
-            background: linear-gradient(180deg, #ffd700, #daa520); /* 金色のグラデーション */
+            padding: 12px 30px;
+            font-size: 1.6em; 
+            background-color: #ff0000; /* 鮮やかな赤 */
             color: white;
             border: none;
-            border-radius: 20px; /* 優雅な角丸 */
+            border-radius: 0; /* カクカクに */
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 8px 0 #b2a45a, 0 10px 20px rgba(0,0,0,0.3); /* 豪華な押しボタン風の影 */
-            font-family: 'Dancing Script', cursive;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+            transition: background-color 0.1s, transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 5px 0 #cc0000, 0 7px 10px rgba(0,0,0,0.3); /* 押しボタン風の影 */
+            font-family: 'Press Start 2P', cursive;
+            letter-spacing: 0.05em;
         }
         #start-button:hover { 
-            background: linear-gradient(180deg, #ffdb1f, #c9961f); 
-            transform: translateY(-4px); 
-            box-shadow: 0 12px 0 #b2a45a, 0 15px 25px rgba(0,0,0,0.4);
+            background-color: #e60000; 
+            transform: translateY(-2px); 
+            box-shadow: 0 7px 0 #cc0000, 0 9px 12px rgba(0,0,0,0.35);
         }
         #start-button:active { 
-            transform: translateY(4px); 
-            box-shadow: 0 4px 0 #b2a45a, 0 5px 10px rgba(0,0,0,0.2);
+            transform: translateY(3px); 
+            box-shadow: 0 2px 0 #cc0000, 0 3px 5px rgba(0,0,0,0.2);
         }
         #start-button:disabled { 
-            background: linear-gradient(180deg, #cccccc, #b3b3b3); 
+            background-color: #757575; 
             cursor: not-allowed; 
             transform: translateY(0); 
-            box-shadow: 0 8px 0 #999, 0 10px 20px rgba(0,0,0,0.3); 
+            box-shadow: 0 5px 0 #616161, 0 7px 10px rgba(0,0,0,0.3); 
         }
 
-        /* ゲーム盤面 (ディズニー風の明るく楽しい色調) */
+        /* ゲーム盤面 (ドット絵風の色調) */
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: #aed581; /* 明るい緑 */
-            border: 8px solid #558b2f; /* 濃い緑のボーダー */
-            border-radius: 15px; /* 優雅な角丸 */
-            padding: 10px;
-            gap: 10px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+            background-color: #757575; /* グレーの盤面 */
+            border: 8px solid #424242; /* 暗いボーダー */
+            border-radius: 0; /* カクカクに */
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
 
         /* 穴 */
         .hole {
-            background-color: #c08465; /* 明るい茶色 */
-            border-radius: 50%;
+            background-color: #212121; /* 暗い穴 */
+            border-radius: 0; /* 四角い穴 */
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 4px solid #8e5c46; /* 濃い茶色のボーダー */
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.4); 
+            border: 4px solid #424242; /* 暗いボーダー */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.6); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* モグラ本体 (SVGコンテナ) */
+        /* モグラ本体 (SVGコンテナ) - ドット絵に馴染む色に */
         .mole {
             width: 100%; 
             height: 100%; 
@@ -161,17 +163,23 @@
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* SVG共通スタイル */
+        /* SVG共通スタイル (ドット絵のようにシンプルに) */
         .mole svg {
             width: 100%;
             height: 100%;
             transform: translateY(10%); 
         }
+        /* モグラの色をドット絵風に調整 */
+        .mole-body { fill: #8b4513; stroke: #6a2e0a; stroke-width: 2; } /* 暗めの茶色 */
+        .mole-face { fill: #e0b284; stroke: #6a2e0a; stroke-width: 1.5; } /* 薄い肌色 */
+        .mole circle, .mole line { fill: #000; stroke: #000; } /* 目や鼻は黒 */
+        .mole-hand { fill: #8b4513; stroke: #6a2e0a; stroke-width: 2; }
+
 
         /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
-        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
-        .mole.bomb .mole-body { fill: #424242; stroke: #c62828; } 
-        .mole.clock .mole-body { fill: #64b5f6; stroke: #4fc3f7; } 
+        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; } /* ゴールドモグラ */
+        .mole.bomb .mole-body { fill: #424242; stroke: #c62828; } /* 爆弾モグラ */
+        .mole.clock .mole-body { fill: #64b5f6; stroke: #4fc3f7; } /* 時計モグラ */
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
         .mole.bomb .mole-hand { fill: #333; }
 
@@ -185,62 +193,62 @@
             width: 100%; 
             height: 100%; 
             overflow: auto; 
-            background-color: rgba(0, 0, 0, 0.7); 
-            backdrop-filter: blur(5px); 
+            background-color: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(3px); 
         }
         .modal-content { 
-            background: linear-gradient(180deg, #fffafa, #f0f0f0); 
+            background-color: #212121; /* 暗い背景 */
             margin: 10% auto; 
-            padding: 40px;
-            border: 5px solid #daa520; /* 金色のボーダー */
-            width: 85%; max-width: 500px; 
-            border-radius: 25px; /* 優雅な角丸 */
+            padding: 30px;
+            border: 5px solid #00ff00; /* 鮮やかな緑のボーダー */
+            width: 85%; max-width: 450px; 
+            border-radius: 0; /* カクカクに */
             text-align: center; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); 
             animation: fadeIn 0.5s; 
-            font-family: 'Playfair Display', serif;
-            color: #333333;
+            font-family: 'DotGothic16', sans-serif;
+            color: #eee;
         }
         .modal-content h2 { 
-            color: #daa520; /* 濃い金色 */
-            font-size: 3.5em; 
-            margin-bottom: 20px; 
-            text-shadow: 2px 2px 0 #fff; 
-            font-family: 'Dancing Script', cursive;
+            color: #ffee58; /* 鮮やかな黄色 */
+            font-size: 2.5em; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 0 #ff6f00; 
+            font-family: 'Press Start 2P', cursive;
         }
         .final-score { 
-            font-size: 4.5em; 
-            color: #ffd700; /* 金色 */
+            font-size: 4em; 
+            color: #00ff00; /* 鮮やかな緑 */
             font-weight: bold; 
             display: block; 
-            margin: 25px 0; 
-            padding: 20px; 
-            background-color: #fff; 
-            border-radius: 15px; 
-            border: 3px solid #b2a45a;
-            font-family: 'Dancing Script', cursive; 
-            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+            margin: 20px 0; 
+            padding: 15px; 
+            background-color: #004d00; /* 暗い緑の背景 */
+            border-radius: 0; /* カクカクに */
+            border: 3px solid #00ff00;
+            font-family: 'Press Start 2P', cursive; 
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
         }
         .modal-content button { 
-            background: linear-gradient(180deg, #add8e6, #87ceeb); /* 水色のグラデーション */
+            background-color: #ff0000; /* 鮮やかな赤 */
             color: white; 
             border: none; 
-            padding: 15px 30px; 
-            font-size: 1.5em; 
-            border-radius: 15px; 
+            padding: 12px 25px; 
+            font-size: 1.3em; 
+            border-radius: 0; /* カクカクに */
             cursor: pointer; 
-            transition: background-color 0.2s, transform 0.1s; 
-            font-family: 'Playfair Display', serif;
-            box-shadow: 0 5px 0 #6a9eb0; 
+            transition: background-color 0.1s, transform 0.1s; 
+            font-family: 'DotGothic16', sans-serif;
+            box-shadow: 0 4px 0 #cc0000; 
         }
         .modal-content button:hover { 
-            background: linear-gradient(180deg, #99ccee, #7bc8e9); 
+            background-color: #e60000; 
             transform: translateY(-2px); 
-            box-shadow: 0 7px 0 #6a9eb0;
+            box-shadow: 0 6px 0 #cc0000;
         }
         .modal-content button:active {
             transform: translateY(2px);
-            box-shadow: 0 3px 0 #6a9eb0;
+            box-shadow: 0 2px 0 #cc0000;
         }
 
         /* スコアポップアップのCSS */
@@ -249,25 +257,25 @@
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            font-size: 3.5em; 
+            font-size: 2.8em; 
             font-weight: bold; 
-            color: #ffd700; /* 金色 */
+            color: #ffee58; /* 鮮やかな黄色 */
             text-shadow: 
-                -2px -2px 0 #fff, 
-                2px -2px 0 #fff,
-                -2px 2px 0 #fff,
-                2px 2px 0 #fff,
-                4px 4px 0 rgba(0,0,0,0.5); /* 深い影 */
+                -2px -2px 0 #000, 
+                2px -2px 0 #000,
+                -2px 2px 0 #000,
+                2px 2px 0 #000,
+                3px 3px 0 rgba(0,0,0,0.8); 
             pointer-events: none; 
             opacity: 0; 
-            animation: scorePopUp 0.8s ease-out forwards; /* アニメーション時間を長く */
+            animation: scorePopUp 0.7s ease-out forwards; 
             z-index: 5; 
-            font-family: 'Dancing Script', cursive; 
+            font-family: 'Press Start 2P', cursive; 
         }
         @keyframes scorePopUp { 
-            0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
-            50% { transform: translate(-50%, -60px) scale(1.2); } /* 膨らみを強調 */
-            100% { opacity: 0; transform: translate(-50%, -120px) scale(1); } 
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } 
+            50% { transform: translate(-50%, -50px) scale(1.1); } 
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
         /* カウントダウンオーバーレイのCSS */
@@ -278,27 +286,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.7); /* 白っぽい半透明 */
+            background-color: rgba(0, 0, 0, 0.7); /* 暗い半透明 */
             z-index: 90;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(4px); /* ぼかしを強調 */
+            backdrop-filter: blur(2px); 
         }
 
         #countdown-text {
-            font-family: 'Dancing Script', cursive; 
-            font-size: 8.5em; 
-            background: linear-gradient(180deg, #add8e6, #87ceeb); /* 水色のグラデーション */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Press Start 2P', cursive; 
+            font-size: 7.5em; 
+            color: #ffee58; /* 鮮やかな黄色 */
             font-weight: bold;
             text-shadow: 
-                -4px -4px 0 #fff, 
-                4px -4px 0 #fff,
-                -4px 4px 0 #fff,
-                4px 4px 0 #fff,
-                6px 6px 0 rgba(0,0,0,0.4); /* 深い影 */
-            animation: pulse 0.9s ease-in-out infinite alternate; /* アニメーション時間を長く */
+                -3px -3px 0 #ff6f00, 
+                3px -3px 0 #ff6f00,
+                -3px 3px 0 #ff6f00,
+                3px 3px 0 #ff6f00,
+                5px 5px 0 #cc0000; /* オレンジ〜赤の影 */
+            animation: pulse 0.8s ease-in-out infinite alternate; 
         }
 
         @keyframes pulse {
@@ -528,7 +534,7 @@
             pop.textContent = sign + points;
             if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#fff'; } else { pop.style.color = '#fff'; }
             hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 800); 
+            setTimeout(() => { pop.remove(); }, 700); 
         }
         
         function whack(event) {
