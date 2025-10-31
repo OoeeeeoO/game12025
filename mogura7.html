@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
+    <title>もぐらdeポン！ 🐹 - SVGモグラ版 (サンリオ風デザイン)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
     <style>
         /* CSS (デザイン) */
@@ -59,7 +59,7 @@
         #score, #time-left { 
             font-weight: bold; 
             color: #ff3366; /* ポップな赤ピンク */
-            font-family: 'Mochiy Pop P One', cursive; /* 一般的なフォントに変更 */
+            font-family: 'Mochiy Pop P One', cursive;
             font-size: 1.5em;
             text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
@@ -123,8 +123,7 @@
             padding: 10px;
             gap: 10px;
             box-shadow: 0 12px 25px rgba(0,0,0,0.35);
-            /* グリッドサイズを柔軟にするため、width/heightの固定値を削除 */
-            max-width: 90vw; /* 画面幅に合わせて最大幅を設定 */
+            max-width: 90vw;
         }
         /* 難易度別のカラム設定 */
         .grid-easy { grid-template-columns: repeat(3, 100px); }
@@ -133,8 +132,8 @@
 
         /* 穴 */
         .hole {
-            width: 100%; /* 難易度別グリッド設定に合わせる */
-            height: 100px; /* 縦長モグラに合わせて固定 */
+            width: 100%;
+            height: 100px;
             background-color: #c08465;
             border-radius: 50%;
             overflow: hidden; 
@@ -150,7 +149,7 @@
         /* モグラ本体 (SVGコンテナ) */
         .mole {
             width: 100%; 
-            height: 100%; 
+            height: 150%; /* 穴の高さよりも大きくして、顔だけ見えるように調整 */
             position: absolute; 
             /* モグラを完全に隠すため、穴の高さに合わせて調整 */
             bottom: calc(-100% - 10px); 
@@ -163,7 +162,8 @@
         }
         /* モグラが出ている状態 */
         .hole.up .mole { 
-            bottom: 0; 
+            /* 穴から顔だけ出すように調整 (SVGの高さと穴の高さに依存) */
+            bottom: -50px; 
             pointer-events: auto; 
         }
 
@@ -171,16 +171,17 @@
         .mole svg {
             width: 100%;
             height: 100%;
-            /* 穴から顔だけ出すようにSVGを上方向にずらす */
-            transform: translateY(10%); 
+            /* モグラの描画基準点が穴の底にくるように調整 */
+            transform: translateY(0); 
         }
 
         /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
         .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
         .mole.bomb .mole-body { fill: #333; stroke: #FF4500; }
-        .mole.bomb .mole-hand { fill: #222; }
+        .mole.bomb .mole-face, .mole.bomb .mole-hand { fill: #222; } /* 顔色も暗く */
         .mole.clock .mole-body { fill: #4682B4; stroke: #3CB371; }
+        .mole.clock .mole-face, .mole.clock .mole-hand { fill: #B0C4DE; }
 
         /* ゲームオーバーモーダル */
         #game-over-modal { 
@@ -257,7 +258,7 @@
             transform: translate(-50%, -50%); 
             font-size: 3em;
             font-weight: bold; 
-            color: #fff; /* デフォルトの文字色 */
+            color: #fff;
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.7s ease-out forwards;
@@ -354,7 +355,7 @@
         
     <div id="countdown-overlay">
         <span id="countdown-text"></span>
-            </div>
+    </div>
         
     <div id="game-over-modal">
         <div class="modal-content">
@@ -411,6 +412,7 @@
         let countdownTimerId;
         let moleTimerId; 
         let lastHole = null;
+        let countdownIntervalId; // カウントダウン用のIDを追加
 
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
@@ -422,7 +424,7 @@
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
 
-        // SVGモグラのHTML (体形を縦長に変更)
+        // SVGモグラのHTML (体形を縦長に変更し、顔の位置を調整)
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
                 <ellipse class="mole-body" cx="50" cy="70" rx="35" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> 
@@ -465,6 +467,7 @@
                 
                 mole.innerHTML = MOLE_SVG; 
 
+                // イベントリスナーをモグラの叩かれる要素（穴）に追加
                 hole.addEventListener('click', whack);
 
                 hole.appendChild(mole);
@@ -472,16 +475,24 @@
             }
         }
         
-        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        function randomTime() { 
+            return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); 
+        }
+        
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
             const idx = Math.floor(Math.random() * holes.length);
             const hole = holes[idx];
 
-            if (hole === lastHole) { return randomHole(); }
+            // 連続して同じ穴を避ける
+            if (hole === lastHole || hole.classList.contains('up')) { 
+                // モグラが出ている穴も避ける
+                return randomHole(); 
+            }
             lastHole = hole;
             return hole;
         }
+
         function randomMoleType() {
             const r = Math.random();
             if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
@@ -492,9 +503,11 @@
 
         function peep() {
             if (!isGameRunning) {
+                // ゲームが終了したら、タイマーをクリアして停止
                 clearTimeout(moleTimerId);
                 return;
             }
+            
             const time = randomTime(); 
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
@@ -503,6 +516,8 @@
             // 以前のクラスをリセット
             mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
+            
+            // モグラの種類を設定
             switch (moleType) {
                 case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
                 case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
@@ -515,19 +530,23 @@
 
             hole.classList.add('up');
 
+            // モグラが引っ込むタイマー
             setTimeout(() => {
-                hole.classList.remove('up');
-                // モグラが引っ込んだ後もクラスをリセットしておく
-                mole.classList.remove('gold', 'bomb', 'clock'); 
-                delete mole.dataset.type; 
-                delete mole.dataset.score;
+                // モグラがまだ出ている状態なら引っ込める
+                if (hole.classList.contains('up')) {
+                    hole.classList.remove('up');
+                    // モグラが引っ込んだ後もクラスをリセットしておく
+                    mole.classList.remove('gold', 'bomb', 'clock'); 
+                    delete mole.dataset.type; 
+                    delete mole.dataset.score;
+                }
             }, time);
 
+            // 次のモグラを出すタイマー
             moleTimerId = setTimeout(peep, time);
         }
 
         function updateTime() {
-            // 時間がマイナスにならないように制御
             if (timeLeft < 0) { timeLeft = 0; }
             timeLeftDisplay.textContent = timeLeft;
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
@@ -550,6 +569,7 @@
                 pop.classList.add('pop-negative');
             }
             
+            // ポップアップを穴の中心に追加
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 700); 
         }
@@ -563,24 +583,31 @@
                 const points = parseInt(mole.dataset.score);
                 const type = mole.dataset.type;
                 
+                // スコア計算とポップアップ表示
                 showScorePop(hole, points);
                 score += points;
                 scoreDisplay.textContent = score;
 
+                // 時間ボーナス/ペナルティ
                 if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
                 else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
                 
                 updateTime(); 
                 
+                // 叩かれたモグラは即座に引っ込める
                 hole.classList.remove('up');
-                // 叩かれたモグラもすぐにクラスをリセット
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
+                
+                // モグラ出現の再帰タイマーをリセットする必要はない (連続で出すことで難易度が上がるため)
+                // clearTimeout(moleTimerId); // この行は削除
+                // peep(); // この行も削除
             }
         }
 
         function startGameLogic() {
+            // 設定値の適用
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentMinTime = settings.minTime;
@@ -588,49 +615,52 @@
             currentHoleCount = settings.holeCount; 
             currentGridColumns = settings.gridColumns; 
 
-            setGridClass(difficulty);
-            createHoles();
-            
+            // ゲームボードの初期化はstartGameで実行済み
+
             score = 0;
             timeLeft = GAME_DURATION; 
             isGameRunning = true; 
             scoreDisplay.textContent = score;
-            startButton.disabled = true;
-
+            
+            // 時間のカウントダウン開始
             countdownTimerId = setInterval(() => {
                 timeLeft--;
                 updateTime();
             }, 1000);
 
+            // モグラ出現ロジック開始
             peep();
         }
 
         function startGame() {
             if (isGameRunning) return;
-
-            // ゲームボードの準備を先に行う
+            
+            // ゲームボードの準備
             const difficulty = difficultySelect.value;
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentHoleCount = settings.holeCount;
             currentGridColumns = settings.gridColumns;
             setGridClass(difficulty);
-            createHoles();
+            createHoles(); // 穴とモグラを難易度に合わせて再生成
 
             startButton.disabled = true;
             countdownOverlay.style.display = 'flex';
             let count = 3;
+            countdownText.textContent = count; // 初期の数字を表示
 
-            const countdownInterval = setInterval(() => {
+            countdownIntervalId = setInterval(() => { // 新しいIDを使用
                 if (count > 0) {
-                    countdownText.textContent = count;
                     count--;
+                    countdownText.textContent = count > 0 ? count : 'スタート!';
                 } else if (count === 0) {
-                    countdownText.textContent = 'スタート!';
-                    count--; 
-                } else {
-                    clearInterval(countdownInterval);
+                    // 「スタート!」の表示が終わったらゲーム開始
+                    clearInterval(countdownIntervalId);
                     countdownOverlay.style.display = 'none';
                     startGameLogic(); 
+                }
+                if (count < 0) {
+                    // 予期せぬエラー防止のため、-1になったら停止
+                    clearInterval(countdownIntervalId);
                 }
             }, 1000);
         }
@@ -638,7 +668,12 @@
         function endGame() {
             isGameRunning = false;
             clearInterval(countdownTimerId);
-            clearTimeout(moleTimerId); 
+            clearTimeout(moleTimerId); // モグラ出現タイマーを停止
+
+            // カウントダウンがまだ動作している場合は停止
+            if (countdownIntervalId) {
+                clearInterval(countdownIntervalId);
+            }
 
             // 画面上のモグラを全て引っ込める
             document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
@@ -656,10 +691,11 @@
             scoreDisplay.textContent = score;
             timeLeftDisplay.textContent = timeLeft;
             
-            initializeGame();
+            initializeGame(); // 難易度設定に基づきボードを再初期化
         }
 
         function initializeGame() {
+            // 初期設定のロード
             const initialDifficulty = difficultySelect.value;
             const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
             
@@ -669,8 +705,8 @@
             currentGridColumns = initialSettings.gridColumns;
             
             setGridClass(initialDifficulty);
-            createHoles(); 
-            updateTime(); 
+            createHoles(); // 穴とモグラを生成
+            updateTime(); // 時間表示を更新
         }
 
         startButton.addEventListener('click', startGame);
