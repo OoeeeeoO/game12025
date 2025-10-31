@@ -2,12 +2,15 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (円形タイマー)</title>
+    <title>モグラたたき - SVGモグラ版 (単一配色・円形タイマー)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Hachi+Maru+Pop&family=Potta+One&display=swap" rel="stylesheet">
     <style>
-        /* CSSカスタムプロパティの定義 (デフォルトはNormal) */
-        body.difficulty-normal {
-            /* (前回の配色プロパティはそのまま) */
+        /* ======================================================= */
+        /* 🔥 難易度による配色変化を削除し、Normal設定に統一 🔥 */
+        /* ======================================================= */
+
+        body {
+            /* --- Normal設定を直接適用 --- */
             --main-bg-start: #ffe0f0; 
             --main-bg-end: #fefefe; 
             --title-main-color: #ff69b4; 
@@ -68,142 +71,10 @@
             --countdown-overlay-bg: rgba(255, 240, 245, 0.7);
             --countdown-text-color: #ff69b4;
             --countdown-text-shadow: rgba(0,0,0,0.2);
-
-            /* 🔥 タイマー色 (Normal) 🔥*/
             --timer-color: #ff69b4; 
             --timer-track-color: rgba(0,0,0,0.1);
-        }
 
-        /* 難易度：かんたん (Easy) */
-        body.difficulty-easy {
-            /* (前回の配色プロパティはそのまま) */
-            --main-bg-start: #e0f2f7; 
-            --main-bg-end: #f0fdfc; 
-            --title-main-color: #4fc3f7; 
-            --title-shadow-color-1: rgba(79, 195, 247, 0.3);
-            --title-shadow-color-2: #fff;
-            --title-blob-color: rgba(79, 195, 247, 0.1);
-            --panel-bg: rgba(255, 255, 255, 0.8);
-            --panel-border: #a7d9f7; 
-            --panel-text-color: #555;
-            --highlight-color: #4fc3f7; 
-            --highlight-font: 'Potta One', cursive;
-            --select-border: #a7d9f7;
-            --select-bg: #fff;
-            --select-text-color: #555;
-            --select-arrow-color: #a7d9f7;
-            --select-focus-shadow: #b3e5fc;
-            --button-bg-start: #81d4fa; 
-            --button-bg-end: #4fc3f7;
-            --button-shadow-color: #389cd1;
-            --button-hover-bg-start: #9be0ff;
-            --button-hover-bg-end: #6ecdfd;
-            --button-active-shadow: #389cd1;
-            --grid-bg: rgba(255, 255, 255, 0.9);
-            --grid-border: #a7d9f7;
-            --hole-bg: #b2dfdb; 
-            --hole-border: #80cbc4;
-            --hole-inner-border: rgba(128, 203, 196, 0.3);
-            --mole-body-fill: #a7d9f7; 
-            --mole-body-stroke: #79bccd;
-            --mole-face-fill: #e8f5e9; 
-            --mole-face-stroke: #79bccd;
-            --mole-eyes-nose: #777;
-            --mole-gold-fill: #ffeb3b;
-            --mole-gold-stroke: #fbc02d;
-            --mole-gold-face-hand: #fff9c4;
-            --mole-bomb-fill: #ef9a9a;
-            --mole-bomb-stroke: #e57373;
-            --mole-bomb-hand: #e57373;
-            --mole-clock-fill: #a5d6a7;
-            --mole-clock-stroke: #81c784;
-            --modal-border: #a7d9f7;
-            --modal-h2-color: #4fc3f7;
-            --modal-final-score-bg: #e1f5fe;
-            --modal-final-score-border: #a7d9f7;
-            --modal-button-bg-start: #ffb74d; 
-            --modal-button-bg-end: #ff9800;
-            --modal-button-shadow: #e68900;
-            --score-pop-color: #4fc3f7;
-            --score-pop-shadow: rgba(0,0,0,0.1);
-            --time-pop-plus-color: #4CAF50;
-            --time-pop-minus-color: #F44336;
-            --countdown-overlay-bg: rgba(224, 247, 250, 0.7);
-            --countdown-text-color: #4fc3f7;
-            --countdown-text-shadow: rgba(0,0,0,0.1);
-
-            /* 🔥 タイマー色 (Easy) 🔥*/
-            --timer-color: #f06292; 
-            --timer-track-color: rgba(0,0,0,0.1);
-        }
-
-        /* 難易度：むずかしい (Hard) */
-        body.difficulty-hard {
-            /* (前回の配色プロパティはそのまま) */
-            --main-bg-start: #212121; 
-            --main-bg-end: #424242; 
-            --title-main-color: #00e676; 
-            --title-shadow-color-1: rgba(0, 230, 118, 0.3);
-            --title-shadow-color-2: #fff;
-            --title-blob-color: rgba(0, 230, 118, 0.1);
-            --panel-bg: rgba(0, 0, 0, 0.7);
-            --panel-border: #6200ea; 
-            --panel-text-color: #eee;
-            --highlight-color: #00e676; 
-            --highlight-font: 'Potta One', cursive;
-            --select-border: #6200ea;
-            --select-bg: #000;
-            --select-text-color: #00e676;
-            --select-arrow-color: #00e676;
-            --select-focus-shadow: #7c4dff;
-            --button-bg-start: #6200ea; 
-            --button-bg-end: #3f0097;
-            --button-shadow-color: #4a00af;
-            --button-hover-bg-start: #7c4dff;
-            --button-hover-bg-end: #5100c8;
-            --button-active-shadow: #4a00af;
-            --grid-bg: rgba(0, 0, 0, 0.8);
-            --grid-border: #00e676;
-            --hole-bg: #424242; 
-            --hole-border: #212121;
-            --hole-inner-border: rgba(33, 33, 33, 0.3);
-            --mole-body-fill: #ff6e40; 
-            --mole-body-stroke: #e64a19;
-            --mole-face-fill: #ffccbc; 
-            --mole-face-stroke: #e64a19;
-            --mole-eyes-nose: #fff; 
-            --mole-gold-fill: #ffd700;
-            --mole-gold-stroke: #b8860b;
-            --mole-gold-face-hand: #ffe082;
-            --mole-bomb-fill: #e53935;
-            --mole-bomb-stroke: #c62828;
-            --mole-bomb-hand: #c62828;
-            --mole-clock-fill: #29b6f6;
-            --mole-clock-stroke: #0288d1;
-            --modal-bg-start: #333;
-            --modal-bg-end: #111;
-            --modal-border: #00e676;
-            --modal-h2-color: #00e676;
-            --modal-final-score-bg: #000;
-            --modal-final-score-border: #00e676;
-            --modal-button-bg-start: #ffeb3b; 
-            --modal-button-bg-end: #fdd835;
-            --modal-button-shadow: #fbc02d;
-            --score-pop-color: #00e676;
-            --score-pop-shadow: rgba(255,255,255,0.2);
-            --time-pop-plus-color: #00e676;
-            --time-pop-minus-color: #e53935;
-            --countdown-overlay-bg: rgba(0, 0, 0, 0.8);
-            --countdown-text-color: #00e676;
-            --countdown-text-shadow: rgba(255,255,255,0.2);
-
-            /* 🔥 タイマー色 (Hard) 🔥*/
-            --timer-color: #e53935; 
-            --timer-track-color: rgba(255,255,255,0.2);
-        }
-
-        /* --- 共通スタイル（省略）--- */
-        body {
+            /* 共通フォントとレイアウト */
             font-family: 'Hachi Maru Pop', cursive;
             text-align: center;
             margin: 0;
@@ -218,6 +89,10 @@
             color: var(--panel-text-color);
             transition: background 0.5s ease-in-out; 
         }
+
+        /* ---------------------------------------------------------------- */
+        /* 難易度別クラス（easy, hard）の定義はすべて削除されました。       */
+        /* ---------------------------------------------------------------- */
 
         h1 { 
             font-family: 'Potta One', cursive;
@@ -268,7 +143,7 @@
             color: var(--panel-text-color); 
             font-size: 1.4em; 
         }
-        /* スコア表示 */
+        
         #score { 
             font-weight: bold; 
             color: var(--highlight-color);
@@ -278,7 +153,7 @@
             transition: color 0.3s ease;
         }
         
-        /* 🔥 円形タイマーのCSS 🔥*/
+        /* 円形タイマーのCSS */
         #time-display {
             display: flex;
             align-items: center;
@@ -289,7 +164,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            display: grid; /* 中心の数字を重ねるため */
+            display: grid; 
             place-content: center;
             position: relative;
             font-family: var(--highlight-font);
@@ -306,7 +181,7 @@
             border-radius: inherit;
             background: var(--timer-track-color);
             background: conic-gradient(
-                var(--timer-color) 0%, /* JSで上書きされる */
+                var(--timer-color) 0%, 
                 var(--timer-track-color) 0% 
             );
             transition: background 0.3s ease;
@@ -333,9 +208,10 @@
             box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
             transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
-        #difficulty-select.select-arrow-easy { background-image: url('data:image/svg+xml;utf8,<svg fill="#a7d9f7" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
-        #difficulty-select.select-arrow-normal { background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
-        #difficulty-select.select-arrow-hard { background-image: url('data:image/svg+xml;utf8,<svg fill="#00e676" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
+        /* 🔥 矢印の色もNormalに固定 🔥 */
+        #difficulty-select { 
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
+        }
         #difficulty-select:focus {
             outline: none;
             box-shadow: 0 0 0 3px var(--select-focus-shadow);
@@ -604,7 +480,7 @@
         }
     </style>
 </head>
-<body class="difficulty-normal" onload="initializeGame()">
+<body onload="initializeGame()">
     <h1>もぐらdeポン！ </h1>
 
     <div id="game-info">
@@ -648,7 +524,7 @@
     <script>
         // JavaScript (ゲームロジック)
 
-        const GAME_DURATION = 30; // 基準となるゲーム時間
+        const GAME_DURATION = 30; 
         
         const NORMAL_MOLE_SCORE = 1;
         const GOLD_MOLE_SCORE = 3;
@@ -694,7 +570,7 @@
 
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
-        const timerRing = document.getElementById('timer-ring'); // 🔥 追加
+        const timerRing = document.getElementById('timer-ring'); 
         const startButton = document.getElementById('start-button');
         const grid = document.getElementById('grid');
         const gameOverModal = document.getElementById('game-over-modal');
@@ -740,7 +616,8 @@
 
             grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
             
-            grid.classList.add('grid-' + difficulty);
+            // 🔥 難易度クラスの追加を削除。グリッドのスタイルは共通CSSで賄われる
+            // grid.classList.add('grid-' + difficulty);
         }
 
         function createHoles() {
@@ -789,33 +666,7 @@
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
             
-            // モグラのクラスと配色をリセット/適用 (中略)
-
-            const moleType = randomMoleType();
-            
-            let scoreValue;
-            switch (moleType) {
-                case 'gold': 
-                    mole.classList.add('gold'); 
-                    scoreValue = GOLD_MOLE_SCORE; 
-                    // (ゴールドモグラの配色設定 - 中略)
-                    break;
-                case 'bomb': 
-                    mole.classList.add('bomb'); 
-                    scoreValue = BOMB_MOLE_SCORE; 
-                    // (爆弾モグラの配色設定 - 中略)
-                    break;
-                case 'clock': 
-                    mole.classList.add('clock'); 
-                    scoreValue = CLOCK_MOLE_SCORE; 
-                    // (時計モグラの配色設定 - 中略)
-                    break;
-                default: 
-                    scoreValue = NORMAL_MOLE_SCORE; 
-                    break;
-            }
-
-            // --- モグラの配色設定 (前回のコードからコピペ) ---
+            // --- モグラの配色設定 (統一配色を参照) ---
             mole.classList.remove('gold', 'bomb', 'clock'); 
             mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
             mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
@@ -832,8 +683,13 @@
                 el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
             });
 
+
+            const moleType = randomMoleType();
+            
+            let scoreValue;
             if (moleType === 'gold') {
                 mole.classList.add('gold'); 
+                scoreValue = GOLD_MOLE_SCORE; 
                 mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-fill');
                 mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
                 mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
@@ -844,6 +700,7 @@
                 });
             } else if (moleType === 'bomb') {
                 mole.classList.add('bomb'); 
+                scoreValue = BOMB_MOLE_SCORE; 
                 mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-fill');
                 mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
                 mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
@@ -853,6 +710,7 @@
                 });
             } else if (moleType === 'clock') {
                 mole.classList.add('clock'); 
+                scoreValue = CLOCK_MOLE_SCORE; 
                 mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
                 mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
                 mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
@@ -860,6 +718,8 @@
                     el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
                     el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
                 });
+            } else {
+                scoreValue = NORMAL_MOLE_SCORE; 
             }
             // --------------------------------------------------
 
@@ -872,7 +732,21 @@
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 
-                // モグラを隠すときに色をリセット (中略)
+                // モグラを隠すときに色をリセット
+                mole.querySelector('.mole-body').style.fill = '';
+                mole.querySelector('.mole-body').style.stroke = '';
+                mole.querySelector('.mole-face').style.fill = '';
+                mole.querySelector('.mole-face').style.stroke = '';
+                mole.querySelectorAll('circle, line').forEach(el => {
+                    if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
+                         el.style.fill = '';
+                         el.style.stroke = '';
+                    }
+                });
+                mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = '';
+                    el.style.stroke = '';
+                });
 
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
@@ -881,39 +755,31 @@
             moleTimerId = setTimeout(peep, time);
         }
 
-        // 🔥 updateTimeを円形タイマー対応に修正 🔥
         function updateTime() {
             if (timeLeft < 0) { timeLeft = 0; }
             
             timeLeftDisplay.textContent = timeLeft;
             
-            // 経過時間を計算
             const percentage = (timeLeft / GAME_DURATION) * 100;
-            const progressDegree = percentage * 3.6; // 360度中の角度
+            const progressDegree = percentage * 3.6; 
 
             const timerColor = getComputedStyle(document.body).getPropertyValue('--timer-color').trim();
             const timerTrackColor = getComputedStyle(document.body).getPropertyValue('--timer-track-color').trim();
-
-            timerRing.style.setProperty('--_timer-color', timerColor); // カスタムプロパティを一時的に設定
             
-            // conic-gradientで円形プログレスバーを更新
-            timerRing.style.setProperty('--_timer-track-color', timerTrackColor);
-
-            // 塗りつぶしの割合が時間の経過とともに減るように設定
             timerRing.style.setProperty('background', `conic-gradient(
-                var(--timer-color) ${progressDegree}deg,
-                var(--timer-track-color) ${progressDegree}deg 360deg
+                ${timerColor} ${progressDegree}deg,
+                ${timerTrackColor} ${progressDegree}deg 360deg
             )`);
             
-            // 🚨 残り時間が少ない場合の警告色
+            // 残り時間が少ない場合の警告色
             if (timeLeft <= 5) {
                 // 赤色を強制的に適用
                 timeLeftDisplay.style.color = '#e53935'; 
                 timeLeftDisplay.style.fontSize = '1.3em'; 
                 timerRing.style.transform = 'scale(1.1)';
             } else {
-                // 難易度ごとの色に戻す
-                timeLeftDisplay.style.color = ''; 
+                // 統一配色（--highlight-color）に戻す
+                timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
                 timeLeftDisplay.style.fontSize = ''; 
                 timerRing.style.transform = 'scale(1.0)';
             }
@@ -984,7 +850,21 @@
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 
-                // モグラが叩かれた時に色をリセット (中略)
+                // モグラが叩かれた時に色をリセット
+                mole.querySelector('.mole-body').style.fill = '';
+                mole.querySelector('.mole-body').style.stroke = '';
+                mole.querySelector('.mole-face').style.fill = '';
+                mole.querySelector('.mole-face').style.stroke = '';
+                mole.querySelectorAll('circle, line').forEach(el => {
+                    if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
+                         el.style.fill = '';
+                         el.style.stroke = '';
+                    }
+                });
+                mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = '';
+                    el.style.stroke = '';
+                });
 
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
@@ -1077,15 +957,13 @@
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
             
-            document.body.className = `difficulty-${initialDifficulty}`;
+            // 🔥 bodyのクラス操作を削除
             
-            difficultySelect.classList.remove('select-arrow-easy', 'select-arrow-normal', 'select-arrow-hard');
-            difficultySelect.classList.add(`select-arrow-${initialDifficulty}`);
-
+            // 🔥 select要素の矢印の色調整ロジックを削除
+            
             setGridClass(initialDifficulty);
             createHoles(); 
             
-            // 🔥 初期化時にタイマーをリセットして表示 🔥
             timeLeft = GAME_DURATION;
             updateTime(); 
         }
@@ -1093,6 +971,7 @@
         startButton.addEventListener('click', startGame);
         difficultySelect.addEventListener('change', () => {
             if (!isGameRunning) {
+                // 難易度設定のみを更新し、ゲーム盤面を再構築
                 initializeGame();
             }
         }); 
