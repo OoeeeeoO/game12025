@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (シンプルデザイン・円形タイマー)</title>
+    <title>モグラたたき - SVGモグラ版 (シンプルデザイン・テキストタイマー)</title>
     <style>
         /* ======================================================= */
         /* 🔥 シンプル＆モダンな配色とスタイル 🔥 */
@@ -63,7 +63,7 @@
             --countdown-overlay-bg: rgba(255, 255, 255, 0.8);
             --countdown-text-color: #3f51b5;
             --countdown-text-shadow: rgba(0,0,0,0.1);
-            --timer-color: #e53935; /* タイマーは警告色（赤）固定 */
+            --timer-color: #e53935; /* 警告色（赤）固定 */
             --timer-track-color: #cccccc;
 
             font-family: sans-serif; /* シンプルなフォント */
@@ -85,7 +85,7 @@
             font-family: sans-serif; 
             font-size: 3em; 
             color: var(--title-main-color);
-            text-shadow: 2px 2px 0px var(--title-shadow-color-1); /* シンプルな影 */
+            text-shadow: 2px 2px 0px var(--title-shadow-color-1); 
             margin-bottom: 30px;
             letter-spacing: 1px;
             line-height: 1.2;
@@ -95,19 +95,18 @@
             z-index: 10;
             transition: color 0.3s ease;
         }
-        /* ポップな飾りを削除 */
         h1::after { content: none; }
         
         #controls, #game-info { 
             background: var(--panel-bg);
             padding: 15px 30px;
-            border-radius: 8px; /* シンプルな角 */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 柔らかな影 */
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
             margin-bottom: 25px; 
             display: flex;
             gap: 20px; 
             align-items: center;
-            border: 1px solid var(--panel-border); /* 実線 */
+            border: 1px solid var(--panel-border); 
             color: var(--panel-text-color);
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
             position: relative; 
@@ -120,51 +119,25 @@
             font-weight: bold; 
             color: var(--highlight-color);
             font-size: 1.4em; 
-            text-shadow: none; /* 影を削除 */
+            text-shadow: none; 
             transition: color 0.3s ease;
         }
-        
-        /* 円形タイマーのCSS */
+
+        /* 🔥 テキストタイマーのスタイル 🔥 */
         #time-display {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
             font-size: 1.1em; 
         }
-        #timer-ring {
-            width: 40px; /* サイズを少し小さく */
-            height: 40px;
-            border-radius: 50%;
-            display: grid; 
-            place-content: center;
-            position: relative;
+
+        #time-left {
             font-weight: bold;
-            font-size: 1em;
-            color: var(--highlight-color);
-            box-shadow: none; /* 影を削除 */
-            border: 2px solid var(--timer-track-color);
-            transition: border-color 0.3s ease;
-        }
-        #timer-ring::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px; /* ボーダーの内側で描画 */
-            border-radius: inherit;
-            background: conic-gradient(
-                var(--timer-color) 0%, 
-                transparent 0% 
-            );
-            /* トラックカラーはボーダーで表現するため、背景グラデーションから削除 */
-            transition: background 0.3s ease;
-            z-index: 0;
-        }
-        #timer-ring span {
-            z-index: 10;
-            text-shadow: none;
-            transition: color 0.3s ease;
+            color: var(--highlight-color); 
+            transition: color 0.3s ease, font-size 0.2s ease;
         }
         
-        /* セレクトボックスのスタイルをシンプルに */
+        /* セレクトボックスのスタイル */
         #difficulty-select {
             padding: 8px 15px;
             font-size: 1em;
@@ -180,7 +153,6 @@
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
             transition: border-color 0.3s ease;
         }
-        /* 矢印をシンプルなグレーに固定 */
         #difficulty-select { 
             background-image: url('data:image/svg+xml;utf8,<svg fill="#666666" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
         }
@@ -190,14 +162,14 @@
             box-shadow: 0 0 0 3px var(--select-focus-shadow);
         }
 
-        /* スタートボタンのスタイルをシンプルに */
+        /* スタートボタンのスタイル */
         #start-button {
             padding: 10px 25px;
             font-size: 1.2em; 
             background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
             color: var(--button-text-color, white);
             border: none;
-            border-radius: 4px; /* シンプルな角 */
+            border-radius: 4px; 
             cursor: pointer;
             transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 2px 0 var(--button-shadow-color), 0 3px 5px rgba(0,0,0,0.1);
@@ -224,7 +196,7 @@
             display: grid;
             margin: 0 auto;
             background: var(--grid-bg);
-            border: 1px solid var(--grid-border); /* 実線 */
+            border: 1px solid var(--grid-border); 
             border-radius: 4px;
             padding: 8px;
             gap: 8px;
@@ -245,7 +217,6 @@
             align-items: flex-end;
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        /* ポップな内側のボーダーを削除 */
         .hole::before { content: none; }
 
         .mole {
@@ -279,7 +250,7 @@
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: var(--mole-gold-face-hand); }
         .mole.bomb .mole-hand { fill: var(--mole-bomb-hand); }
 
-        /* モーダルのスタイルをシンプルに */
+        /* モーダルのスタイル */
         #game-over-modal { 
             display: none; 
             position: fixed; 
@@ -288,7 +259,7 @@
             top: 0; 
             width: 100%; 
             height: 100%; 
-            background-color: rgba(0, 0, 0, 0.4); /* 暗い背景 */
+            background-color: rgba(0, 0, 0, 0.4); 
             backdrop-filter: blur(4px); 
         }
         .modal-content { 
@@ -320,7 +291,7 @@
             padding: 10px; 
             background-color: var(--modal-final-score-bg); 
             border-radius: 4px; 
-            border: 1px solid var(--modal-final-score-border); /* 実線 */
+            border: 1px solid var(--modal-final-score-border); 
             font-family: sans-serif; 
             text-shadow: none;
         }
@@ -350,10 +321,10 @@
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            font-size: 2.5em; /* 少し小さく */
+            font-size: 2.5em; 
             font-weight: bold; 
             color: var(--score-pop-color);
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* シンプルな影 */
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); 
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.9s ease-out forwards; 
@@ -369,6 +340,7 @@
         .time-pop {
             position: absolute;
             top: 50%; 
+            /* スコア表示の右側に出すための調整 */
             left: calc(50% + 150px); 
             transform: translate(-50%, -50%);
             font-size: 2em; 
@@ -426,9 +398,7 @@
         <p>スコア: <span id="score">0</span> | 
             <span id="time-display">
                 時間: 
-                <div id="timer-ring">
-                    <span id="time-left">30</span>
-                </div>
+                <span id="time-left">30</span>
                 秒
             </span>
         </p>
@@ -509,7 +479,6 @@
 
         const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
-        const timerRing = document.getElementById('timer-ring'); 
         const startButton = document.getElementById('start-button');
         const grid = document.getElementById('grid');
         const gameOverModal = document.getElementById('game-over-modal');
@@ -691,38 +660,21 @@
             moleTimerId = setTimeout(peep, time);
         }
 
-        // 🔥 円形タイマーの更新ロジック 🔥
+        // 🔥 テキストタイマーの更新ロジック 🔥
         function updateTime() {
             if (timeLeft < 0) { timeLeft = 0; }
             
             timeLeftDisplay.textContent = timeLeft;
             
-            const percentage = (timeLeft / GAME_DURATION) * 100;
-            const progressDegree = percentage * 3.6; 
-
-            const timerColor = getComputedStyle(document.body).getPropertyValue('--timer-color').trim();
-            const timerTrackColor = getComputedStyle(document.body).getPropertyValue('--timer-track-color').trim();
-            
-            // progressDegreeが100%に近くなるほど塗りつぶしが減る
-            timerRing.style.setProperty('background', `
-                radial-gradient(circle, white 55%, transparent 55%), /* 中心を白で抜く */
-                conic-gradient(
-                    ${timerColor} ${progressDegree}deg,
-                    transparent ${progressDegree}deg 360deg
-                )
-            `);
-            
             // 残り時間が少ない場合の警告色
             if (timeLeft <= 5) {
-                // 赤色を強制的に適用
-                timeLeftDisplay.style.color = '#e53935'; 
-                timeLeftDisplay.style.fontSize = '1.1em'; 
-                timerRing.style.transform = 'scale(1.1)';
+                // 警告色（赤）を適用
+                timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--timer-color'); 
+                timeLeftDisplay.style.fontSize = '1.4em'; // 目立たせる
             } else {
                 // 通常の色（--highlight-color）に戻す
                 timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
                 timeLeftDisplay.style.fontSize = ''; 
-                timerRing.style.transform = 'scale(1.0)';
             }
 
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
