@@ -4,1301 +4,1267 @@
 
 <head>
 
-    <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
+    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
 
-    <style>
+    <style>
 
-        /* CSS (デザイン) */
+        /* CSS (デザイン) */
 
-        body {
+        body {
 
-            font-family: 'Mochiy Pop P One', 'Arial', sans-serif; /* サンリオ風フォントを優先 */
+            font-family: 'Mochiy Pop P One', 'Arial', sans-serif; /* サンリオ風フォントを優先 */
 
-            text-align: center;
+            text-align: center;
 
-            margin: 0;
+            margin: 0;
 
-            padding: 20px;
+            padding: 20px;
 
-            display: flex;
+            display: flex;
 
-            flex-direction: column;
+            flex-direction: column;
 
-            align-items: center;
+            align-items: center;
 
-            min-height: 100vh;
+            min-height: 100vh;
 
-            box-sizing: border-box;
+            box-sizing: border-box;
 
-            background-color: #fce4ec; /* 全体的にパステルピンク */
+            background-color: #fce4ec; /* 全体的にパステルピンク */
 
-        }
+        }
 
 
 
-        h1 { 
+        h1 { 
 
-            /* サンリオ風の大きなフチ付きタイトル */
+            /* サンリオ風の大きなフチ付きタイトル */
 
-            font-family: 'Mochiy Pop P One', cursive;
+            font-family: 'Mochiy Pop P One', cursive;
 
-            font-size: 3.8em; /* 大きく */
+            font-size: 3.8em; /* 大きく */
 
-            color: #ff80ab; /* 濃いピンク */
+            color: #ff80ab; /* 濃いピンク */
 
-            text-shadow: 
+            text-shadow: 
 
-                -2px -2px 0 #fff,  /* 白いフチ */
+                -2px -2px 0 #fff,  /* 白いフチ */
 
-                2px -2px 0 #fff,
+                2px -2px 0 #fff,
 
-                -2px 2px 0 #fff,
+                -2px 2px 0 #fff,
 
-                2px 2px 0 #fff,
+                2px 2px 0 #fff,
 
-                4px 4px 0 #ffc1e3, /* ピンクの影で立体感 */
+                4px 4px 0 #ffc1e3, /* ピンクの影で立体感 */
 
-                6px 6px 0 #ffb3d9,
+                6px 6px 0 #ffb3d9,
 
-                8px 8px 0 #ff99c8,
+                8px 8px 0 #ff99c8,
 
-                10px 10px 0 #ff80b3;
+                10px 10px 0 #ff80b3;
 
-            margin-bottom: 25px;
+            margin-bottom: 25px;
 
-            letter-spacing: 2px; /* 少し字間を広げる */
+            letter-spacing: 2px; /* 少し字間を広げる */
 
-            line-height: 1.2;
+            line-height: 1.2;
 
-        }
+        }
 
-        
+        
 
-        #controls, #game-info { 
+        #controls, #game-info { 
 
-            background-color: #ffe0f0; /* 明るいピンクの背景 */
+            background-color: #ffe0f0; /* 明るいピンクの背景 */
 
-            padding: 12px 25px;
+            padding: 12px 25px;
 
-            border-radius: 20px; /* 角丸を強調 */
+            border-radius: 20px; /* 角丸を強調 */
 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* 少し強めの影 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* 少し強めの影 */
 
-            margin-bottom: 25px; 
+            margin-bottom: 25px; 
 
-            display: flex;
+            display: flex;
 
-            gap: 20px; /* 間隔を広げる */
+            gap: 20px; /* 間隔を広げる */
 
-            align-items: center;
+            align-items: center;
 
-            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
+            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
 
-            color: #6a053c; /* 濃い文字色 */
+            color: #6a053c; /* 濃い文字色 */
 
-        }
+        }
 
 
 
-        #game-info p { 
+        #game-info p { 
 
-            margin: 0; 
+            margin: 0; 
 
-            color: #6a053c; 
+            color: #6a053c; 
 
-            font-size: 1.2em; /* 文字を大きく */
+            font-size: 1.2em; /* 文字を大きく */
 
-        }
+        }
 
-        #score, #time-left { 
+        #score, #time-left { 
 
-            font-weight: bold; 
+            font-weight: bold; 
 
-            color: #ff3366; /* ポップな赤ピンク */
+            color: #ff3366; /* ポップな赤ピンク */
 
-            font-family: 'Nikukyu', cursive; /* 専用フォント */
+            font-family: 'Nikukyu', cursive; /* 専用フォント */
 
-            font-size: 1.5em; /* さらに大きく */
+            font-size: 1.5em; /* さらに大きく */
 
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
 
-        }
+        }
 
 
 
-        #difficulty-select {
+        #difficulty-select {
 
-            padding: 10px 18px;
+            padding: 10px 18px;
 
-            font-size: 1.1em;
+            font-size: 1.1em;
 
-            border-radius: 10px; /* 角丸 */
+            border-radius: 10px; /* 角丸 */
 
-            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
+            border: 2px solid #ff80ab; /* 濃いピンクのボーダー */
 
-            background-color: #fff0f5; /* 薄いピンクの背景 */
+            background-color: #fff0f5; /* 薄いピンクの背景 */
 
-            color: #6a053c;
+            color: #6a053c;
 
-            font-family: 'Mochiy Pop P One', sans-serif;
+            font-family: 'Mochiy Pop P One', sans-serif;
 
-            appearance: none; /* デフォルトのスタイルをリセット */
+            appearance: none; /* デフォルトのスタイルをリセット */
 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="#ff80ab" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印 */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#ff80ab" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印 */
 
-            background-repeat: no-repeat;
+            background-repeat: no-repeat;
 
-            background-position: right 10px center;
+            background-position: right 10px center;
 
-            background-size: 20px;
+            background-size: 20px;
 
-            cursor: pointer;
+            cursor: pointer;
 
-        }
+        }
 
-        #difficulty-select:focus {
+        #difficulty-select:focus {
 
-            outline: none;
+            outline: none;
 
-            box-shadow: 0 0 0 3px #ffc1e3;
+            box-shadow: 0 0 0 3px #ffc1e3;
 
-        }
+        }
 
 
 
-        #start-button {
+        #start-button {
 
-            padding: 12px 30px;
+            padding: 12px 30px;
 
-            font-size: 1.8em; /* 非常に大きく */
+            font-size: 1.8em; /* 非常に大きく */
 
-            background-color: #ff66b2; /* 鮮やかなピンク */
+            background-color: #ff66b2; /* 鮮やかなピンク */
 
-            color: white;
+            color: white;
 
-            border: none;
+            border: none;
 
-            border-radius: 15px; /* さらに角丸 */
+            border-radius: 15px; /* さらに角丸 */
 
-            cursor: pointer;
+            cursor: pointer;
 
-            transition: background-color 0.3s, transform 0.1s, box-shadow 0.2s;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.2s;
 
-            box-shadow: 0 6px 0 #e04b9b, 0 8px 15px rgba(0,0,0,0.25); /* 押しボタン風の影 */
+            box-shadow: 0 6px 0 #e04b9b, 0 8px 15px rgba(0,0,0,0.25); /* 押しボタン風の影 */
 
-            font-family: 'Mochiy Pop P One', cursive;
+            font-family: 'Mochiy Pop P One', cursive;
 
-            letter-spacing: 1px;
+            letter-spacing: 1px;
 
-        }
+        }
 
-        #start-button:hover { 
+        #start-button:hover { 
 
-            background-color: #ff4d9b; 
+            background-color: #ff4d9b; 
 
-            transform: translateY(-3px); 
+            transform: translateY(-3px); 
 
-            box-shadow: 0 9px 0 #e04b9b, 0 12px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 9px 0 #e04b9b, 0 12px 20px rgba(0,0,0,0.3);
 
-        }
+        }
 
-        #start-button:active { /* 押した時に沈む表現 */
+        #start-button:active { /* 押した時に沈む表現 */
 
-            transform: translateY(3px); 
+            transform: translateY(3px); 
 
-            box-shadow: 0 3px 0 #e04b9b, 0 5px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 0 #e04b9b, 0 5px 10px rgba(0,0,0,0.2);
 
-        }
+        }
 
-        #start-button:disabled { 
+        #start-button:disabled { 
 
-            background-color: #cccccc; 
+            background-color: #cccccc; 
 
-            cursor: not-allowed; 
+            cursor: not-allowed; 
 
-            transform: translateY(0); 
+            transform: translateY(0); 
 
-            box-shadow: 0 6px 0 #b3b3b3, 0 8px 15px rgba(0,0,0,0.25); 
+            box-shadow: 0 6px 0 #b3b3b3, 0 8px 15px rgba(0,0,0,0.25); 
 
-        }
+        }
 
 
 
-        /* ゲーム盤面 (変更なし - 色味は可愛らしいのでこのままでOK) */
+        /* ゲーム盤面 (変更なし - 色味は可愛らしいのでこのままでOK) */
 
-        #grid {
-            display: grid;
-            margin: 0 auto;
-            background-color: #a0d468;
-            border: 8px solid #6b9e32;
-            border-radius: 20px;
-            padding: 10px;
-            gap: 10px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
-        }
+        #grid {
+            display: grid;
+            margin: 0 auto;
+            background-color: #a0d468;
+            border: 8px solid #6b9e32;
+            border-radius: 20px;
+            padding: 10px;
+            gap: 10px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+        }
 
 
 
-        /* 穴 */
+        /* 穴 */
 
-        .hole {
-            background-color: #c08465; /* 穴の内部色 */
-            border-radius: 50%;
-            overflow: hidden; 
-            position: relative; 
-            cursor: pointer;
-            /* 修正点: borderを削除し、box-shadowで外枠と立体感を表現 */
-            border: none; /* 既存のborderを削除 */
-            box-shadow: 
-                inset 0 0 12px rgba(0,0,0,0.4), /* 内側の影で深さを表現 */
-                0 0 0 4px #8e5c46, /* 外側のボーダー風の影（4px） */
-                0 4px 6px rgba(0,0,0,0.2); /* 穴自体の少し浮いたような影 */
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-        }
+        .hole {
+            background-color: #c08465; /* 穴の内部色 */
+            border-radius: 50%;
+            overflow: hidden; 
+            position: relative; 
+            cursor: pointer;
+            /* 修正点: borderを削除し、box-shadowで外枠と立体感を表現 */
+            border: none; /* 既存のborderを削除 */
+            box-shadow: 
+                inset 0 0 12px rgba(0,0,0,0.4), /* 内側の影で深さを表現 */
+                0 0 0 4px #8e5c46, /* 外側のボーダー風の影（4px） */
+                0 4px 6px rgba(0,0,0,0.2); /* 穴自体の少し浮いたような影 */
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
 
 
 
-        /* モグラ本体 (SVGコンテナ) - ここは見た目の変更なしで良いかと */
+        /* モグラ本体 (SVGコンテナ) */
 
-        .mole {
-            width: 100%; 
-            height: 100%; 
-            position: absolute; 
-            bottom: -100%; 
-            transition: bottom 0.2s ease-out; 
-            pointer-events: none; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 2; 
-        }
-        .hole.up .mole { bottom: 0; pointer-events: auto; }
+        .mole {
+            width: 100%; 
+            height: 100%; 
+            position: absolute; 
+            bottom: -100%; 
+            transition: bottom 0.2s ease-out; 
+            pointer-events: none; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2; 
+        }
+        .hole.up .mole { bottom: 0; pointer-events: auto; }
 
 
 
-        /* SVG共通スタイル */
+        /* SVG共通スタイル - ここを修正してモグラを大きくする */
 
-        .mole svg {
+        .mole svg {
 
-            width: 100%;
+            width: **100%**;
 
-            height: 100%;
+            height: **115%**; /* 高さを上げて穴からより大きく出るようにする */
 
-            transform: translateY(10%); 
+            transform: translateY(0); /* 以前の調整をリセット */
 
-        }
+        }
 
 
 
-         /* --- 特殊モグラの色変更 (SVG内の要素を直接操作) --- */
+         /* --- 特殊モグラの色変更 (SVG内の要素を直接操作) --- */
 
-        /* 通常モグラのデフォルト色 */
+        /* 通常モグラのデフォルト色 */
 
-        .mole-body { fill: #8B5C3D; stroke: #6A462F; } /* 体 */
+        .mole-body { fill: #8B5C3D; stroke: #6A462F; } /* 体 */
 
-        .mole-face { fill: #E6C5A9; stroke: #6A462F; } /* 顔 */
+        .mole-face { fill: #E6C5A9; stroke: #6A462F; } /* 顔 */
 
-        .mole-hand { fill: #8B5C3D; stroke: #6A462F; } /* 手 */
+        .mole-hand { fill: #8B5C3D; stroke: #6A462F; } /* 手 */
 
-        .mole-whisker { stroke: #6A462F; } /* ひげ */
+        .mole-whisker { stroke: #6A462F; } /* ひげ */
 
-        .mole-nose { fill: #333; } /* 鼻 */
+        .mole-nose { fill: #333; } /* 鼻 */
 
 
 
-        /* ゴールドモグラ */
+        /* ゴールドモグラ */
 
-        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
+        .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
 
-        .mole.gold .mole-face { fill: #FFE580; }
+        .mole.gold .mole-face { fill: #FFE580; }
 
-        .mole.gold .mole-hand { fill: #FFD700; }
+        .mole.gold .mole-hand { fill: #FFD700; }
 
-        .mole.gold .mole-nose { fill: #B8860B; }
+        .mole.gold .mole-nose { fill: #B8860B; }
 
-        
+        
 
-        /* ボムモグラ */
+        /* ボムモグラ */
 
-        .mole.bomb .mole-body { fill: #333; stroke: #111; }
+        .mole.bomb .mole-body { fill: #333; stroke: #111; }
 
-        .mole.bomb .mole-face { fill: #555; stroke: #111; }
+        .mole.bomb .mole-face { fill: #555; stroke: #111; }
 
-        .mole.bomb .mole-hand { fill: #FF4500; stroke: #CC3700; } /* 手を爆弾っぽく */
+        .mole.bomb .mole-hand { fill: #FF4500; stroke: #CC3700; } /* 手を爆弾っぽく */
 
-        .mole.bomb .mole-nose { fill: #FF4500; }
+        .mole.bomb .mole-nose { fill: #FF4500; }
 
-        
+        
 
-        /* クロックモグラ */
+        /* クロックモグラ */
 
-        .mole.clock .mole-body { fill: #80c0ff; stroke: #4682B4; } /* パステルブルー */
+        .mole.clock .mole-body { fill: #80c0ff; stroke: #4682B4; } /* パステルブルー */
 
-        .mole.clock .mole-face { fill: #c0e0ff; stroke: #4682B4; }
+        .mole.clock .mole-face { fill: #c0e0ff; stroke: #4682B4; }
 
-        .mole.clock .mole-hand { fill: #80c0ff; }
+        .mole.clock .mole-hand { fill: #80c0ff; }
 
-        .mole.clock .mole-nose { fill: #4682B4; }
+        .mole.clock .mole-nose { fill: #4682B4; }
 
 
 
-        /* ゲームオーバーモーダルのCSS */
+        /* ゲームオーバーモーダルのCSS */
 
-        #game-over-modal { 
+        #game-over-modal { 
 
-            display: none; 
+            display: none; 
 
-            position: fixed; 
+            position: fixed; 
 
-            z-index: 100; 
+            z-index: 100; 
 
-            left: 0; 
+            left: 0; 
 
-            top: 0; 
+            top: 0; 
 
-            width: 100%; 
+            width: 100%; 
 
-            height: 100%; 
+            height: 100%; 
 
-            overflow: auto; 
+            overflow: auto; 
 
-            background-color: rgba(0, 0, 0, 0.7); 
+            background-color: rgba(0, 0, 0, 0.7); 
 
-            backdrop-filter: blur(5px); 
+            backdrop-filter: blur(5px); 
 
-        }
+        }
 
-        .modal-content { 
+        .modal-content { 
 
-            background-color: #fff0f5; /* 明るいピンク背景 */
+            background-color: #fff0f5; /* 明るいピンク背景 */
 
-            margin: 10% auto; /* 少し上に表示 */
+            margin: 10% auto; /* 少し上に表示 */
 
-            padding: 35px;
+            padding: 35px;
 
-            border: 5px solid #ff80ab; /* 濃いピンクボーダー */
+            border: 5px solid #ff80ab; /* 濃いピンクボーダー */
 
-            width: 85%; max-width: 450px; 
+            width: 85%; max-width: 450px; 
 
-            border-radius: 25px; /* 大きな角丸 */
+            border-radius: 25px; /* 大きな角丸 */
 
-            text-align: center; 
+            text-align: center; 
 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
 
-            animation: fadeIn 0.5s; 
+            animation: fadeIn 0.5s; 
 
-            font-family: 'Mochiy Pop P One', sans-serif;
+            font-family: 'Mochiy Pop P One', sans-serif;
 
-            color: #6a053c;
+            color: #6a053c;
 
-        }
+        }
 
-        .modal-content h2 { 
+        .modal-content h2 { 
 
-            color: #ff66b2; /* 鮮やかなピンク */
+            color: #ff66b2; /* 鮮やかなピンク */
 
-            font-size: 3em; 
+            font-size: 3em; 
 
-            margin-bottom: 15px; 
+            margin-bottom: 15px; 
 
-            text-shadow: 2px 2px 0 #fff; /* 白いフチ */
+            text-shadow: 2px 2px 0 #fff; /* 白いフチ */
 
-        }
+        }
 
-        .final-score { 
+        .final-score { 
 
-            font-size: 4.5em; /* 最終スコアを非常に大きく */
+            font-size: 4.5em; /* 最終スコアを非常に大きく */
 
-            color: #ff3366; /* ポップな赤ピンク */
+            color: #ff3366; /* ポップな赤ピンク */
 
-            font-weight: bold; 
+            font-weight: bold; 
 
-            display: block; 
+            display: block; 
 
-            margin: 20px 0; 
+            margin: 20px 0; 
 
-            padding: 15px; 
+            padding: 15px; 
 
-            background-color: #fff; /* 白背景 */
+            background-color: #fff; /* 白背景 */
 
-            border-radius: 15px; /* 角丸 */
+            border-radius: 15px; /* 角丸 */
 
-            border: 3px solid #ff80ab;
+            border: 3px solid #ff80ab;
 
-            font-family: 'Nikukyu', cursive; /* 専用フォント */
+            font-family: 'Nikukyu', cursive; /* 専用フォント */
 
-            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
 
-        }
+        }
 
-        .modal-content button { 
+        .modal-content button { 
 
-            background-color: #80c0ff; /* パステルブルー */
+            background-color: #80c0ff; /* パステルブルー */
 
-            color: white; 
+            color: white; 
 
-            border: none; 
+            border: none; 
 
-            padding: 12px 25px; 
+            padding: 12px 25px; 
 
-            font-size: 1.5em; 
+            font-size: 1.5em; 
 
-            border-radius: 10px; /* 角丸 */
+            border-radius: 10px; /* 角丸 */
 
-            cursor: pointer; 
+            cursor: pointer; 
 
-            transition: background-color 0.3s, transform 0.1s; 
+            transition: background-color 0.3s, transform 0.1s; 
 
-            font-family: 'Mochiy Pop P One', sans-serif;
+            font-family: 'Mochiy Pop P One', sans-serif;
 
-            box-shadow: 0 4px 0 #66aaff; /* 押しボタン風の影 */
+            box-shadow: 0 4px 0 #66aaff; /* 押しボタン風の影 */
 
-        }
+        }
 
-        .modal-content button:hover { 
+        .modal-content button:hover { 
 
-            background-color: #66aaff; 
+            background-color: #66aaff; 
 
-            transform: translateY(-2px); 
+            transform: translateY(-2px); 
 
-            box-shadow: 0 6px 0 #66aaff;
+            box-shadow: 0 6px 0 #66aaff;
 
-        }
+        }
 
-        .modal-content button:active {
+        .modal-content button:active {
 
-            transform: translateY(2px);
+            transform: translateY(2px);
 
-            box-shadow: 0 2px 0 #66aaff;
+            box-shadow: 0 2px 0 #66aaff;
 
-        }
+        }
 
 
 
-        /* スコアポップアップのCSS */
+        /* スコアポップアップのCSS */
 
-        .score-pop { 
+        .score-pop { 
 
-            position: absolute; 
+            position: absolute; 
 
-            top: 50%; 
+            top: 50%; 
 
-            left: 50%; 
+            left: 50%; 
 
-            transform: translate(-50%, -50%); 
+            transform: translate(-50%, -50%); 
 
-            font-size: 3em; /* 大きく */
+            font-size: 3em; /* 大きく */
 
-            font-weight: bold; 
+            font-weight: bold; 
 
-            color: #fff; 
+            color: #fff; 
 
-            text-shadow: 
+            text-shadow: 
 
-                -2px -2px 0 #ff66b2, /* ピンクのフチ */
+                -2px -2px 0 #ff66b2, /* ピンクのフチ */
 
-                2px -2px 0 #ff66b2,
+                2px -2px 0 #ff66b2,
 
-                -2px 2px 0 #ff66b2,
+                -2px 2px 0 #ff66b2,
 
-                2px 2px 0 #ff66b2,
+                2px 2px 0 #ff66b2,
 
-                3px 3px 0 rgba(0,0,0,0.4); /* 黒い影 */
+                3px 3px 0 rgba(0,0,0,0.4); /* 黒い影 */
 
-            pointer-events: none; 
+            pointer-events: none; 
 
-            opacity: 0; 
+            opacity: 0; 
 
-            animation: scorePopUp 0.7s ease-out forwards; /* アニメーション時間を少し長く */
+            animation: scorePopUp 0.7s ease-out forwards; /* アニメーション時間を少し長く */
 
-            z-index: 5; 
+            z-index: 5; 
 
-            font-family: 'Nikukyu', cursive; /* 専用フォント */
+            font-family: 'Nikukyu', cursive; /* 専用フォント */
 
-        }
+        }
 
-        @keyframes scorePopUp { 
+        @keyframes scorePopUp { 
 
-            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } /* 開始時に少し小さく */
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } /* 開始時に少し小さく */
 
-            50% { transform: translate(-50%, -50px) scale(1.1); } /* 途中で少し膨らむ */
+            50% { transform: translate(-50%, -50px) scale(1.1); } /* 途中で少し膨らむ */
 
-            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
 
-        }
+        }
 
-        
+        
 
-        /* カウントダウンオーバーレイのCSS */
+        /* カウントダウンオーバーレイのCSS */
 
-        #countdown-overlay {
+        #countdown-overlay {
 
-            display: none; 
+            display: none; 
 
-            position: fixed;
+            position: fixed;
 
-            top: 0;
+            top: 0;
 
-            left: 0;
+            left: 0;
 
-            width: 100%;
+            width: 100%;
 
-            height: 100%;
+            height: 100%;
 
-            background-color: rgba(255, 204, 229, 0.7); /* パステルピンクの半透明 */
+            background-color: rgba(255, 204, 229, 0.7); /* パステルピンクの半透明 */
 
-            z-index: 90;
+            z-index: 90;
 
-            justify-content: center;
+            justify-content: center;
 
-            align-items: center;
+            align-items: center;
 
-            backdrop-filter: blur(3px); /* ぼかしを少し強調 */
+            backdrop-filter: blur(3px); /* ぼかしを少し強調 */
 
-        }
+        }
 
 
 
-        #countdown-text {
+        #countdown-text {
 
-            font-family: 'Mochiy Pop P One', cursive;
+            font-family: 'Mochiy Pop P One', cursive;
 
-            font-size: 9em; /* さらに大きく */
+            font-size: 9em; /* さらに大きく */
 
-            color: #ff3366; /* ポップな赤ピンク */
+            color: #ff3366; /* ポップな赤ピンク */
 
-            font-weight: bold;
+            font-weight: bold;
 
-            text-shadow: 
+            text-shadow: 
 
-                -4px -4px 0 #fff, 
+                -4px -4px 0 #fff, 
 
-                4px -4px 0 #fff,
+                4px -4px 0 #fff,
 
-                -4px 4px 0 #fff,
+                -4px 4px 0 #fff,
 
-                4px 4px 0 #fff,
+                4px 4px 0 #fff,
 
-                6px 6px 0 #ffb3d9; /* ピンクの影 */
+                6px 6px 0 #ffb3d9; /* ピンクの影 */
 
-            animation: pulse 0.8s ease-in-out infinite alternate; /* アニメーション速度調整 */
+            animation: pulse 0.8s ease-in-out infinite alternate; /* アニメーション速度調整 */
 
-        }
+        }
 
 
 
-        @keyframes pulse {
+        @keyframes pulse {
 
-            from { transform: scale(1); opacity: 0.9; }
+            from { transform: scale(1); opacity: 0.9; }
 
-            to { transform: scale(1.1); opacity: 1; }
+            to { transform: scale(1.1); opacity: 1; }
 
-        }
+        }
 
-    </style>
+    </style>
 
 </head>
 
 <body onload="initializeGame()">
 
-    <h1>もぐらdeポン！ </h1>
+    <h1>もぐらdeポン！ </h1>
 
 
 
-    <div id="game-info">
+    <div id="game-info">
 
-        <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
+        <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
 
-    </div>
+    </div>
 
 
 
-    <div id="controls">
+    <div id="controls">
 
-        <label for="difficulty-select">難易度: </label>
+        <label for="difficulty-select">難易度: </label>
 
-        <select id="difficulty-select">
+        <select id="difficulty-select">
 
-            <option value="easy">かんたん</option>
+            <option value="easy">かんたん</option>
 
-            <option value="normal" selected>ふつう</option>
+            <option value="normal" selected>ふつう</option>
 
-            <option value="hard">むずかしい</option>
+            <option value="hard">むずかしい</option>
 
-        </select>
+        </select>
 
-        <button id="start-button">ゲームスタート</button>
+        <button id="start-button">ゲームスタート</button>
 
-    </div>
+    </div>
 
 
 
-    <div id="grid">
+    <div id="grid">
 
-    </div>
+    </div>
 
-        
+        
 
-    <div id="countdown-overlay">
+    <div id="countdown-overlay">
 
-        <span id="countdown-text"></span>
+        <span id="countdown-text"></span>
 
-    </div>
+    </div>
 
-        
+        
 
-    <div id="game-over-modal">
+    <div id="game-over-modal">
 
-        <div class="modal-content">
+        <div class="modal-content">
 
-            <h2>ゲームオーバー！</h2>
+            <h2>ゲームオーバー！</h2>
 
-            <p>最終スコア</p>
+            <p>最終スコア</p>
 
-            <span id="final-score" class="final-score">0</span>
+            <span id="final-score" class="final-score">0</span>
 
-            <button onclick="closeModal()">OK</button>
+            <button onclick="closeModal()">OK</button>
 
-        </div>
+        </div>
 
-    </div>
+    </div>
 
 
 
-    <script>
+    <script>
 
-        // JavaScript (ゲームロジック)
+        // JavaScript (ゲームロジック)
 
 
 
-        const GAME_DURATION = 30; 
+        const GAME_DURATION = 30; 
 
-        
+        
 
-        const NORMAL_MOLE_SCORE = 1;
+        const NORMAL_MOLE_SCORE = 1;
 
-        const GOLD_MOLE_SCORE = 3;
+        const GOLD_MOLE_SCORE = 3;
 
-        const BOMB_MOLE_SCORE = -5;
+        const BOMB_MOLE_SCORE = -5;
 
-        const CLOCK_MOLE_SCORE = 2;
+        const CLOCK_MOLE_SCORE = 2;
 
 
 
-        const BOMB_TIME_PENALTY = 5; 
+        const BOMB_TIME_PENALTY = 5; 
 
-        const CLOCK_TIME_BONUS = 5; 
+        const CLOCK_TIME_BONUS = 5; 
 
 
 
-        const GOLD_MOLE_CHANCE = 0.10; 
+        const GOLD_MOLE_CHANCE = 0.10; 
 
-        const BOMB_MOLE_CHANCE = 0.15; 
+        const BOMB_MOLE_CHANCE = 0.15; 
 
-        const CLOCK_MOLE_CHANCE = 0.05; 
+        const CLOCK_MOLE_CHANCE = 0.05; 
 
-        
+        
 
-        const DIFFICULTY_SETTINGS = {
+        const DIFFICULTY_SETTINGS = {
 
-            easy: {
+            easy: {
 
-                minTime: 800, maxTime: 1800,
+                minTime: 800, maxTime: 1800,
 
-                holeCount: 9, 
+                holeCount: 9, 
 
-                gridColumns: 3, 
+                gridColumns: 3, 
 
-            },
+            },
 
-            normal: {
+            normal: {
 
-                minTime: 500, maxTime: 1500,
+                minTime: 500, maxTime: 1500, /* 時間を少し短縮して難易度を上げる */
 
-                holeCount: 16, 
+                holeCount: 16, 
 
-                gridColumns: 4, 
+                gridColumns: 4, 
 
-            },
+            },
 
-            hard: {
+            hard: {
 
-                minTime: 300, maxTime: 1000,
+                minTime: 300, maxTime: 1000, /* 時間を少し短縮して難易度を上げる */
 
-                holeCount: 25, 
+                holeCount: 25, 
 
-                gridColumns: 5, 
+                gridColumns: 5, 
 
-            }
+            }
 
-        };
+        };
 
 
 
-        let currentMinTime;
+        let currentMinTime;
 
-        let currentMaxTime;
+        let currentMaxTime;
 
-        let currentHoleCount;
+        let currentHoleCount;
 
-        let currentGridColumns;
+        let currentGridColumns;
 
 
 
-        let score = 0;
+        let score = 0;
 
-        let timeLeft = GAME_DURATION; 
+        let timeLeft = GAME_DURATION; 
 
-        let isGameRunning = false;
+        let isGameRunning = false;
 
-        let countdownTimerId;
+        let countdownTimerId;
 
-        let moleTimerId; 
+        let moleTimerId; 
 
-        let lastHole = null;
+        let lastHole = null;
 
 
 
-        const scoreDisplay = document.getElementById('score');
+        const scoreDisplay = document.getElementById('score');
 
-        const timeLeftDisplay = document.getElementById('time-left');
+        const timeLeftDisplay = document.getElementById('time-left');
 
-        const startButton = document.getElementById('start-button');
+        const startButton = document.getElementById('start-button');
 
-        const grid = document.getElementById('grid');
+        const grid = document.getElementById('grid');
 
-        const gameOverModal = document.getElementById('game-over-modal');
+        const gameOverModal = document.getElementById('game-over-modal');
 
-        const finalScoreDisplay = document.getElementById('final-score');
+        const finalScoreDisplay = document.getElementById('final-score');
 
-        const difficultySelect = document.getElementById('difficulty-select');
+        const difficultySelect = document.getElementById('difficulty-select');
 
-        const countdownOverlay = document.getElementById('countdown-overlay');
+        const countdownOverlay = document.getElementById('countdown-overlay');
 
-        const countdownText = document.getElementById('countdown-text');
+        const countdownText = document.getElementById('countdown-text');
 
 
 
-        // SVGモグラのHTML (ひげを修正)
+        // SVGモグラのHTML (ビューボックスとパーツの縦位置を調整)
 
-        const MOLE_SVG = `
+        const MOLE_SVG = `
 
-            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
+            <svg viewBox="0 0 100 **105**" preserveAspectRatio="xMidYMax slice">                 <ellipse class="mole-body" cx="50" cy="**75**" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>                 
 
-                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-face" cx="50" cy="**83**" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>                 <circle class="mole-nose" cx="50" cy="**75**" r="3" fill="#333"/>                 
 
-                
+                <circle cx="38" cy="**63**" r="3.5" fill="black"/>                 <circle cx="62" cy="**63**" r="3.5" fill="black"/>                 
 
-                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="23" y1="**78**" x2="38" y2="**78**" stroke="#6A462F" stroke-width="1"/>                 <line class="mole-whisker" x1="20" y1="**83**" x2="38" y2="**83**" stroke="#6A462F" stroke-width="1"/>                 <line class="mole-whisker" x1="23" y1="**88**" x2="38" y2="**88**" stroke="#6A462F" stroke-width="1"/>                 
 
+                
 
+                <line class="mole-whisker" x1="62" y1="**78**" x2="77" y2="**78**" stroke="#6A462F" stroke-width="1"/>                 <line class="mole-whisker" x1="62" y1="**83**" x2="80" y2="**83**" stroke="#6A462F" stroke-width="1"/>                 <line class="mole-whisker" x1="62" y1="**88**" x2="77" y2="**88**" stroke="#6A462F" stroke-width="1"/>                 <ellipse class="mole-hand" cx="25" cy="**95**" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>                 <ellipse class="mole-hand" cx="75" cy="**95**" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>             </svg>
 
-                <circle cx="50" cy="70" r="3" fill="#333"/>
+        `;
 
-                
 
-                <circle cx="38" cy="58" r="3.5" fill="black"/>
 
-                <circle cx="62" cy="58" r="3.5" fill="black"/>
 
 
+        function setGridClass(difficulty) {
 
-                
+            grid.className = ''; 
 
-                <line x1="23" y1="73" x2="38" y2="73" stroke="#6A462F" stroke-width="1"/>
+            const settings = DIFFICULTY_SETTINGS[difficulty];
 
-                <line x1="20" y1="78" x2="38" y2="78" stroke="#6A462F" stroke-width="1"/>
+            const columns = settings.gridColumns;
 
-                <line x1="23" y1="83" x2="38" y2="83" stroke="#6A462F" stroke-width="1"/>
+            
 
-                
+            const baseSize = 100; 
 
-                
+            const gap = 10; // gapを10に戻す
 
-                <line x1="62" y1="73" x2="77" y2="73" stroke="#6A462F" stroke-width="1"/>
+            const borderPadding = 20;  // border: 8px, padding: 10px の合計
 
-                <line x1="62" y1="78" x2="80" y2="78" stroke="#6A462F" stroke-width="1"/>
 
-                <line x1="62" y1="83" x2="77" y2="83" stroke="#6A462F" stroke-width="1"/>
 
+            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
 
 
-                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
 
-                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+            grid.style.width = `${newSize}px`;
 
-            </svg>
+            grid.style.height = `${newSize}px`;
 
-        `;
 
 
+            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
+            
 
+            grid.classList.add('grid-' + difficulty);
 
-        function setGridClass(difficulty) {
+        }
 
-            grid.className = ''; 
 
-            const settings = DIFFICULTY_SETTINGS[difficulty];
 
-            const columns = settings.gridColumns;
+        function createHoles() {
 
-            
+            grid.innerHTML = '';
 
-            const baseSize = 100; 
+            for (let i = 0; i < currentHoleCount; i++) {
 
-            const gap = 8;
+                const hole = document.createElement('div');
 
-            const borderPadding = 16; 
+                hole.classList.add('hole');
 
+                hole.dataset.id = i;
 
 
-            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
 
+                const mole = document.createElement('div');
 
+                mole.classList.add('mole');
 
-            grid.style.width = `${newSize}px`;
+                
 
-            grid.style.height = `${newSize}px`;
+                mole.innerHTML = MOLE_SVG; 
 
 
 
-            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+                hole.addEventListener('click', whack);
 
-            
 
-            grid.classList.add('grid-' + difficulty);
 
-        }
+                hole.appendChild(mole);
 
+                grid.appendChild(hole);
 
+            }
 
-        function createHoles() {
+        }
 
-            grid.innerHTML = '';
+        
 
-            for (let i = 0; i < currentHoleCount; i++) {
+        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
 
-                const hole = document.createElement('div');
+        function randomHole() {
 
-                hole.classList.add('hole');
+            const holes = document.querySelectorAll('.hole');
 
-                hole.dataset.id = i;
+            const idx = Math.floor(Math.random() * holes.length);
 
+            const hole = holes[idx];
 
 
-                const mole = document.createElement('div');
 
-                mole.classList.add('mole');
+            if (hole === lastHole) { return randomHole(); }
 
-                
+            lastHole = hole;
 
-                mole.innerHTML = MOLE_SVG; 
+            return hole;
 
+        }
 
+        function randomMoleType() {
 
-                hole.addEventListener('click', whack);
+            const r = Math.random();
 
+            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
 
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
 
-                hole.appendChild(mole);
+            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
 
-                grid.appendChild(hole);
+            else { return 'normal'; }
 
-            }
+        }
 
-        }
 
-        
 
-        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        function peep() {
 
-        function randomHole() {
+            if (!isGameRunning) {
 
-            const holes = document.querySelectorAll('.hole');
+                clearTimeout(moleTimerId);
 
-            const idx = Math.floor(Math.random() * holes.length);
+                return;
 
-            const hole = holes[idx];
+            }
 
+            const time = randomTime(); 
 
+            const hole = randomHole();
 
-            if (hole === lastHole) { return randomHole(); }
+            const mole = hole.querySelector('.mole');
 
-            lastHole = hole;
+            const moleType = randomMoleType();
 
-            return hole;
+            
 
-        }
+            mole.classList.remove('gold', 'bomb', 'clock'); 
 
-        function randomMoleType() {
+            let scoreValue;
 
-            const r = Math.random();
+            switch (moleType) {
 
-            if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
+                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
 
-            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE) { return 'bomb'; } 
+                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
 
-            else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
+                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
 
-            else { return 'normal'; }
+                default: scoreValue = NORMAL_MOLE_SCORE; break;
 
-        }
+            }
 
 
 
-        function peep() {
+            mole.dataset.type = moleType; 
 
-            if (!isGameRunning) {
+            mole.dataset.score = scoreValue;
 
-                clearTimeout(moleTimerId);
 
-                return;
 
-            }
+            hole.classList.add('up');
 
-            const time = randomTime(); 
 
-            const hole = randomHole();
 
-            const mole = hole.querySelector('.mole');
+            setTimeout(() => {
 
-            const moleType = randomMoleType();
+                hole.classList.remove('up');
 
-            
+                mole.classList.remove('gold', 'bomb', 'clock'); 
 
-            mole.classList.remove('gold', 'bomb', 'clock'); 
+                delete mole.dataset.type; 
 
-            let scoreValue;
+                delete mole.dataset.score;
 
-            switch (moleType) {
+            }, time);
 
-                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
 
-                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
 
-                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
+            moleTimerId = setTimeout(peep, time);
 
-                default: scoreValue = NORMAL_MOLE_SCORE; break;
+        }
 
-            }
 
 
+        function updateTime() {
 
-            mole.dataset.type = moleType; 
+            if (timeLeft < 0) { timeLeft = 0; }
 
-            mole.dataset.score = scoreValue;
+            timeLeftDisplay.textContent = timeLeft;
 
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
 
+        }
 
-            hole.classList.add('up');
 
 
+        function showScorePop(hole, points) {
 
-            setTimeout(() => {
+            const pop = document.createElement('div');
 
-                hole.classList.remove('up');
+            pop.classList.add('score-pop');
 
-                mole.classList.remove('gold', 'bomb', 'clock'); 
+            let sign = points > 0 ? '+' : '';
 
-                delete mole.dataset.type; 
+            pop.textContent = sign + points;
 
-                delete mole.dataset.score;
+            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
 
-            }, time);
+            hole.appendChild(pop);
 
+            setTimeout(() => { pop.remove(); }, 700); /* アニメーション時間に合わせる */
 
+        }
 
-            moleTimerId = setTimeout(peep, time);
+        
 
-        }
+        function whack(event) {
 
+            if (!isGameRunning) return;
 
+            const hole = event.currentTarget;
 
-        function updateTime() {
+            const mole = hole.querySelector('.mole');
 
-            if (timeLeft < 0) { timeLeft = 0; }
+            
 
-            timeLeftDisplay.textContent = timeLeft;
+            if (hole.classList.contains('up')) {
 
-            if (timeLeft <= 0 && isGameRunning) { endGame(); }
+                const points = parseInt(mole.dataset.score);
 
-        }
+                const type = mole.dataset.type;
 
+                
 
+                showScorePop(hole, points);
 
-        function showScorePop(hole, points) {
+                score += points;
 
-            const pop = document.createElement('div');
+                scoreDisplay.textContent = score;
 
-            pop.classList.add('score-pop');
 
-            let sign = points > 0 ? '+' : '';
 
-            pop.textContent = sign + points;
+                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
 
-            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
+                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
 
-            hole.appendChild(pop);
+                
 
-            setTimeout(() => { pop.remove(); }, 700); /* アニメーション時間に合わせる */
+                updateTime(); 
 
-        }
+                
 
-        
+                hole.classList.remove('up');
 
-        function whack(event) {
+                mole.classList.remove('gold', 'bomb', 'clock'); 
 
-            if (!isGameRunning) return;
+                delete mole.dataset.type; 
 
-            const hole = event.currentTarget;
+                delete mole.dataset.score;
 
-            const mole = hole.querySelector('.mole');
+            }
 
-            
+        }
 
-            if (hole.classList.contains('up')) {
 
-                const points = parseInt(mole.dataset.score);
 
-                const type = mole.dataset.type;
+        function startGameLogic() {
 
-                
+            const difficulty = difficultySelect.value;
 
-                showScorePop(hole, points);
+            const settings = DIFFICULTY_SETTINGS[difficulty];
 
-                score += points;
+            currentMinTime = settings.minTime;
 
-                scoreDisplay.textContent = score;
+            currentMaxTime = settings.maxTime;
 
+            currentHoleCount = settings.holeCount; 
 
+            currentGridColumns = settings.gridColumns; 
 
-                if (type === 'clock') { timeLeft += CLOCK_TIME_BONUS; } 
 
-                else if (type === 'bomb') { timeLeft -= BOMB_TIME_PENALTY; }
 
-                
+            setGridClass(difficulty);
 
-                updateTime(); 
+            createHoles();
 
-                
+            
 
-                hole.classList.remove('up');
+            score = 0;
 
-                mole.classList.remove('gold', 'bomb', 'clock'); 
+            timeLeft = GAME_DURATION; 
 
-                delete mole.dataset.type; 
+            isGameRunning = true; 
 
-                delete mole.dataset.score;
+            scoreDisplay.textContent = score;
 
-            }
+            startButton.disabled = true;
 
-        }
 
 
+            countdownTimerId = setInterval(() => {
 
-        function startGameLogic() {
+                timeLeft--;
 
-            const difficulty = difficultySelect.value;
+                updateTime();
 
-            const settings = DIFFICULTY_SETTINGS[difficulty];
+            }, 1000);
 
-            currentMinTime = settings.minTime;
 
-            currentMaxTime = settings.maxTime;
 
-            currentHoleCount = settings.holeCount; 
+            peep();
 
-            currentGridColumns = settings.gridColumns; 
+        }
 
 
 
-            setGridClass(difficulty);
+        function startGame() {
 
-            createHoles();
+            if (isGameRunning) return;
 
-            
 
-            score = 0;
 
-            timeLeft = GAME_DURATION; 
+            const difficulty = difficultySelect.value;
 
-            isGameRunning = true; 
+            const settings = DIFFICULTY_SETTINGS[difficulty];
 
-            scoreDisplay.textContent = score;
+            currentHoleCount = settings.holeCount;
 
-            startButton.disabled = true;
+            currentGridColumns = settings.gridColumns;
 
+            setGridClass(difficulty);
 
+            createHoles();
 
-            countdownTimerId = setInterval(() => {
 
-                timeLeft--;
 
-                updateTime();
+            startButton.disabled = true;
 
-            }, 1000);
+            countdownOverlay.style.display = 'flex';
 
+            let count = 3;
 
 
-            peep();
 
-        }
+            const countdownInterval = setInterval(() => {
 
+                if (count > 0) {
 
+                    countdownText.textContent = count;
 
-        function startGame() {
+                    count--;
 
-            if (isGameRunning) return;
+                } else if (count === 0) {
 
+                    countdownText.textContent = 'スタート!';
 
+                    count--; 
 
-            const difficulty = difficultySelect.value;
+                } else {
 
-            const settings = DIFFICULTY_SETTINGS[difficulty];
+                    clearInterval(countdownInterval);
 
-            currentHoleCount = settings.holeCount;
+                    countdownOverlay.style.display = 'none';
 
-            currentGridColumns = settings.gridColumns;
+                    startGameLogic(); 
 
-            setGridClass(difficulty);
+                }
 
-            createHoles();
+            }, 1000);
 
+        }
 
 
-            startButton.disabled = true;
 
-            countdownOverlay.style.display = 'flex';
+        function endGame() {
 
-            let count = 3;
+            isGameRunning = false;
 
+            clearInterval(countdownTimerId);
 
+            clearTimeout(moleTimerId); 
 
-            const countdownInterval = setInterval(() => {
 
-                if (count > 0) {
 
-                    countdownText.textContent = count;
+            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
 
-                    count--;
 
-                } else if (count === 0) {
 
-                    countdownText.textContent = 'スタート!';
+            finalScoreDisplay.textContent = score;
 
-                    count--; 
+            gameOverModal.style.display = 'flex'; 
 
-                } else {
+        }
 
-                    clearInterval(countdownInterval);
+        
 
-                    countdownOverlay.style.display = 'none';
+        function closeModal() {
 
-                    startGameLogic(); 
+            gameOverModal.style.display = 'none';
 
-                }
+            startButton.disabled = false;
 
-            }, 1000);
+            
 
-        }
+            score = 0;
 
+            timeLeft = GAME_DURATION;
 
+            scoreDisplay.textContent = score;
 
-        function endGame() {
+            timeLeftDisplay.textContent = timeLeft;
 
-            isGameRunning = false;
+            
 
-            clearInterval(countdownTimerId);
+            initializeGame();
 
-            clearTimeout(moleTimerId); 
+        }
 
 
 
-            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+        function initializeGame() {
 
+            const initialDifficulty = difficultySelect.value;
 
+            const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
 
-            finalScoreDisplay.textContent = score;
+            
 
-            gameOverModal.style.display = 'flex'; 
+            currentMinTime = initialSettings.minTime;
 
-        }
+            currentMaxTime = initialSettings.maxTime;
 
-        
+            currentHoleCount = initialSettings.holeCount;
 
-        function closeModal() {
+            currentGridColumns = initialSettings.gridColumns;
 
-            gameOverModal.style.display = 'none';
+            
 
-            startButton.disabled = false;
+            setGridClass(initialDifficulty);
 
-            
+            createHoles(); 
 
-            score = 0;
+            updateTime(); 
 
-            timeLeft = GAME_DURATION;
+        }
 
-            scoreDisplay.textContent = score;
 
-            timeLeftDisplay.textContent = timeLeft;
 
-            
+        startButton.addEventListener('click', startGame);
 
-            initializeGame();
+        difficultySelect.addEventListener('change', () => {
 
-        }
+            if (!isGameRunning) {
 
+                initializeGame();
 
+            }
 
-        function initializeGame() {
+        }); 
 
-            const initialDifficulty = difficultySelect.value;
-
-            const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
-
-            
-
-            currentMinTime = initialSettings.minTime;
-
-            currentMaxTime = initialSettings.maxTime;
-
-            currentHoleCount = initialSettings.holeCount;
-
-            currentGridColumns = initialSettings.gridColumns;
-
-            
-
-            setGridClass(initialDifficulty);
-
-            createHoles(); 
-
-            updateTime(); 
-
-        }
-
-
-
-        startButton.addEventListener('click', startGame);
-
-        difficultySelect.addEventListener('change', () => {
-
-            if (!isGameRunning) {
-
-                initializeGame();
-
-            }
-
-        }); 
-
-    </script>
+    </script>
 
 </body>
 
