@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (修正済み)</title>
+    <title>モグラたたき - SVGモグラ版 (ひげ・スコアポップ修正済み)</title>
     <style>
         /* CSS (デザイン) */
         body {
@@ -125,8 +125,24 @@
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         
         /* スコアポップアップのCSS */
-        .score-pop { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); pointer-events: none; opacity: 0; transition: none; animation: scorePopUp 0.6s ease-out forwards; z-index: 5; }
-        @keyframes scorePopUp { 0% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -100px); } }
+        .score-pop { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 2.5em; 
+            font-weight: bold; 
+            color: #fff; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+            pointer-events: none; 
+            opacity: 0; /* 初期は透明 */
+            animation: scorePopUp 0.6s ease-out forwards; 
+            z-index: 5; 
+        }
+        @keyframes scorePopUp { 
+            0% { opacity: 1; transform: translate(-50%, 0); } /* 開始時に表示 */
+            100% { opacity: 0; transform: translate(-50%, -100px); } 
+        }
     </style>
 </head>
 <body onload="initializeGame()">
@@ -213,7 +229,7 @@
         const finalScoreDisplay = document.getElementById('final-score');
         const difficultySelect = document.getElementById('difficulty-select');
 
-        // SVGモグラのHTML
+        // SVGモグラのHTML (ひげを修正)
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
                 <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
@@ -225,10 +241,13 @@
                 <circle cx="38" cy="58" r="3.5" fill="black"/>
                 <circle cx="62" cy="58" r="3.5" fill="black"/>
 
-                <line x1="23" y1="75" x2="38" y2="75" stroke="#6A462F" stroke-width="1"/><br>
-                <line x1="23" y1="80" x2="38" y2="80" stroke="#6A462F" stroke-width="1"/><br>
-                <line x1="62" y1="75" x2="77" y2="75" stroke="#6A462F" stroke-width="1"/><br>
-                <line x1="62" y1="80" x2="77" y2="80" stroke="#6A462F" stroke-width="1"/><br>
+                <line x1="23" y1="73" x2="38" y2="73" stroke="#6A462F" stroke-width="1"/>
+                <line x1="20" y1="78" x2="38" y2="78" stroke="#6A462F" stroke-width="1"/>
+                <line x1="23" y1="83" x2="38" y2="83" stroke="#6A462F" stroke-width="1"/>
+                
+                <line x1="62" y1="73" x2="77" y2="73" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="78" x2="80" y2="78" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="83" x2="77" y2="83" stroke="#6A462F" stroke-width="1"/>
 
                 <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
                 <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
@@ -350,6 +369,7 @@
             pop.textContent = sign + points;
             if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
             hole.appendChild(pop);
+            // スコアポップのアニメーション時間に合わせて削除
             setTimeout(() => { pop.remove(); }, 600); 
         }
         
@@ -390,6 +410,12 @@
             const settings = DIFFICULTY_SETTINGS[difficulty];
             currentMinTime = settings.minTime;
             currentMaxTime = settings.maxTime;
+            currentHoleCount = settings.holeCount; // 難易度変更時に穴の数を更新
+            currentGridColumns = settings.gridColumns; // 難易度変更時にグリッド列を更新
+
+            // 盤面を再作成して新しい難易度を適用
+            setGridClass(difficulty);
+            createHoles();
 
             score = 0;
             timeLeft = GAME_DURATION; 
@@ -424,6 +450,14 @@
             gameOverModal.style.display = 'none';
             // ゲーム終了後、スタートボタンを有効にして再開できるようにする
             startButton.disabled = false;
+            // スコアと時間をリセット
+            score = 0;
+            timeLeft = GAME_DURATION;
+            scoreDisplay.textContent = score;
+            timeLeftDisplay.textContent = timeLeft;
+            
+            // 盤面もリセット（難易度設定を反映させるため）
+            initializeGame();
         }
 
         // 初期設定とイベントリスナー
@@ -443,7 +477,7 @@
         }
 
         startButton.addEventListener('click', startGame);
-        // 難易度変更時に盤面を再作成
+        // 難易度変更時に、ゲーム中でなければ盤面を更新
         difficultySelect.addEventListener('change', () => {
             if (!isGameRunning) {
                 initializeGame();
