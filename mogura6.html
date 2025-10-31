@@ -2,12 +2,211 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (手書き風可愛いデザイン)</title>
+    <title>モグラたたき - SVGモグラ版 (難易度別配色)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Hachi+Maru+Pop&family=Potta+One&display=swap" rel="stylesheet">
     <style>
-        /* CSS (デザイン) */
+        /* CSSカスタムプロパティの定義 (デフォルトはNormal) */
+        body.difficulty-normal {
+            /* 全体背景 */
+            --main-bg-start: #ffe0f0; /* 淡いピンク */
+            --main-bg-end: #fefefe; /* クリーム色 */
+            /* タイトル */
+            --title-main-color: #ff69b4; /* ホットピンク */
+            --title-shadow-color-1: rgba(255, 105, 180, 0.3);
+            --title-shadow-color-2: #fff;
+            --title-blob-color: rgba(255, 105, 180, 0.1);
+            /* 情報・コントロールパネル */
+            --panel-bg: rgba(255, 255, 255, 0.7);
+            --panel-border: #f0b0c0; /* 淡い点線ピンク */
+            --panel-text-color: #666;
+            /* スコア・時間表示 */
+            --highlight-color: #ff69b4; /* ホットピンク */
+            --highlight-font: 'Potta One', cursive;
+            /* セレクトボックス */
+            --select-border: #f0b0c0;
+            --select-bg: #fff;
+            --select-text-color: #666;
+            --select-arrow-color: #f0b0c0;
+            --select-focus-shadow: #f5d3db;
+            /* ボタン */
+            --button-bg-start: #ff99cc; /* 可愛いピンク */
+            --button-bg-end: #ff6699;
+            --button-text-color: white;
+            --button-shadow-color: #e05c8c;
+            --button-hover-bg-start: #ffadc2;
+            --button-hover-bg-end: #ff7ba0;
+            --button-active-shadow: #e05c8c;
+            --button-disabled-bg-start: #ccc;
+            --button-disabled-bg-end: #bbb;
+            --button-disabled-shadow: #aaa;
+            /* ゲーム盤面 */
+            --grid-bg: rgba(255, 255, 255, 0.8);
+            --grid-border: #f0b0c0;
+            /* 穴 */
+            --hole-bg: #d2b48c; /* 淡い茶色 */
+            --hole-border: #b39b7a;
+            --hole-inner-border: rgba(179, 155, 122, 0.3);
+            /* モグラ */
+            --mole-body-fill: #f0a0a0; /* 淡いピンク */
+            --mole-body-stroke: #d08080;
+            --mole-face-fill: #ffebee; /* クリーム色 */
+            --mole-face-stroke: #d08080;
+            --mole-eyes-nose: #888;
+            /* 特殊モグラ */
+            --mole-gold-fill: #ffdf00;
+            --mole-gold-stroke: #e0b000;
+            --mole-gold-face-hand: #fff3a0;
+            --mole-bomb-fill: #a0a0a0;
+            --mole-bomb-stroke: #808080;
+            --mole-bomb-hand: #808080;
+            --mole-clock-fill: #87ceeb;
+            --mole-clock-stroke: #6aabcb;
+            /* モーダル */
+            --modal-bg-start: #fefefe;
+            --modal-bg-end: #fcfcfc;
+            --modal-border: #ff99cc;
+            --modal-h2-color: #ff69b4;
+            --modal-final-score-bg: #fff0f5;
+            --modal-final-score-border: #ff99cc;
+            --modal-button-bg-start: #99ccff; /* 可愛い水色 */
+            --modal-button-bg-end: #6699ff;
+            --modal-button-shadow: #5c8ae0;
+            /* ポップアップ */
+            --score-pop-color: #ff69b4;
+            --score-pop-shadow: rgba(0,0,0,0.2);
+            /* カウントダウン */
+            --countdown-overlay-bg: rgba(255, 240, 245, 0.7);
+            --countdown-text-color: #ff69b4;
+            --countdown-text-shadow: rgba(0,0,0,0.2);
+        }
+
+        /* 難易度：かんたん (Easy) */
+        body.difficulty-easy {
+            --main-bg-start: #e0f2f7; /* 淡い水色 */
+            --main-bg-end: #f0fdfc; /* ミントクリーム */
+            --title-main-color: #4fc3f7; /* 明るい水色 */
+            --title-shadow-color-1: rgba(79, 195, 247, 0.3);
+            --title-shadow-color-2: #fff;
+            --title-blob-color: rgba(79, 195, 247, 0.1);
+            --panel-bg: rgba(255, 255, 255, 0.8);
+            --panel-border: #a7d9f7; /* 淡い水色 */
+            --panel-text-color: #555;
+            --highlight-color: #4fc3f7; /* 明るい水色 */
+            --highlight-font: 'Potta One', cursive;
+            --select-border: #a7d9f7;
+            --select-bg: #fff;
+            --select-text-color: #555;
+            --select-arrow-color: #a7d9f7;
+            --select-focus-shadow: #b3e5fc;
+            --button-bg-start: #81d4fa; /* ライトブルー */
+            --button-bg-end: #4fc3f7;
+            --button-text-color: white;
+            --button-shadow-color: #389cd1;
+            --button-hover-bg-start: #9be0ff;
+            --button-hover-bg-end: #6ecdfd;
+            --button-active-shadow: #389cd1;
+            --button-disabled-bg-start: #ccc;
+            --button-disabled-bg-end: #bbb;
+            --button-disabled-shadow: #aaa;
+            --grid-bg: rgba(255, 255, 255, 0.9);
+            --grid-border: #a7d9f7;
+            --hole-bg: #b2dfdb; /* 淡いミントグリーン */
+            --hole-border: #80cbc4;
+            --hole-inner-border: rgba(128, 203, 196, 0.3);
+            --mole-body-fill: #a7d9f7; /* ライトブルー */
+            --mole-body-stroke: #79bccd;
+            --mole-face-fill: #e8f5e9; /* 淡い緑 */
+            --mole-face-stroke: #79bccd;
+            --mole-eyes-nose: #777;
+            --mole-gold-fill: #ffeb3b;
+            --mole-gold-stroke: #fbc02d;
+            --mole-gold-face-hand: #fff9c4;
+            --mole-bomb-fill: #ef9a9a;
+            --mole-bomb-stroke: #e57373;
+            --mole-bomb-hand: #e57373;
+            --mole-clock-fill: #a5d6a7;
+            --mole-clock-stroke: #81c784;
+            --modal-bg-start: #fefefe;
+            --modal-bg-end: #fcfcfc;
+            --modal-border: #a7d9f7;
+            --modal-h2-color: #4fc3f7;
+            --modal-final-score-bg: #e1f5fe;
+            --modal-final-score-border: #a7d9f7;
+            --modal-button-bg-start: #ffb74d; /* オレンジ */
+            --modal-button-bg-end: #ff9800;
+            --modal-button-shadow: #e68900;
+            --score-pop-color: #4fc3f7;
+            --score-pop-shadow: rgba(0,0,0,0.1);
+            --countdown-overlay-bg: rgba(224, 247, 250, 0.7);
+            --countdown-text-color: #4fc3f7;
+            --countdown-text-shadow: rgba(0,0,0,0.1);
+        }
+
+        /* 難易度：むずかしい (Hard) */
+        body.difficulty-hard {
+            --main-bg-start: #212121; /* ダークグレー */
+            --main-bg-end: #424242; /* 少し明るいグレー */
+            --title-main-color: #00e676; /* エメラルドグリーン */
+            --title-shadow-color-1: rgba(0, 230, 118, 0.3);
+            --title-shadow-color-2: #fff;
+            --title-blob-color: rgba(0, 230, 118, 0.1);
+            --panel-bg: rgba(0, 0, 0, 0.7);
+            --panel-border: #6200ea; /* 深い紫 */
+            --panel-text-color: #eee;
+            --highlight-color: #00e676; /* エメラルドグリーン */
+            --highlight-font: 'Potta One', cursive;
+            --select-border: #6200ea;
+            --select-bg: #000;
+            --select-text-color: #00e676;
+            --select-arrow-color: #00e676;
+            --select-focus-shadow: #7c4dff;
+            --button-bg-start: #6200ea; /* 深い紫 */
+            --button-bg-end: #3f0097;
+            --button-text-color: white;
+            --button-shadow-color: #4a00af;
+            --button-hover-bg-start: #7c4dff;
+            --button-hover-bg-end: #5100c8;
+            --button-active-shadow: #4a00af;
+            --button-disabled-bg-start: #555;
+            --button-disabled-bg-end: #444;
+            --button-disabled-shadow: #333;
+            --grid-bg: rgba(0, 0, 0, 0.8);
+            --grid-border: #00e676;
+            --hole-bg: #424242; /* 暗いグレー */
+            --hole-border: #212121;
+            --hole-inner-border: rgba(33, 33, 33, 0.3);
+            --mole-body-fill: #ff6e40; /* 鮮やかなオレンジ */
+            --mole-body-stroke: #e64a19;
+            --mole-face-fill: #ffccbc; /* 淡いオレンジ */
+            --mole-face-stroke: #e64a19;
+            --mole-eyes-nose: #fff; /* 白い目 */
+            --mole-gold-fill: #ffd700;
+            --mole-gold-stroke: #b8860b;
+            --mole-gold-face-hand: #ffe082;
+            --mole-bomb-fill: #e53935;
+            --mole-bomb-stroke: #c62828;
+            --mole-bomb-hand: #c62828;
+            --mole-clock-fill: #29b6f6;
+            --mole-clock-stroke: #0288d1;
+            --modal-bg-start: #333;
+            --modal-bg-end: #111;
+            --modal-border: #00e676;
+            --modal-h2-color: #00e676;
+            --modal-final-score-bg: #000;
+            --modal-final-score-border: #00e676;
+            --modal-button-bg-start: #ffeb3b; /* 鮮やかな黄色 */
+            --modal-button-bg-end: #fdd835;
+            --modal-button-shadow: #fbc02d;
+            --score-pop-color: #00e676;
+            --score-pop-shadow: rgba(255,255,255,0.2);
+            --countdown-overlay-bg: rgba(0, 0, 0, 0.8);
+            --countdown-text-color: #00e676;
+            --countdown-text-shadow: rgba(255,255,255,0.2);
+        }
+
+        /* 全体共通スタイル (カスタムプロパティを使用) */
         body {
-            font-family: 'Hachi Maru Pop', cursive; /* 手書き風のフォント */
+            font-family: 'Hachi Maru Pop', cursive;
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -16,153 +215,160 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background: linear-gradient(135deg, #ffe0f0 0%, #fefefe 50%, #ffe0f0 100%); /* 淡いピンクのグラデーション */
-            background-attachment: fixed; /* 背景を固定 */
-            color: #555;
+            background: linear-gradient(135deg, var(--main-bg-start) 0%, var(--main-bg-end) 50%, var(--main-bg-start) 100%);
+            background-attachment: fixed;
+            color: var(--panel-text-color);
+            transition: background 0.5s ease-in-out; /* 背景色の切り替えアニメーション */
         }
 
         h1 { 
-            /* 手書き風タイトル */
-            font-family: 'Potta One', cursive; /* より太く丸みのある手書きフォント */
+            font-family: 'Potta One', cursive;
             font-size: 4.5em; 
-            color: #ff69b4; /* ホットピンク */
+            color: var(--title-main-color);
             text-shadow: 
-                3px 3px 0px rgba(255, 105, 180, 0.3), /* 滲んだような影 */
-                -2px -2px 0px #fff; /* 白いハイライト */
+                3px 3px 0px var(--title-shadow-color-1),
+                -2px -2px 0px var(--title-shadow-color-2);
             margin-bottom: 30px;
             letter-spacing: 2px;
             line-height: 1.2;
             padding: 10px 25px;
             position: relative;
-            display: inline-block; /* 影がはみ出るように */
+            display: inline-block;
             z-index: 10;
+            transition: color 0.3s ease;
         }
-        h1::after { /* インクの滲みのような効果 */
+        h1::after {
             content: '';
             position: absolute;
             top: 5px; left: 5px;
             right: -5px; bottom: -5px;
-            background-color: rgba(255, 105, 180, 0.1); /* 薄いピンク */
-            border-radius: 50% 30% 40% 60% / 60% 40% 50% 30%; /* 不規則な丸み */
+            background-color: var(--title-blob-color);
+            border-radius: 50% 30% 40% 60% / 60% 40% 50% 30%;
             filter: blur(8px);
             z-index: -1;
+            transition: background-color 0.3s ease;
         }
         
         #controls, #game-info { 
-            background: rgba(255, 255, 255, 0.7); /* 半透明の白い背景 */
+            background: var(--panel-bg);
             padding: 15px 30px;
-            border-radius: 30px; /* 非常に丸く */
+            border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
             margin-bottom: 25px; 
             display: flex;
             gap: 25px; 
             align-items: center;
-            border: 2px dashed #f0b0c0; /* 淡い点線ボーダー */
-            color: #666;
+            border: 2px dashed var(--panel-border);
+            color: var(--panel-text-color);
             font-family: 'Hachi Maru Pop', cursive;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         #game-info p { 
             margin: 0; 
-            color: #555; 
+            color: var(--panel-text-color); 
             font-size: 1.4em; 
         }
         #score, #time-left { 
             font-weight: bold; 
-            color: #ff69b4; /* ホットピンク */
-            font-family: 'Potta One', cursive; 
+            color: var(--highlight-color);
+            font-family: var(--highlight-font); 
             font-size: 1.8em; 
             text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+            transition: color 0.3s ease;
         }
 
         #difficulty-select {
             padding: 10px 18px;
             font-size: 1.1em;
-            border-radius: 20px; /* 丸み */
-            border: 2px solid #f0b0c0; 
-            background-color: #fff; 
-            color: #666;
+            border-radius: 20px;
+            border: 2px solid var(--select-border); 
+            background-color: var(--select-bg); 
+            color: var(--select-text-color);
             font-family: 'Hachi Maru Pop', cursive;
             appearance: none; 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* カスタム矢印も淡いピンク */
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 20px;
             cursor: pointer;
             box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
+        #difficulty-select.select-arrow-easy { background-image: url('data:image/svg+xml;utf8,<svg fill="#a7d9f7" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
+        #difficulty-select.select-arrow-normal { background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
+        #difficulty-select.select-arrow-hard { background-image: url('data:image/svg+xml;utf8,<svg fill="#00e676" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); }
         #difficulty-select:focus {
             outline: none;
-            box-shadow: 0 0 0 3px #f5d3db;
+            box-shadow: 0 0 0 3px var(--select-focus-shadow);
         }
 
         #start-button {
             padding: 12px 30px;
             font-size: 1.6em; 
-            background: linear-gradient(180deg, #ff99cc, #ff6699); /* 可愛いピンクのグラデーション */
-            color: white;
+            background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
+            color: var(--button-text-color);
             border: none;
-            border-radius: 25px; /* 丸みのあるボタン */
+            border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 3px 0 #e05c8c, 0 5px 10px rgba(0,0,0,0.15); /* 控えめな影 */
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 3px 0 var(--button-shadow-color), 0 5px 10px rgba(0,0,0,0.15);
             font-family: 'Potta One', cursive;
             letter-spacing: 1px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         #start-button:hover { 
-            background: linear-gradient(180deg, #ffadc2, #ff7ba0); 
+            background: linear-gradient(180deg, var(--button-hover-bg-start), var(--button-hover-bg-end)); 
             transform: translateY(-2px); 
-            box-shadow: 0 5px 0 #e05c8c, 0 7px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 0 var(--button-shadow-color), 0 7px 12px rgba(0,0,0,0.2);
         }
         #start-button:active { 
             transform: translateY(2px); 
-            box-shadow: 0 1px 0 #e05c8c, 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 0 var(--button-active-shadow), 0 2px 5px rgba(0,0,0,0.1);
         }
         #start-button:disabled { 
-            background: linear-gradient(180deg, #ccc, #bbb); 
+            background: linear-gradient(180deg, var(--button-disabled-bg-start), var(--button-disabled-bg-end)); 
             cursor: not-allowed; 
             transform: translateY(0); 
-            box-shadow: 0 3px 0 #aaa, 0 5px 10px rgba(0,0,0,0.15); 
+            box-shadow: 0 3px 0 var(--button-disabled-shadow), 0 5px 10px rgba(0,0,0,0.15); 
         }
 
-        /* ゲーム盤面 (手書き風) */
         #grid {
             display: grid;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.8); /* 半透明の白い背景 */
-            border: 4px dashed #f0b0c0; /* 手書き風の点線ボーダー */
-            border-radius: 20px; /* 丸み */
+            background: var(--grid-bg);
+            border: 4px dashed var(--grid-border);
+            border-radius: 20px;
             padding: 10px;
             gap: 10px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
-        /* 穴 (手書き風の丸) */
         .hole {
-            background-color: #d2b48c; /* 淡い茶色 */
-            border-radius: 50%; /* 基本は丸 */
+            background-color: var(--hole-bg);
+            border-radius: 50%;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 3px solid #b39b7a; /* 濃いめの茶色のボーダー */
+            border: 3px solid var(--hole-border);
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        .hole::before { /* 不規則な円形を強調 */
+        .hole::before {
             content: '';
             position: absolute;
             top: -5%; left: -5%;
             width: 110%; height: 110%;
-            border: 2px solid rgba(179, 155, 122, 0.3); /* 薄い茶色の不規則な線 */
-            border-radius: 40% 60% 50% 50% / 50% 50% 40% 60%; /* 不規則な丸み */
+            border: 2px solid var(--hole-inner-border);
+            border-radius: 40% 60% 50% 50% / 50% 50% 40% 60%;
             pointer-events: none;
             z-index: 1;
+            transition: border-color 0.3s ease;
         }
 
-        /* モグラ本体 (SVGコンテナ) - 可愛らしい色合いに */
         .mole {
             width: 100%; 
             height: 100%; 
@@ -177,27 +383,23 @@
         }
         .hole.up .mole { bottom: 0; pointer-events: auto; }
 
-        /* SVG共通スタイル */
         .mole svg {
             width: 100%;
             height: 100%;
             transform: translateY(10%); 
         }
-        /* モグラの色を可愛らしい色に調整 */
-        .mole-body { fill: #f0a0a0; stroke: #d08080; stroke-width: 2; } /* 淡いピンク */
-        .mole-face { fill: #ffebee; stroke: #d08080; stroke-width: 1.5; } /* クリーム色 */
-        .mole circle, .mole line { fill: #888; stroke: #888; } /* 目や鼻はグレー */
-        .mole-hand { fill: #f0a0a0; stroke: #d08080; stroke-width: 2; }
+        .mole-body { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
+        .mole-face { fill: var(--mole-face-fill); stroke: var(--mole-face-stroke); stroke-width: 1.5; transition: fill 0.3s ease, stroke 0.3s ease; }
+        .mole circle, .mole line { fill: var(--mole-eyes-nose); stroke: var(--mole-eyes-nose); transition: fill 0.3s ease, stroke 0.3s ease; }
+        .mole-hand { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
 
 
-        /* 特殊モグラの色変更 (可愛らしい色) */
-        .mole.gold .mole-body { fill: #ffdf00; stroke: #e0b000; } /* 優しい金色 */
-        .mole.bomb .mole-body { fill: #a0a0a0; stroke: #808080; } /* 控えめなグレー */
-        .mole.clock .mole-body { fill: #87ceeb; stroke: #6aabcb; } /* スカイブルー */
-        .mole.gold .mole-face, .mole.gold .mole-hand { fill: #fff3a0; }
-        .mole.bomb .mole-hand { fill: #808080; }
+        .mole.gold .mole-body { fill: var(--mole-gold-fill); stroke: var(--mole-gold-stroke); }
+        .mole.bomb .mole-body { fill: var(--mole-bomb-fill); stroke: var(--mole-bomb-stroke); }
+        .mole.clock .mole-body { fill: var(--mole-clock-fill); stroke: var(--mole-clock-stroke); }
+        .mole.gold .mole-face, .mole.gold .mole-hand { fill: var(--mole-gold-face-hand); }
+        .mole.bomb .mole-hand { fill: var(--mole-bomb-hand); }
 
-        /* ゲームオーバーモーダルのCSS */
         #game-over-modal { 
             display: none; 
             position: fixed; 
@@ -211,61 +413,63 @@
             backdrop-filter: blur(5px); 
         }
         .modal-content { 
-            background: linear-gradient(180deg, #fefefe, #fcfcfc); 
+            background: linear-gradient(180deg, var(--modal-bg-start), var(--modal-bg-end)); 
             margin: 10% auto; 
             padding: 30px;
-            border: 3px solid #ff99cc; /* 可愛いピンクのボーダー */
+            border: 3px solid var(--modal-border);
             width: 85%; max-width: 450px; 
             border-radius: 25px; 
             text-align: center; 
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
             animation: fadeIn 0.5s; 
             font-family: 'Hachi Maru Pop', cursive;
-            color: #555;
+            color: var(--panel-text-color);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .modal-content h2 { 
-            color: #ff69b4; /* ホットピンク */
+            color: var(--modal-h2-color);
             font-size: 3em; 
             margin-bottom: 15px; 
             text-shadow: 1px 1px 0 #fff; 
             font-family: 'Potta One', cursive;
+            transition: color 0.3s ease;
         }
         .final-score { 
             font-size: 4em; 
-            color: #ff69b4; /* ホットピンク */
+            color: var(--modal-h2-color);
             font-weight: bold; 
             display: block; 
             margin: 20px 0; 
             padding: 15px; 
-            background-color: #fff0f5; 
+            background-color: var(--modal-final-score-bg); 
             border-radius: 15px; 
-            border: 2px dashed #ff99cc;
+            border: 2px dashed var(--modal-final-score-border);
             font-family: 'Potta One', cursive; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .modal-content button { 
-            background: linear-gradient(180deg, #99ccff, #6699ff); /* 可愛い水色のグラデーション */
+            background: linear-gradient(180deg, var(--modal-button-bg-start), var(--modal-button-bg-end));
             color: white; 
             border: none; 
             padding: 12px 25px; 
             font-size: 1.3em; 
             border-radius: 20px; 
             cursor: pointer; 
-            transition: background-color 0.2s, transform 0.1s; 
+            transition: background 0.2s, transform 0.1s; 
             font-family: 'Hachi Maru Pop', cursive;
-            box-shadow: 0 3px 0 #5c8ae0; 
+            box-shadow: 0 3px 0 var(--modal-button-shadow); 
         }
         .modal-content button:hover { 
-            background: linear-gradient(180deg, #aaddff, #7bbaff); 
+            background: linear-gradient(180deg, var(--modal-button-hover-bg-start, #aaddff), var(--modal-button-hover-bg-end, #7bbaff)); 
             transform: translateY(-2px); 
-            box-shadow: 0 5px 0 #5c8ae0;
+            box-shadow: 0 5px 0 var(--modal-button-shadow);
         }
         .modal-content button:active {
             transform: translateY(2px);
-            box-shadow: 0 1px 0 #5c8ae0;
+            box-shadow: 0 1px 0 var(--modal-button-shadow);
         }
 
-        /* スコアポップアップのCSS */
         .score-pop { 
             position: absolute; 
             top: 50%; 
@@ -273,18 +477,19 @@
             transform: translate(-50%, -50%); 
             font-size: 3em; 
             font-weight: bold; 
-            color: #ff69b4; /* ホットピンク */
+            color: var(--score-pop-color);
             text-shadow: 
                 -1px -1px 0 #fff, 
                 1px -1px 0 #fff,
                 -1px 1px 0 #fff,
                 1px 1px 0 #fff,
-                2px 2px 0 rgba(0,0,0,0.2); 
+                2px 2px 0 var(--score-pop-shadow); 
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.9s ease-out forwards; 
             z-index: 5; 
             font-family: 'Potta One', cursive; 
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
         @keyframes scorePopUp { 
             0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
@@ -292,7 +497,6 @@
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
-        /* カウントダウンオーバーレイのCSS */
         #countdown-overlay {
             display: none; 
             position: fixed;
@@ -300,25 +504,27 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 240, 245, 0.7); /* 淡いピンクの半透明 */
+            background-color: var(--countdown-overlay-bg); 
             z-index: 90;
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(3px); 
+            transition: background-color 0.3s ease;
         }
 
         #countdown-text {
             font-family: 'Potta One', cursive; 
             font-size: 7.5em; 
-            color: #ff69b4; /* ホットピンク */
+            color: var(--countdown-text-color);
             font-weight: bold;
             text-shadow: 
                 -3px -3px 0 #fff, 
                 3px -3px 0 #fff,
                 -3px 3px 0 #fff,
                 3px 3px 0 #fff,
-                5px 5px 0 rgba(0,0,0,0.2); 
+                5px 5px 0 var(--countdown-text-shadow); 
             animation: pulse 0.9s ease-in-out infinite alternate; 
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         @keyframes pulse {
@@ -327,7 +533,7 @@
         }
     </style>
 </head>
-<body onload="initializeGame()">
+<body class="difficulty-normal" onload="initializeGame()">
     <h1>もぐらdeポン！ </h1>
 
     <div id="game-info">
@@ -420,27 +626,27 @@
         // SVGモグラのHTML 
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
-                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" />
                 
-                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/>
+                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" />
 
-                <circle cx="50" cy="70" r="3" fill="#333"/>
+                <circle cx="50" cy="70" r="3" />
                 
-                <circle cx="38" cy="58" r="3.5" fill="black"/>
-                <circle cx="62" cy="58" r="3.5" fill="black"/>
+                <circle cx="38" cy="58" r="3.5" />
+                <circle cx="62" cy="58" r="3.5" />
 
                 
-                <line x1="23" y1="73" x2="38" y2="73" stroke="#6A462F" stroke-width="1"/>
-                <line x1="20" y1="78" x2="38" y2="78" stroke="#6A462F" stroke-width="1"/>
-                <line x1="23" y1="83" x2="38" y2="83" stroke="#6A462F" stroke-width="1"/>
+                <line x1="23" y1="73" x2="38" y2="73" />
+                <line x1="20" y1="78" x2="38" y2="78" />
+                <line x1="23" y1="83" x2="38" y2="83" />
                 
                 
-                <line x1="62" y1="73" x2="77" y2="73" stroke="#6A462F" stroke-width="1"/>
-                <line x1="62" y1="78" x2="80" y2="78" stroke="#6A462F" stroke-width="1"/>
-                <line x1="62" y1="83" x2="77" y2="83" stroke="#6A462F" stroke-width="1"/>
+                <line x1="62" y1="73" x2="77" y2="73" />
+                <line x1="62" y1="78" x2="80" y2="78" />
+                <line x1="62" y1="83" x2="77" y2="83" />
 
-                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" />
+                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" />
             </svg>
         `;
 
@@ -509,15 +715,68 @@
             const time = randomTime(); 
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
+            
+            // モグラのクラスをリセットして、現在の難易度に応じた色を適用
+            mole.classList.remove('gold', 'bomb', 'clock'); 
+            mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
+            mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
+            mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-face-fill');
+            mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-face-stroke');
+            mole.querySelectorAll('circle, line').forEach(el => {
+                if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
+                     el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-eyes-nose');
+                     el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-eyes-nose');
+                }
+            });
+            mole.querySelectorAll('.mole-hand').forEach(el => {
+                el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
+                el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
+            });
+
+
             const moleType = randomMoleType();
             
-            mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
             switch (moleType) {
-                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
-                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
-                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
-                default: scoreValue = NORMAL_MOLE_SCORE; break;
+                case 'gold': 
+                    mole.classList.add('gold'); 
+                    scoreValue = GOLD_MOLE_SCORE; 
+                    mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-fill');
+                    mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
+                    mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
+                    mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
+                    mole.querySelectorAll('.mole-hand').forEach(el => {
+                        el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
+                        el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
+                    });
+                    break;
+                case 'bomb': 
+                    mole.classList.add('bomb'); 
+                    scoreValue = BOMB_MOLE_SCORE; 
+                    mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-fill');
+                    mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
+                    mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-face-fill'); /* 顔はノーマルと同じ */
+                    mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
+                     mole.querySelectorAll('.mole-hand').forEach(el => {
+                        el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-hand');
+                        el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
+                    });
+                    break;
+                case 'clock': 
+                    mole.classList.add('clock'); 
+                    scoreValue = CLOCK_MOLE_SCORE; 
+                    mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
+                    mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
+                    mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-face-fill'); /* 顔はノーマルと同じ */
+                    mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
+                     mole.querySelectorAll('.mole-hand').forEach(el => {
+                        el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
+                        el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
+                    });
+                    break;
+                default: 
+                    scoreValue = NORMAL_MOLE_SCORE; 
+                    break;
             }
 
             mole.dataset.type = moleType; 
@@ -528,6 +787,23 @@
             setTimeout(() => {
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
+                
+                // モグラを隠すときに色をリセット
+                mole.querySelector('.mole-body').style.fill = '';
+                mole.querySelector('.mole-body').style.stroke = '';
+                mole.querySelector('.mole-face').style.fill = '';
+                mole.querySelector('.mole-face').style.stroke = '';
+                mole.querySelectorAll('circle, line').forEach(el => {
+                    if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
+                         el.style.fill = '';
+                         el.style.stroke = '';
+                    }
+                });
+                mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = '';
+                    el.style.stroke = '';
+                });
+
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
             }, time);
@@ -546,7 +822,11 @@
             pop.classList.add('score-pop');
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
-            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffeb3b' : '#fff'; } else { pop.style.color = '#ff1493'; } /* スコアポップアップの色もジョジョ風に */
+            
+            // ポップアップの色も動的に設定
+            pop.style.color = getComputedStyle(document.body).getPropertyValue('--score-pop-color');
+            pop.style.textShadow = getComputedStyle(document.body).getPropertyValue('--score-pop-shadow');
+
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 900); 
         }
@@ -571,6 +851,23 @@
                 
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
+                
+                // モグラが叩かれた時に色をリセット
+                mole.querySelector('.mole-body').style.fill = '';
+                mole.querySelector('.mole-body').style.stroke = '';
+                mole.querySelector('.mole-face').style.fill = '';
+                mole.querySelector('.mole-face').style.stroke = '';
+                 mole.querySelectorAll('circle, line').forEach(el => {
+                    if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
+                         el.style.fill = '';
+                         el.style.stroke = '';
+                    }
+                });
+                mole.querySelectorAll('.mole-hand').forEach(el => {
+                    el.style.fill = '';
+                    el.style.stroke = '';
+                });
+
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
             }
@@ -662,6 +959,13 @@
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
             
+            // bodyのクラスを更新して配色を適用
+            document.body.className = `difficulty-${initialDifficulty}`;
+            
+            // select要素の矢印SVGも難易度に合わせて更新
+            difficultySelect.classList.remove('select-arrow-easy', 'select-arrow-normal', 'select-arrow-hard');
+            difficultySelect.classList.add(`select-arrow-${initialDifficulty}`);
+
             setGridClass(initialDifficulty);
             createHoles(); 
             updateTime(); 
