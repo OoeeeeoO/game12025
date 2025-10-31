@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (ディズニー風デザイン・テキストタイマー)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Potta+One&display=swap" rel="stylesheet">
+    <title>モグラたたき - SVGモグラ版 (ディズニー風デザイン・読みやすいフォント・テキストタイマー)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
     <style>
         /* ======================================================= */
-        /* ✨ ディズニー風デザイン ✨ */
+        /* ✨ ディズニー風デザイン (フォント変更済) ✨ */
         /* ======================================================= */
 
         body {
@@ -36,39 +36,40 @@
             --grid-border: #ffccbc; /* 淡いオレンジ */
             --hole-bg: #ffe0b2; /* 薄いオレンジ */
             --hole-border: #ffab91; /* コーラルオレンジ */
-            --mole-body-fill: #90a4ae; /* 青みがかったグレー */
+            --mole-body-fill: #90a4ae; 
             --mole-body-stroke: #546e7a;
-            --mole-face-fill: #eceff1; /* 薄いグレー */
+            --mole-face-fill: #eceff1; 
             --mole-face-stroke: #546e7a;
             --mole-eyes-nose: #333;
-            --mole-gold-fill: #ffeb3b; /* 黄色 */
-            --mole-gold-stroke: #fbc02d; /* 濃い黄 */
-            --mole-gold-face-hand: #fff9c4; /* 薄い黄 */
-            --mole-bomb-fill: #ef9a9a; /* 赤みがかったピンク */
+            --mole-gold-fill: #ffeb3b; 
+            --mole-gold-stroke: #fbc02d; 
+            --mole-gold-face-hand: #fff9c4; 
+            --mole-bomb-fill: #ef9a9a; 
             --mole-bomb-stroke: #e57373;
-            --mole-bomb-hand: #ffcdd2; /* 超薄いピンク */
-            --mole-clock-fill: #81c784; /* 明るい緑 */
+            --mole-bomb-hand: #ffcdd2; 
+            --mole-clock-fill: #81c784; 
             --mole-clock-stroke: #4caf50;
             --modal-bg-start: #fff;
             --modal-bg-end: #fefefe;
-            --modal-border: #d81b60; /* 濃いピンク */
+            --modal-border: #d81b60; 
             --modal-h2-color: #d81b60;
-            --modal-final-score-bg: #f8bbd0; /* 薄いピンク */
+            --modal-final-score-bg: #f8bbd0; 
             --modal-final-score-border: #f06292;
-            --modal-button-bg-start: #ffb74d; /* オレンジ */
-            --modal-button-bg-end: #ff8a65; /* コーラルオレンジ */
+            --modal-button-bg-start: #ffb74d; 
+            --modal-button-bg-end: #ff8a65; 
             --modal-button-shadow: #e65100;
-            --score-pop-color: #ff4081; /* 強めのピンク */
+            --score-pop-color: #ff4081; 
             --score-pop-shadow: rgba(0,0,0,0.1);
-            --time-pop-plus-color: #4CAF50; /* 緑 */
-            --time-pop-minus-color: #F44336; /* 赤 */
+            --time-pop-plus-color: #4CAF50; 
+            --time-pop-minus-color: #F44336; 
             --countdown-overlay-bg: rgba(255, 255, 255, 0.8);
-            --countdown-text-color: #d81b60; /* 濃いピンク */
-            --countdown-text-shadow: rgba(255, 255, 255, 0.8); /* 白っぽい影 */
-            --timer-alert-color: #ef5350; /* 赤系の警告色 */
+            --countdown-text-color: #d81b60; 
+            --countdown-text-shadow: rgba(255, 255, 255, 0.8); 
+            --timer-alert-color: #ef5350; 
 
 
-            font-family: 'Kiwi Maru', sans-serif; /* ディズニー風フォント */
+            /* 🔥 フォント変更: Noto Sans JP (読みやすいゴシック体) 🔥 */
+            font-family: 'Noto Sans JP', sans-serif; 
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -81,17 +82,18 @@
             background-attachment: fixed;
             color: var(--panel-text-color);
             transition: background 0.5s ease-in-out; 
-            overflow-x: hidden; /* 横スクロールバーを非表示 */
+            overflow-x: hidden;
         }
 
         h1 { 
-            font-family: 'Potta One', cursive; /* ポップなタイトルフォント */
+            /* 🔥 フォント変更: Montserrat (ポップだが読みやすい英数字フォント) 🔥 */
+            font-family: 'Montserrat', sans-serif; 
             font-size: 3.8em; 
             color: var(--title-main-color);
             text-shadow: 
                 -2px -2px 0 var(--title-shadow-color-1),
                 2px 2px 0 var(--title-shadow-color-2),
-                4px 4px 0px rgba(0,0,0,0.1); /* 柔らかい多層影 */
+                4px 4px 0px rgba(0,0,0,0.1); 
             margin-bottom: 30px;
             letter-spacing: 2px;
             line-height: 1.2;
@@ -101,11 +103,12 @@
             z-index: 10;
             transition: color 0.3s ease;
             animation: bounceIn 0.8s ease-out;
+            font-weight: 800; /* 太字 */
         }
 
         /* ✨ タイトルにキラキラを追加 ✨ */
         h1::before, h1::after {
-            content: '⭐'; /* キラキラの星 */
+            content: '⭐'; 
             position: absolute;
             font-size: 0.5em;
             opacity: 0.7;
@@ -128,27 +131,26 @@
         #controls, #game-info { 
             background: var(--panel-bg);
             padding: 18px 35px;
-            border-radius: 15px; /* 丸みを強調 */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15), 0 0 0 5px var(--panel-border); /* 柔らかな影とボーダー */
+            border-radius: 15px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15), 0 0 0 5px var(--panel-border); 
             margin-bottom: 28px; 
             display: flex;
             gap: 25px; 
             align-items: center;
-            /* border: 1px solid var(--panel-border); */ /* 影でボーダーを表現 */
             color: var(--panel-text-color);
             transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
             position: relative; 
             font-size: 1.2em;
             max-width: 90%;
-            flex-wrap: wrap; /* 小さい画面で折り返す */
+            flex-wrap: wrap; 
             justify-content: center;
         }
         
         #score { 
-            font-weight: bold; 
+            font-weight: 700; /* Noto Sans JPの太字 */
             color: var(--highlight-color);
             font-size: 1.6em; 
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); /* 明るい影 */
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); 
             transition: color 0.3s ease;
         }
 
@@ -161,10 +163,10 @@
         }
 
         #time-left {
-            font-weight: bold;
+            font-weight: 700;
             color: var(--highlight-color); 
-            font-size: 1.6em; /* 大きく */
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); /* 明るい影 */
+            font-size: 1.6em; 
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); 
             transition: color 0.3s ease, font-size 0.2s ease, transform 0.2s ease;
         }
         
@@ -172,7 +174,7 @@
         #difficulty-select {
             padding: 10px 20px;
             font-size: 1.1em;
-            border-radius: 8px; /* 角丸 */
+            border-radius: 8px; 
             border: 2px solid var(--select-border); 
             background-color: var(--select-bg); 
             color: var(--select-text-color);
@@ -183,7 +185,8 @@
             cursor: pointer;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            font-family: 'Kiwi Maru', sans-serif;
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Noto Sans JP', sans-serif;
             min-width: 120px;
         }
         /* 矢印をディズニー風の星に */
@@ -203,12 +206,14 @@
             background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
             color: var(--button-text-color);
             border: none;
-            border-radius: 25px; /* 丸みを強調 */
+            border-radius: 25px; 
             cursor: pointer;
             transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 5px 0 var(--button-shadow-color), 0 8px 15px rgba(0,0,0,0.15);
-            font-family: 'Potta One', cursive; /* タイトルと同じフォント */
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* 軽く影 */
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Noto Sans JP', sans-serif; 
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); 
             letter-spacing: 1px;
             min-width: 150px;
         }
@@ -233,13 +238,13 @@
             display: grid;
             margin: 0 auto;
             background: var(--grid-bg);
-            border: 3px solid var(--grid-border); /* 太めのボーダー */
-            border-radius: 20px; /* 丸みを強調 */
+            border: 3px solid var(--grid-border); 
+            border-radius: 20px; 
             padding: 15px;
             gap: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 0 0 8px rgba(255,255,255,0.7) inset; /* 外側に柔らかな影、内側に白い縁 */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 0 0 8px rgba(255,255,255,0.7) inset; 
             transition: background 0.3s ease, border-color 0.3s ease;
-            max-width: calc(100% - 40px); /* 画面幅に合わせて調整 */
+            max-width: calc(100% - 40px); 
             box-sizing: border-box;
         }
 
@@ -249,8 +254,8 @@
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 3px dashed var(--hole-border); /* 破線ボーダー */
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 0 0 5px rgba(255,255,255,0.5); /* 内側に影、外側に白い縁 */
+            border: 3px dashed var(--hole-border); 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 0 0 5px rgba(255,255,255,0.5); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -265,7 +270,7 @@
             height: 100%; 
             position: absolute; 
             bottom: -100%; 
-            transition: bottom 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* バウンドするようなアニメーション */
+            transition: bottom 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
             pointer-events: none; 
             display: flex;
             justify-content: center;
@@ -301,7 +306,7 @@
             top: 0; 
             width: 100%; 
             height: 100%; 
-            background-color: rgba(0, 0, 0, 0.5); /* やや濃い背景 */
+            background-color: rgba(0, 0, 0, 0.5); 
             backdrop-filter: blur(5px); 
             display: flex;
             justify-content: center;
@@ -311,13 +316,14 @@
             background: linear-gradient(135deg, var(--modal-bg-start), var(--modal-bg-end));
             margin: auto; 
             padding: 30px;
-            border: 3px dashed var(--modal-border); /* ディズニー風の破線 */
+            border: 3px dashed var(--modal-border); 
             width: 90%; max-width: 450px; 
-            border-radius: 20px; /* 丸みを強調 */
+            border-radius: 20px; 
             text-align: center; 
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25), 0 0 0 8px rgba(255,255,255,0.7) inset; 
             animation: modalPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-            font-family: 'Kiwi Maru', sans-serif;
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Noto Sans JP', sans-serif;
             color: var(--panel-text-color);
             position: relative;
         }
@@ -348,23 +354,26 @@
         }
 
         .modal-content h2 { 
-            font-family: 'Potta One', cursive;
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 700;
             color: var(--modal-h2-color);
             font-size: 3em; 
             margin-bottom: 20px; 
             text-shadow: 2px 2px 0 var(--title-shadow-color-1); 
         }
         .final-score { 
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Montserrat', sans-serif; /* 数字はMontserratで強調 */
             font-size: 3.5em; 
             color: var(--modal-h2-color);
-            font-weight: bold; 
+            font-weight: 800; 
             display: block; 
             margin: 25px 0; 
             padding: 12px; 
             background-color: var(--modal-final-score-bg); 
             border-radius: 10px; 
             border: 2px solid var(--modal-final-score-border); 
-            font-family: 'Potta One', cursive; 
             text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
             animation: scoreScale 0.8s ease-out;
         }
@@ -383,7 +392,9 @@
             border-radius: 25px; 
             cursor: pointer; 
             transition: background 0.2s, transform 0.1s, box-shadow 0.2s; 
-            font-family: 'Potta One', cursive;
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 700;
             box-shadow: 0 4px 0 var(--modal-button-shadow), 0 6px 10px rgba(0,0,0,0.15); 
             margin-top: 15px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
@@ -403,32 +414,33 @@
             left: 50%; 
             transform: translate(-50%, -50%); 
             font-size: 3em; 
-            font-weight: bold; 
+            font-weight: 700; /* Noto Sans JPの太字 */
             color: var(--score-pop-color);
             text-shadow: 
                 -1px -1px 0 #fff,
                 1px 1px 0 #fff,
                 -2px -2px 0 var(--score-pop-shadow),
-                2px 2px 0 var(--score-pop-shadow); /* ディズニー風の輪郭と影 */
+                2px 2px 0 var(--score-pop-shadow); 
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.9s ease-out forwards; 
             z-index: 5; 
-            font-family: 'Potta One', cursive; /* ポップなフォント */
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Montserrat', sans-serif; 
         }
         @keyframes scorePopUp { 
             0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
-            50% { transform: translate(-50%, -50px) scale(1.2); } /* 大きく弾む */
+            50% { transform: translate(-50%, -50px) scale(1.2); } 
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
         .time-pop {
             position: absolute;
             top: 50%; 
-            left: calc(50% + 150px); /* スコア表示の右側に出すための調整 */
+            left: calc(50% + 150px); 
             transform: translate(-50%, -50%);
             font-size: 2.2em; 
-            font-weight: bold;
+            font-weight: 700;
             text-shadow: 
                 -1px -1px 0 #fff,
                 1px 1px 0 #fff,
@@ -438,7 +450,8 @@
             opacity: 0;
             animation: timePopUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
             z-index: 20;
-            font-family: 'Potta One', cursive; /* ポップなフォント */
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Noto Sans JP', sans-serif; 
         }
 
         .time-pop.plus { color: var(--time-pop-plus-color); }
@@ -465,14 +478,15 @@
         }
 
         #countdown-text {
-            font-family: 'Potta One', cursive; 
+            /* 🔥 フォント変更 🔥 */
+            font-family: 'Montserrat', sans-serif; 
             font-size: 8em; 
             color: var(--countdown-text-color);
-            font-weight: bold;
+            font-weight: 800;
             text-shadow: 
                 -3px -3px 0 var(--countdown-text-shadow),
                 3px 3px 0 var(--countdown-text-shadow),
-                6px 6px 0px rgba(0,0,0,0.1); /* 柔らかい影 */
+                6px 6px 0px rgba(0,0,0,0.1); 
             animation: pulse 0.9s ease-in-out infinite alternate; 
         }
 
@@ -490,7 +504,7 @@
             .modal-content h2 { font-size: 2em; }
             .final-score { font-size: 2.5em; }
             .score-pop { font-size: 2em; }
-            .time-pop { font-size: 1.8em; left: 50%; top: 70%; } /* 位置調整 */
+            .time-pop { font-size: 1.8em; left: 50%; top: 70%; } 
             #countdown-text { font-size: 5em; }
         }
     </style>
@@ -618,8 +632,8 @@
             const columns = settings.gridColumns;
             
             const baseSize = 100; 
-            const gap = 12; // ディズニー風で広めのギャップ
-            const borderPadding = 30; // 太いボーダーとシャドウ分の調整
+            const gap = 12; 
+            const borderPadding = 30; 
 
             const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
 
@@ -764,7 +778,7 @@
             moleTimerId = setTimeout(peep, time);
         }
 
-        // 🔥 テキストタイマーの更新ロジック 🔥
+        // テキストタイマーの更新ロジック 
         function updateTime() {
             if (timeLeft < 0) { timeLeft = 0; }
             
@@ -774,11 +788,11 @@
             if (timeLeft <= 5) {
                 timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--timer-alert-color'); 
                 timeLeftDisplay.style.fontSize = '1.8em'; 
-                timeLeftDisplay.style.transform = 'scale(1.1)'; // 少し大きく
+                timeLeftDisplay.style.transform = 'scale(1.1)'; 
             } else {
                 timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
                 timeLeftDisplay.style.fontSize = '1.6em'; 
-                timeLeftDisplay.style.transform = 'scale(1)'; // 元に戻す
+                timeLeftDisplay.style.transform = 'scale(1)'; 
             }
 
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
@@ -790,7 +804,6 @@
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
             
-            // CSS変数を直接参照してスタイルを設定
             pop.style.setProperty('--score-pop-color', getComputedStyle(document.body).getPropertyValue('--score-pop-color'));
             pop.style.setProperty('--score-pop-shadow', getComputedStyle(document.body).getPropertyValue('--score-pop-shadow'));
 
