@@ -2,75 +2,13 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (ディズニー風デザイン・読みやすいフォント・テキストタイマー)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <title>モグラたたき - 難易度選択＆スコアポップアップ付き</title>
     <style>
-        /* ======================================================= */
-        /* ✨ ディズニー風デザイン (フォント変更済) ✨ */
-        /* ======================================================= */
-
+        /* CSS (デザイン) - 既存のスタイル */
         body {
-            /* ベースカラー: 夢のあるパステルとグラデーション */
-            --main-bg-start: #fce4ec; /* 薄いピンク */
-            --main-bg-end: #e0f2f7;   /* 薄い水色 */
-            --title-main-color: #d81b60; /* 濃いピンク */
-            --title-shadow-color-1: rgba(255, 255, 255, 0.8); 
-            --title-shadow-color-2: #ef9a9a; /* 淡い赤 */
-            --panel-bg: #ffffff;
-            --panel-border: #f8bbd0; /* 薄いピンクのボーダー */
-            --panel-text-color: #424242;
-            --highlight-color: #6a1b9a; /* 紫 */
-            --select-border: #f06292; /* ピンク */
-            --select-bg: #fff;
-            --select-text-color: #424242;
-            --select-focus-shadow: rgba(236, 64, 122, 0.3); /* フォーカス時の影 */
-            --button-bg-start: #ff8a65; /* コーラルオレンジ */
-            --button-bg-end: #ffb74d;   /* 明るいオレンジ */
-            --button-text-color: white;
-            --button-shadow-color: #e64a19; /* 暗いオレンジ */
-            --button-hover-bg-start: #ffab91;
-            --button-hover-bg-end: #ffcc80;
-            --button-disabled-bg-start: #f8bbd0; /* 淡いピンク */
-            --button-disabled-bg-end: #e0e0e0;
-            --grid-bg: #fffde7; /* クリーム色 */
-            --grid-border: #ffccbc; /* 淡いオレンジ */
-            --hole-bg: #ffe0b2; /* 薄いオレンジ */
-            --hole-border: #ffab91; /* コーラルオレンジ */
-            --mole-body-fill: #90a4ae; 
-            --mole-body-stroke: #546e7a;
-            --mole-face-fill: #eceff1; 
-            --mole-face-stroke: #546e7a;
-            --mole-eyes-nose: #333;
-            --mole-gold-fill: #ffeb3b; 
-            --mole-gold-stroke: #fbc02d; 
-            --mole-gold-face-hand: #fff9c4; 
-            --mole-bomb-fill: #ef9a9a; 
-            --mole-bomb-stroke: #e57373;
-            --mole-bomb-hand: #ffcdd2; 
-            --mole-clock-fill: #81c784; 
-            --mole-clock-stroke: #4caf50;
-            --modal-bg-start: #fff;
-            --modal-bg-end: #fefefe;
-            --modal-border: #d81b60; 
-            --modal-h2-color: #d81b60;
-            --modal-final-score-bg: #f8bbd0; 
-            --modal-final-score-border: #f06292;
-            --modal-button-bg-start: #ffb74d; 
-            --modal-button-bg-end: #ff8a65; 
-            --modal-button-shadow: #e65100;
-            --score-pop-color: #ff4081; 
-            --score-pop-shadow: rgba(0,0,0,0.1);
-            --time-pop-plus-color: #4CAF50; 
-            --time-pop-minus-color: #F44336; 
-            --countdown-overlay-bg: rgba(255, 255, 255, 0.8);
-            --countdown-text-color: #d81b60; 
-            --countdown-text-shadow: rgba(255, 255, 255, 0.8); 
-            --timer-alert-color: #ef5350; 
-
-
-            /* 🔥 フォント変更: Noto Sans JP (読みやすいゴシック体) 🔥 */
-            font-family: 'Noto Sans JP', sans-serif; 
+            font-family: 'Arial', sans-serif;
             text-align: center;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -78,466 +16,433 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background: linear-gradient(135deg, var(--main-bg-start), var(--main-bg-end));
-            background-attachment: fixed;
-            color: var(--panel-text-color);
-            transition: background 0.5s ease-in-out; 
-            overflow-x: hidden;
         }
 
         h1 { 
-            /* 🔥 フォント変更: Montserrat (ポップだが読みやすい英数字フォント) 🔥 */
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 3.8em; 
-            color: var(--title-main-color);
-            text-shadow: 
-                -2px -2px 0 var(--title-shadow-color-1),
-                2px 2px 0 var(--title-shadow-color-2),
-                4px 4px 0px rgba(0,0,0,0.1); 
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            line-height: 1.2;
-            padding: 10px 0;
-            position: relative;
-            display: inline-block;
-            z-index: 10;
-            transition: color 0.3s ease;
-            animation: bounceIn 0.8s ease-out;
-            font-weight: 800; /* 太字 */
-        }
-
-        /* ✨ タイトルにキラキラを追加 ✨ */
-        h1::before, h1::after {
-            content: '⭐'; 
-            position: absolute;
-            font-size: 0.5em;
-            opacity: 0.7;
-            animation: twinkle 1.5s infinite alternate ease-in-out;
-        }
-        h1::before { top: 10%; left: -10%; transform: rotate(-20deg); }
-        h1::after { bottom: 5%; right: -8%; transform: rotate(15deg); animation-delay: 0.5s; }
-
-        @keyframes twinkle {
-            from { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
-            to { opacity: 1; transform: scale(1.2) rotate(30deg); }
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
+            color: #333; 
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         
-        #controls, #game-info { 
-            background: var(--panel-bg);
-            padding: 18px 35px;
-            border-radius: 15px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15), 0 0 0 5px var(--panel-border); 
-            margin-bottom: 28px; 
+        #controls { 
+            margin-bottom: 20px; 
             display: flex;
-            gap: 25px; 
+            gap: 15px;
             align-items: center;
-            color: var(--panel-text-color);
-            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-            position: relative; 
-            font-size: 1.2em;
-            max-width: 90%;
-            flex-wrap: wrap; 
-            justify-content: center;
-        }
-        
-        #score { 
-            font-weight: 700; /* Noto Sans JPの太字 */
-            color: var(--highlight-color);
-            font-size: 1.6em; 
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); 
-            transition: color 0.3s ease;
-        }
-
-        #time-display {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1.2em; 
-            color: var(--panel-text-color);
-        }
-
-        #time-left {
-            font-weight: 700;
-            color: var(--highlight-color); 
-            font-size: 1.6em; 
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.7); 
-            transition: color 0.3s ease, font-size 0.2s ease, transform 0.2s ease;
-        }
-        
-        /* セレクトボックスのスタイル */
-        #difficulty-select {
+            background-color: #fff;
             padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #difficulty-select {
+            padding: 8px 15px;
             font-size: 1.1em;
-            border-radius: 8px; 
-            border: 2px solid var(--select-border); 
-            background-color: var(--select-bg); 
-            color: var(--select-text-color);
-            appearance: none; 
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 18px;
-            cursor: pointer;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Noto Sans JP', sans-serif;
-            min-width: 120px;
-        }
-        /* 矢印をディズニー風の星に */
-        #difficulty-select { 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23d81b60" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'); 
-        }
-        #difficulty-select:focus {
-            outline: none;
-            border-color: var(--highlight-color);
-            box-shadow: 0 0 0 4px var(--select-focus-shadow);
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
-        /* スタートボタンのスタイル */
         #start-button {
-            padding: 12px 30px;
-            font-size: 1.3em; 
-            background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
-            color: var(--button-text-color);
+            padding: 10px 25px;
+            font-size: 1.5em;
+            background-color: #4CAF50;
+            color: white;
             border: none;
-            border-radius: 25px; 
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 5px 0 var(--button-shadow-color), 0 8px 15px rgba(0,0,0,0.15);
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Noto Sans JP', sans-serif; 
-            font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2); 
-            letter-spacing: 1px;
-            min-width: 150px;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
-        #start-button:hover { 
-            background: linear-gradient(180deg, var(--button-hover-bg-start), var(--button-hover-bg-end)); 
-            transform: translateY(-2px); 
-            box-shadow: 0 7px 0 var(--button-shadow-color), 0 10px 20px rgba(0,0,0,0.2);
-        }
-        #start-button:active { 
-            transform: translateY(2px); 
-            box-shadow: 0 3px 0 var(--button-shadow-color), 0 2px 5px rgba(0,0,0,0.1);
-        }
-        #start-button:disabled { 
-            background: linear-gradient(180deg, var(--button-disabled-bg-start), var(--button-disabled-bg-end)); 
-            cursor: not-allowed; 
-            transform: translateY(0); 
-            box-shadow: 0 3px 0 rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.1); 
-            color: #757575;
-        }
+        #start-button:hover { background-color: #45a049; transform: translateY(-2px); }
+        #start-button:disabled { background-color: #cccccc; cursor: not-allowed; transform: translateY(0); box-shadow: none; }
 
+        #game-info {
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            color: #555;
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #game-info p { margin: 0; }
+        #score, #time-left { font-weight: bold; color: #d35400; }
+
+        /* ゲーム盤面 */
         #grid {
             display: grid;
+            /* grid-template-columns: repeat(3, 1fr); <--- JSで動的に設定するため削除 */
+            width: 420px; /* 固定サイズ */
+            height: 420px; /* 固定サイズ */
             margin: 0 auto;
-            background: var(--grid-bg);
-            border: 3px solid var(--grid-border); 
-            border-radius: 20px; 
-            padding: 15px;
-            gap: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 0 0 8px rgba(255,255,255,0.7) inset; 
-            transition: background 0.3s ease, border-color 0.3s ease;
-            max-width: calc(100% - 40px); 
+            background-color: #556b2f; 
+            border: 8px solid #8b4513; 
+            border-radius: 15px;
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* 穴 */
+        .hole {
+            background-color: #a0522d; 
+            border-radius: 50%;
+            overflow: hidden; 
+            position: relative;
+            cursor: pointer;
+            border: 4px solid #696969; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
+        }
+
+        /* モグラ本体 */
+        .mole {
+            width: 100%;
+            height: 100%; 
+            background-color: #c28b5e; 
+            border: 4px solid #8b4513; 
+            border-radius: 50%;
+            position: absolute;
+            bottom: -100%; 
+            transition: bottom 0.2s ease-out; 
+            pointer-events: none; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box; 
+            z-index: 2; 
+            overflow: visible; 
+        }
+        /* モグラが出ている状態 */
+        .hole.up .mole {
+            bottom: 0; 
+            pointer-events: auto; 
+        }
+
+        /* ---------------------------------- */
+        /* モグラの顔のデザイン (省略せず全て残す) */
+        /* ---------------------------------- */
+        .face-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; 
+            width: 100%; 
+            height: 100%; 
+            padding-top: 15%; 
             box-sizing: border-box;
         }
 
-        .hole {
-            background-color: var(--hole-bg);
+        .eyes {
+            display: flex;
+            justify-content: space-between;
+            width: 50%; 
+            position: absolute;
+            top: 25%; 
+            z-index: 3;
+        }
+
+        .eye {
+            width: 20px; 
+            height: 20px; 
+            background-color: white;
+            border: 2px solid black; 
             border-radius: 50%;
-            overflow: hidden; 
-            position: relative; 
-            cursor: pointer;
-            border: 3px dashed var(--hole-border); 
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 0 0 5px rgba(255,255,255,0.5); 
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
-        }
-        .hole:hover {
-            transform: scale(1.02);
-        }
-
-        .mole {
-            width: 100%; 
-            height: 100%; 
-            position: absolute; 
-            bottom: -100%; 
-            transition: bottom 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-            pointer-events: none; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 2; 
-        }
-        .hole.up .mole { bottom: 0; pointer-events: auto; }
-
-        .mole svg {
-            width: 100%;
-            height: 100%;
-            transform: translateY(10%); 
-        }
-        /* モグラのSVG要素の基本スタイル */
-        .mole-body { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
-        .mole-face { fill: var(--mole-face-fill); stroke: var(--mole-face-stroke); stroke-width: 1.5; transition: fill 0.3s ease, stroke 0.3s ease; }
-        .mole circle, .mole line { fill: var(--mole-eyes-nose); stroke: var(--mole-eyes-nose); transition: fill 0.3s ease, stroke 0.3s ease; }
-        .mole-hand { fill: var(--mole-body-fill); stroke: var(--mole-body-stroke); stroke-width: 2; transition: fill 0.3s ease, stroke 0.3s ease; }
-
-
-        .mole.gold .mole-body { fill: var(--mole-gold-fill); stroke: var(--mole-gold-stroke); }
-        .mole.bomb .mole-body { fill: var(--mole-bomb-fill); stroke: var(--mole-bomb-stroke); }
-        .mole.clock .mole-body { fill: var(--mole-clock-fill); stroke: var(--mole-clock-stroke); }
-        .mole.gold .mole-face, .mole.gold .mole-hand { fill: var(--mole-gold-face-hand); }
-        .mole.bomb .mole-hand { fill: var(--mole-bomb-hand); }
-
-        /* モーダルのスタイル */
-        #game-over-modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 100; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0, 0, 0, 0.5); 
-            backdrop-filter: blur(5px); 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content { 
-            background: linear-gradient(135deg, var(--modal-bg-start), var(--modal-bg-end));
-            margin: auto; 
-            padding: 30px;
-            border: 3px dashed var(--modal-border); 
-            width: 90%; max-width: 450px; 
-            border-radius: 20px; 
-            text-align: center; 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25), 0 0 0 8px rgba(255,255,255,0.7) inset; 
-            animation: modalPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Noto Sans JP', sans-serif;
-            color: var(--panel-text-color);
             position: relative;
+            box-sizing: border-box;
         }
-        /* ✨ モーダルにキラキラと飾り枠 ✨ */
-        .modal-content::before, .modal-content::after {
+        .eye::before { 
             content: '';
             position: absolute;
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.8;
+            width: 8px;
+            height: 8px;
+            background-color: black;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-        .modal-content::before {
-            content: '✨';
-            font-size: 2em;
-            top: -15px; left: -15px;
-            animation: twinkle 2s infinite alternate ease-in-out;
-        }
-        .modal-content::after {
-            content: '🌟';
-            font-size: 2em;
-            bottom: -15px; right: -15px;
-            animation: twinkle 2s infinite alternate ease-in-out reverse;
-        }
-
-        @keyframes modalPop {
-            0% { transform: scale(0.7) translateY(-50px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+        .eye::after { 
+            content: '';
+            position: absolute;
+            width: 5px; 
+            height: 5px; 
+            background-color: white;
+            border-radius: 50%;
+            top: 15%;
+            left: 15%;
         }
 
-        .modal-content h2 { 
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Noto Sans JP', sans-serif;
-            font-weight: 700;
-            color: var(--modal-h2-color);
-            font-size: 3em; 
-            margin-bottom: 20px; 
-            text-shadow: 2px 2px 0 var(--title-shadow-color-1); 
-        }
-        .final-score { 
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Montserrat', sans-serif; /* 数字はMontserratで強調 */
-            font-size: 3.5em; 
-            color: var(--modal-h2-color);
-            font-weight: 800; 
-            display: block; 
-            margin: 25px 0; 
-            padding: 12px; 
-            background-color: var(--modal-final-score-bg); 
-            border-radius: 10px; 
-            border: 2px solid var(--modal-final-score-border); 
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
-            animation: scoreScale 0.8s ease-out;
-        }
-        @keyframes scoreScale {
-            0% { transform: scale(0.8); opacity: 0; }
-            80% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-
-        .modal-content button { 
-            background: linear-gradient(180deg, var(--modal-button-bg-start), var(--modal-button-bg-end));
-            color: white; 
-            border: none; 
-            padding: 12px 25px; 
-            font-size: 1.2em; 
-            border-radius: 25px; 
-            cursor: pointer; 
-            transition: background 0.2s, transform 0.1s, box-shadow 0.2s; 
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Noto Sans JP', sans-serif;
-            font-weight: 700;
-            box-shadow: 0 4px 0 var(--modal-button-shadow), 0 6px 10px rgba(0,0,0,0.15); 
-            margin-top: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-        .modal-content button:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 0 var(--modal-button-shadow), 0 8px 15px rgba(0,0,0,0.2);
-        }
-        .modal-content button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 var(--modal-button-shadow), 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .score-pop { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            font-size: 3em; 
-            font-weight: 700; /* Noto Sans JPの太字 */
-            color: var(--score-pop-color);
-            text-shadow: 
-                -1px -1px 0 #fff,
-                1px 1px 0 #fff,
-                -2px -2px 0 var(--score-pop-shadow),
-                2px 2px 0 var(--score-pop-shadow); 
-            pointer-events: none; 
-            opacity: 0; 
-            animation: scorePopUp 0.9s ease-out forwards; 
-            z-index: 5; 
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Montserrat', sans-serif; 
-        }
-        @keyframes scorePopUp { 
-            0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
-            50% { transform: translate(-50%, -50px) scale(1.2); } 
-            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
-        }
-        
-        .time-pop {
+        .nose {
+            width: 16px; 
+            height: 10px; 
+            background-color: #e6a782; 
+            border-radius: 50%;
+            border: 1px solid #8b4513; 
             position: absolute;
             top: 50%; 
-            left: calc(50% + 150px); 
-            transform: translate(-50%, -50%);
-            font-size: 2.2em; 
-            font-weight: 700;
-            text-shadow: 
-                -1px -1px 0 #fff,
-                1px 1px 0 #fff,
-                -2px -2px 0 rgba(0,0,0,0.1),
-                2px 2px 0 rgba(0,0,0,0.1); 
-            pointer-events: none;
-            opacity: 0;
-            animation: timePopUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-            z-index: 20;
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Noto Sans JP', sans-serif; 
-        }
-
-        .time-pop.plus { color: var(--time-pop-plus-color); }
-        .time-pop.minus { color: var(--time-pop-minus-color); }
-
-        @keyframes timePopUp {
-            0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
-            10% { opacity: 1; transform: translate(-50%, -30px) scale(1.2); }
-            100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
-        }
-
-        #countdown-overlay {
-            display: none; 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--countdown-overlay-bg); 
-            z-index: 90;
+            z-index: 3;
+            display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(4px); 
+        }
+        .nose::before { 
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            top: 15%;
+        }
+        .nose::after { 
+            content: 'U';
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: #8b4513;
+            position: absolute;
+            bottom: -10px;
+            line-height: 0;
         }
 
-        #countdown-text {
-            /* 🔥 フォント変更 🔥 */
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 8em; 
-            color: var(--countdown-text-color);
-            font-weight: 800;
-            text-shadow: 
-                -3px -3px 0 var(--countdown-text-shadow),
-                3px 3px 0 var(--countdown-text-shadow),
-                6px 6px 0px rgba(0,0,0,0.1); 
-            animation: pulse 0.9s ease-in-out infinite alternate; 
+        .cheeks {
+            position: absolute;
+            width: 25px;
+            height: 15px;
+            background-color: #ffb6c1; 
+            border-radius: 50%;
+            top: 40%; 
+            z-index: 2;
+            box-shadow: 0 0 5px rgba(255, 182, 193, 0.5);
+        }
+        .cheek.left { left: 15%; }
+        .cheek.right { right: 15%; }
+        
+        .whiskers {
+            position: absolute;
+            width: 80%;
+            height: 1px;
+            top: 55%;
+            z-index: 3;
+        }
+        .whiskers::before, .whiskers::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 1px;
+            background: #8b4513; 
+            top: 0;
+            transform-origin: 100% 50%;
+        }
+        .whiskers::before { 
+            right: 50%;
+            margin-right: 5px;
+            box-shadow: 
+                0 -6px 0 0 #8b4513, 
+                0 6px 0 0 #8b4513;
+            transform: rotate(0deg);
+        }
+        .whiskers::after { 
+            left: 50%;
+            margin-left: 5px;
+            box-shadow: 
+                0 -6px 0 0 #8b4513, 
+                0 6px 0 0 #8b4513;
+            transform: rotate(0deg);
         }
 
-        @keyframes pulse {
-            from { transform: scale(1); opacity: 0.9; }
-            to { transform: scale(1.1); opacity: 1; }
+        .paws {
+            position: absolute;
+            width: 100%;
+            height: 30px; 
+            bottom: 0; 
+            z-index: 4; 
+            pointer-events: none;
+        }
+        .paw {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background-color: #a0522d; 
+            border: 2px solid #8b4513;
+            border-radius: 50%;
+            bottom: 10px; 
+            z-index: 4;
+            box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .paw::before { 
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 5px;
+            background: radial-gradient(#663300 30%, transparent 30%);
+            background-size: 5px 5px;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* レスポンシブデザイン */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5em; }
-            #controls, #game-info { flex-direction: column; gap: 15px; padding: 15px 20px; }
-            #score, #time-left { font-size: 1.4em; }
-            #start-button { font-size: 1.1em; padding: 10px 20px; }
-            .modal-content h2 { font-size: 2em; }
-            .final-score { font-size: 2.5em; }
-            .score-pop { font-size: 2em; }
-            .time-pop { font-size: 1.8em; left: 50%; top: 70%; } 
-            #countdown-text { font-size: 5em; }
+        .paw.left { left: 15%; transform: rotate(-10deg); }
+        .paw.right { right: 15%; transform: rotate(10deg); }
+
+        /* ---------------------------------- */
+        /* 各モグラのカスタムスタイル (変更なし) */
+        /* ---------------------------------- */
+        .mole:not(.gold):not(.bomb):not(.clock) { background-color: #c28b5e; border-color: #8b4513; }
+        .mole:not(.gold):not(.bomb):not(.clock) .paw { background-color: #a0522d; border-color: #8b4513; }
+        .mole:not(.gold):not(.bomb):not(.clock) .cheeks { background-color: #ffb6c1; }
+        .mole:not(.gold):not(.bomb):not(.clock) .whiskers::before, .mole:not(.gold):not(.bomb):not(.clock) .whiskers::after { background: #8b4513; box-shadow: 0 -6px 0 0 #8b4513, 0 6px 0 0 #8b4513;}
+
+        .mole.gold { background: linear-gradient(to bottom, #ffd700, #daa520); border: 4px solid #b8860b; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        .mole.gold .paw { background-color: #ffd700; border-color: #b8860b; }
+        .mole.gold .cheeks { background-color: #ffcc00; }
+        .mole.gold .whiskers::before, .mole.gold .whiskers::after { background: #b8860b; box-shadow: 0 -6px 0 0 #b8860b, 0 6px 0 0 #b8860b; }
+        .mole.gold .eye { border-color: #b8860b; }
+        .mole.gold .nose { background-color: #f08080; border-color: #8b0000; }
+        .mole.gold .nose::after { color: #8b0000; }
+
+        .mole.bomb { background-color: #333; border: 4px solid #ff4500; box-shadow: 0 0 10px rgba(255, 69, 0, 0.7); }
+        .mole.bomb .paw { background-color: #000; border-color: #ff4500; }
+        .mole.bomb .cheeks { background-color: #ff0000; }
+        .mole.bomb .whiskers::before, .mole.bomb .whiskers::after { background: #ff4500; box-shadow: 0 -6px 0 0 #ff4500, 0 6px 0 0 #ff4500; }
+        .mole.bomb .eye { background-color: #ff0000; border-color: #8b0000; }
+        .mole.bomb .eye::before { background-color: #fff; }
+        .mole.bomb .eye::after { display: none; }
+        .mole.bomb .nose { background-color: #000; border-color: #666; }
+        .mole.bomb .nose::after { content: '-'; color: #ff0000; } 
+        .mole.bomb .paw::before { background: radial-gradient(#ff0000 30%, transparent 30%); }
+
+        .mole.clock { background-color: #4682b4; border: 4px solid #3cb371; box-shadow: 0 0 10px rgba(60, 179, 113, 0.7); }
+        .mole.clock .paw { background-color: #3cb371; border-color: #4682b4; }
+        .mole.clock .cheeks { background-color: #90ee90; }
+        .mole.clock .whiskers::before, .mole.clock .whiskers::after { background: #3cb371; box-shadow: 0 -6px 0 0 #3cb371, 0 6px 0 0 #3cb371; }
+        .mole.clock .eye { border-color: #008000; }
+        .mole.clock .eye::before { background-color: #006400; }
+        .mole.clock .nose { background-color: #e0ffff; border-color: #4682b4; }
+        .mole.clock .nose::after { color: #008000; }
+        
+        /* ---------------------------------- */
+        /* ゲームオーバーモーダルのCSS (変更なし) */
+        /* ---------------------------------- */
+        #game-over-modal {
+            display: none; 
+            position: fixed;
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(5px); 
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto; 
+            padding: 30px;
+            border: 5px solid #d35400;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-content h2 {
+            color: #d35400;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .final-score {
+            font-size: 3.5em;
+            color: #27ae60; 
+            font-weight: bold;
+            display: block;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+
+        .modal-content button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #2980b9;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ---------------------------------- */
+        /* スコアポップアップのCSS (変更なし) */
+        /* ---------------------------------- */
+        .score-pop {
+            position: absolute;
+            top: 50%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            pointer-events: none; 
+            opacity: 0; 
+            transition: none; 
+            animation: scorePopUp 0.6s ease-out forwards; 
+            z-index: 5;
+        }
+
+        /* スコアポップアップのアニメーション定義 */
+        @keyframes scorePopUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, 0); 
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -100px); 
+            }
         }
     </style>
 </head>
-<body onload="initializeGame()">
-    <h1>もぐらdeポン！</h1>
+<body>
+    <h1>スペシャルモグラたたき！ </h1>
 
     <div id="game-info">
-        <p>スコア: <span id="score">0</span>
-            <span id="time-display">
-                時間: 
-                <span id="time-left">30</span>
-                秒
-            </span>
-        </p>
+        <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
     </div>
 
     <div id="controls">
         <label for="difficulty-select">難易度: </label>
         <select id="difficulty-select">
-            <option value="easy">かんたん</option>
-            <option value="normal" selected>ふつう</option>
-            <option value="hard">むずかしい</option>
+            <option value="easy">かんたん (穴4)</option>
+            <option value="normal" selected>ふつう (穴9)</option>
+            <option value="hard">むずかしい (穴16)</option>
         </select>
         <button id="start-button">ゲームスタート</button>
     </div>
 
     <div id="grid">
-    </div>
-        
-    <div id="countdown-overlay">
-        <span id="countdown-text"></span>
-    </div>
+        </div>
         
     <div id="game-over-modal">
         <div class="modal-content">
@@ -551,6 +456,7 @@
     <script>
         // JavaScript (ゲームロジック)
 
+        // ★★★ 難易度によって穴の数を変更するための設定を拡張 ★★★
         const GAME_DURATION = 30; 
         
         const NORMAL_MOLE_SCORE = 1;
@@ -564,35 +470,36 @@
         const GOLD_MOLE_CHANCE = 0.10; 
         const BOMB_MOLE_CHANCE = 0.15; 
         const CLOCK_MOLE_CHANCE = 0.05; 
-        
+        const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); 
+
         const DIFFICULTY_SETTINGS = {
             easy: {
-                minTime: 800, maxTime: 1800,
-                holeCount: 9, 
-                gridColumns: 3, 
+                holeCount: 4, 
+                gridColumns: 'repeat(2, 1fr)', // 2x2のグリッド
+                minTime: 800, 
+                maxTime: 1800, 
             },
             normal: {
-                minTime: 500, maxTime: 1500,
-                holeCount: 16, 
-                gridColumns: 4, 
+                holeCount: 9, 
+                gridColumns: 'repeat(3, 1fr)', // 3x3のグリッド
+                minTime: 500,
+                maxTime: 1500,
             },
             hard: {
-                minTime: 300, maxTime: 1000,
-                holeCount: 25, 
-                gridColumns: 5, 
+                holeCount: 16, 
+                gridColumns: 'repeat(4, 1fr)', // 4x4のグリッド
+                minTime: 300,
+                maxTime: 1000,
             }
         };
 
-        let currentMinTime;
-        let currentMaxTime;
-        let currentHoleCount;
-        let currentGridColumns;
+        // 現在の難易度設定を保持する変数
+        let currentSettings = DIFFICULTY_SETTINGS.normal; 
 
         let score = 0;
         let timeLeft = GAME_DURATION; 
         let isGameRunning = false;
         let countdownTimerId;
-        let moleTimerId; 
         let lastHole = null;
 
         const scoreDisplay = document.getElementById('score');
@@ -602,50 +509,14 @@
         const gameOverModal = document.getElementById('game-over-modal');
         const finalScoreDisplay = document.getElementById('final-score');
         const difficultySelect = document.getElementById('difficulty-select');
-        const countdownOverlay = document.getElementById('countdown-overlay');
-        const countdownText = document.getElementById('countdown-text');
-        const gameInfoPanel = document.getElementById('game-info'); 
 
-        // SVGモグラのHTML
-        const MOLE_SVG = `
-            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
-                <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" />
-                <ellipse class="mole-face" cx="50" cy="78" rx="25" ry="18" />
-                <circle cx="50" cy="70" r="3" />
-                <circle cx="38" cy="58" r="3.5" />
-                <circle cx="62" cy="58" r="3.5" />
-                <line x1="23" y1="73" x2="38" y2="73" />
-                <line x1="20" y1="78" x2="38" y2="78" />
-                <line x1="23" y1="83" x2="38" y2="83" />
-                <line x1="62" y1="73" x2="77" y2="73" />
-                <line x1="62" y1="78" x2="80" y2="78" />
-                <line x1="62" y1="83" x2="77" y2="83" />
-                <ellipse class="mole-hand" cx="25" cy="90" rx="10" ry="5" />
-                <ellipse class="mole-hand" cx="75" cy="90" rx="10" ry="5" />
-            </svg>
-        `;
-
-
-        function setGridClass(difficulty) {
-            grid.className = ''; 
-            const settings = DIFFICULTY_SETTINGS[difficulty];
-            const columns = settings.gridColumns;
-            
-            const baseSize = 100; 
-            const gap = 12; 
-            const borderPadding = 30; 
-
-            const newSize = (baseSize * columns) + (gap * (columns - 1)) + borderPadding;
-
-            grid.style.width = `${newSize}px`;
-            grid.style.height = `${newSize}px`;
-
-            grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-        }
-
-        function createHoles() {
+        // ★ createHoles 関数を修正: 穴の数とグリッドの列設定を引数で受け取る
+        function createHoles(count, columns) {
             grid.innerHTML = '';
-            for (let i = 0; i < currentHoleCount; i++) {
+            // グリッドのCSSを動的に設定
+            grid.style.gridTemplateColumns = columns;
+            
+            for (let i = 0; i < count; i++) {
                 const hole = document.createElement('div');
                 hole.classList.add('hole');
                 hole.dataset.id = i;
@@ -653,7 +524,22 @@
                 const mole = document.createElement('div');
                 mole.classList.add('mole');
                 
-                mole.innerHTML = MOLE_SVG; 
+                // モグラの顔のHTML構造 (変更なし)
+                mole.innerHTML = `
+                    <div class="face-container">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="whiskers"></div> <div class="nose"></div>
+                        <div class="cheeks cheek left"></div>
+                        <div class="cheeks cheek right"></div>
+                    </div>
+                    <div class="paws">
+                        <div class="paw left"></div>
+                        <div class="paw right"></div>
+                    </div>
+                `;
 
                 hole.addEventListener('click', whack);
 
@@ -662,7 +548,12 @@
             }
         }
         
-        function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
+        // 2. モグラの出現ロジック
+        function randomTime() { 
+            // currentSettingsからminTime/maxTimeを取得
+            return Math.round(Math.random() * (currentSettings.maxTime - currentSettings.minTime) + currentSettings.minTime); 
+        }
+
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
             const idx = Math.floor(Math.random() * holes.length);
@@ -672,6 +563,7 @@
             lastHole = hole;
             return hole;
         }
+
         function randomMoleType() {
             const r = Math.random();
             if (r < CLOCK_MOLE_CHANCE) { return 'clock'; } 
@@ -679,72 +571,21 @@
             else if (r < CLOCK_MOLE_CHANCE + BOMB_MOLE_CHANCE + GOLD_MOLE_CHANCE) { return 'gold'; } 
             else { return 'normal'; }
         }
-
         function peep() {
-            if (!isGameRunning) {
-                clearTimeout(moleTimerId);
-                return;
-            }
+            if (!isGameRunning) return;
             const time = randomTime(); 
             const hole = randomHole();
             const mole = hole.querySelector('.mole');
-            
-            // --- モグラの配色設定 (統一配色を参照) ---
-            mole.classList.remove('gold', 'bomb', 'clock'); 
-            mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
-            mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
-            mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-face-fill');
-            mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-face-stroke');
-            mole.querySelectorAll('circle, line').forEach(el => {
-                if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
-                     el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-eyes-nose');
-                     el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-eyes-nose');
-                }
-            });
-            mole.querySelectorAll('.mole-hand').forEach(el => {
-                el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-body-fill');
-                el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-body-stroke');
-            });
-
-
             const moleType = randomMoleType();
             
+            mole.classList.remove('gold', 'bomb', 'clock'); 
             let scoreValue;
-            if (moleType === 'gold') {
-                mole.classList.add('gold'); 
-                scoreValue = GOLD_MOLE_SCORE; 
-                mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-fill');
-                mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
-                mole.querySelector('.mole-face').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
-                mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
-                mole.querySelectorAll('.mole-hand').forEach(el => {
-                    el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-gold-face-hand');
-                    el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-gold-stroke');
-                });
-            } else if (moleType === 'bomb') {
-                mole.classList.add('bomb'); 
-                scoreValue = BOMB_MOLE_SCORE; 
-                mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-fill');
-                mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
-                mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
-                 mole.querySelectorAll('.mole-hand').forEach(el => {
-                    el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-bomb-hand');
-                    el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-bomb-stroke');
-                });
-            } else if (moleType === 'clock') {
-                mole.classList.add('clock'); 
-                scoreValue = CLOCK_MOLE_SCORE; 
-                mole.querySelector('.mole-body').style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
-                mole.querySelector('.mole-body').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
-                mole.querySelector('.mole-face').style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
-                 mole.querySelectorAll('.mole-hand').forEach(el => {
-                    el.style.fill = getComputedStyle(document.body).getPropertyValue('--mole-clock-fill');
-                    el.style.stroke = getComputedStyle(document.body).getPropertyValue('--mole-clock-stroke');
-                });
-            } else {
-                scoreValue = NORMAL_MOLE_SCORE; 
+            switch (moleType) {
+                case 'gold': mole.classList.add('gold'); scoreValue = GOLD_MOLE_SCORE; break;
+                case 'bomb': mole.classList.add('bomb'); scoreValue = BOMB_MOLE_SCORE; break;
+                case 'clock': mole.classList.add('clock'); scoreValue = CLOCK_MOLE_SCORE; break;
+                default: scoreValue = NORMAL_MOLE_SCORE; break;
             }
-            // --------------------------------------------------
 
             mole.dataset.type = moleType; 
             mole.dataset.score = scoreValue;
@@ -754,80 +595,37 @@
             setTimeout(() => {
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
-                
-                // モグラが隠れるときに色をリセット
-                mole.querySelector('.mole-body').style.fill = '';
-                mole.querySelector('.mole-body').style.stroke = '';
-                mole.querySelector('.mole-face').style.fill = '';
-                mole.querySelector('.mole-face').style.stroke = '';
-                mole.querySelectorAll('circle, line').forEach(el => {
-                    if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
-                         el.style.fill = '';
-                         el.style.stroke = '';
-                    }
-                });
-                mole.querySelectorAll('.mole-hand').forEach(el => {
-                    el.style.fill = '';
-                    el.style.stroke = '';
-                });
-
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
+                if (isGameRunning) { peep(); }
             }, time);
-
-            moleTimerId = setTimeout(peep, time);
         }
 
-        // テキストタイマーの更新ロジック 
-        function updateTime() {
-            if (timeLeft < 0) { timeLeft = 0; }
-            
-            timeLeftDisplay.textContent = timeLeft;
-            
-            // 残り時間が少ない場合の警告色
-            if (timeLeft <= 5) {
-                timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--timer-alert-color'); 
-                timeLeftDisplay.style.fontSize = '1.8em'; 
-                timeLeftDisplay.style.transform = 'scale(1.1)'; 
-            } else {
-                timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
-                timeLeftDisplay.style.fontSize = '1.6em'; 
-                timeLeftDisplay.style.transform = 'scale(1)'; 
-            }
-
-            if (timeLeft <= 0 && isGameRunning) { endGame(); }
-        }
-
+        // 3. プレイヤーの操作ロジック
         function showScorePop(hole, points) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
+            
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
             
-            pop.style.setProperty('--score-pop-color', getComputedStyle(document.body).getPropertyValue('--score-pop-color'));
-            pop.style.setProperty('--score-pop-shadow', getComputedStyle(document.body).getPropertyValue('--score-pop-shadow'));
-
-
-            hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 900); 
-        }
-
-        function showTimePop(seconds) {
-            const pop = document.createElement('div');
-            pop.classList.add('time-pop');
-            
-            let sign = seconds > 0 ? '+' : '';
-            pop.textContent = sign + seconds + '秒';
-
-            if (seconds > 0) {
-                pop.classList.add('plus');
+            if (points > 0) {
+                pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; 
             } else {
-                pop.classList.add('minus');
+                pop.style.color = '#e74c3c'; 
             }
             
-            gameInfoPanel.appendChild(pop);
+            hole.appendChild(pop);
             
-            setTimeout(() => { pop.remove(); }, 1200); 
+            setTimeout(() => {
+                pop.remove();
+            }, 600); 
+        }
+        
+        function updateTime() {
+            if (timeLeft < 0) { timeLeft = 0; }
+            timeLeftDisplay.textContent = timeLeft;
+            if (timeLeft <= 0 && isGameRunning) { endGame(); }
         }
         
         function whack(event) {
@@ -840,147 +638,84 @@
                 const type = mole.dataset.type;
                 
                 showScorePop(hole, points);
+
                 score += points;
                 scoreDisplay.textContent = score;
 
-                let timeChange = 0;
                 if (type === 'clock') { 
-                    timeChange = CLOCK_TIME_BONUS;
-                    timeLeft += timeChange; 
-                } 
-                else if (type === 'bomb') { 
-                    timeChange = -BOMB_TIME_PENALTY;
-                    timeLeft += timeChange; 
+                    timeLeft += CLOCK_TIME_BONUS; 
+                } else if (type === 'bomb') { 
+                    timeLeft -= BOMB_TIME_PENALTY;
                 }
-                
-                if (timeChange !== 0) {
-                    showTimePop(timeChange);
-                }
-                
+
                 updateTime(); 
                 
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
-                
-                // モグラが叩かれた時に色をリセット
-                mole.querySelector('.mole-body').style.fill = '';
-                mole.querySelector('.mole-body').style.stroke = '';
-                mole.querySelector('.mole-face').style.fill = '';
-                mole.querySelector('.mole-face').style.stroke = '';
-                mole.querySelectorAll('circle, line').forEach(el => {
-                    if (!el.classList.contains('mole-body') && !el.classList.contains('mole-face') && !el.classList.contains('mole-hand')) {
-                         el.style.fill = '';
-                         el.style.stroke = '';
-                    }
-                });
-                mole.querySelectorAll('.mole-hand').forEach(el => {
-                    el.style.fill = '';
-                    el.style.stroke = '';
-                });
-
                 delete mole.dataset.type; 
                 delete mole.dataset.score;
             }
         }
 
-        function startGameLogic() {
-            const difficulty = difficultySelect.value;
-            const settings = DIFFICULTY_SETTINGS[difficulty];
-            currentMinTime = settings.minTime;
-            currentMaxTime = settings.maxTime;
-            currentHoleCount = settings.holeCount; 
-            currentGridColumns = settings.gridColumns; 
-
-            setGridClass(difficulty);
-            createHoles();
-            
+        // 4. ゲームの流れ
+        function startGame() {
+            if (isGameRunning) return;
+            isGameRunning = true;
             score = 0;
+            
+            // 選択された難易度を取得し、現在の設定を更新
+            const difficulty = difficultySelect.value;
+            currentSettings = DIFFICULTY_SETTINGS[difficulty]; 
+            
+            // ★穴の数とグリッドの設定を難易度に応じて作成
+            createHoles(currentSettings.holeCount, currentSettings.gridColumns); 
+            
+            // ゲーム時間を固定値 (30秒) に設定
             timeLeft = GAME_DURATION; 
-            isGameRunning = true; 
+            
             scoreDisplay.textContent = score;
+            timeLeftDisplay.textContent = timeLeft;
             startButton.disabled = true;
-
-            countdownTimerId = setInterval(() => {
-                timeLeft--;
-                updateTime();
-            }, 1000);
-
+            gameOverModal.style.display = 'none'; 
+            countdownTimerId = setInterval(countdown, 1000);
             peep();
         }
 
-        function startGame() {
-            if (isGameRunning) return;
-
-            const difficulty = difficultySelect.value;
-            const settings = DIFFICULTY_SETTINGS[difficulty];
-            currentHoleCount = settings.holeCount;
-            currentGridColumns = settings.gridColumns;
-            setGridClass(difficulty);
-            createHoles();
-
-            startButton.disabled = true;
-            countdownOverlay.style.display = 'flex';
-            let count = 3;
-
-            const countdownInterval = setInterval(() => {
-                if (count > 0) {
-                    countdownText.textContent = count;
-                } else if (count === 0) {
-                    countdownText.textContent = 'スタート！'; 
-                } else {
-                    clearInterval(countdownInterval);
-                    countdownOverlay.style.display = 'none';
-                    startGameLogic(); 
-                }
-                count--; 
-            }, 1000);
+        function countdown() {
+            timeLeft--;
+            updateTime();
         }
 
         function endGame() {
             isGameRunning = false;
             clearInterval(countdownTimerId);
-            clearTimeout(moleTimerId); 
 
-            document.querySelectorAll('.hole.up').forEach(hole => hole.classList.remove('up'));
+            document.querySelectorAll('.hole.up').forEach(hole => {
+                hole.classList.remove('up');
+                const mole = hole.querySelector('.mole');
+                mole.classList.remove('gold', 'bomb', 'clock');
+                delete mole.dataset.type; 
+                delete mole.dataset.score;
+            });
 
+            startButton.disabled = false;
+            
             finalScoreDisplay.textContent = score;
             gameOverModal.style.display = 'flex'; 
         }
         
         function closeModal() {
             gameOverModal.style.display = 'none';
-            startButton.disabled = false;
-            
-            score = 0;
-            timeLeft = GAME_DURATION;
-            scoreDisplay.textContent = score;
-            timeLeftDisplay.textContent = timeLeft;
-            
-            initializeGame();
         }
 
-        function initializeGame() {
-            const initialDifficulty = difficultySelect.value;
-            const initialSettings = DIFFICULTY_SETTINGS[initialDifficulty];
-            
-            currentMinTime = initialSettings.minTime;
-            currentMaxTime = initialSettings.maxTime;
-            currentHoleCount = initialSettings.holeCount;
-            currentGridColumns = initialSettings.gridColumns;
-            
-            setGridClass(initialDifficulty);
-            createHoles(); 
-            
-            timeLeft = GAME_DURATION;
-            updateTime(); 
-        }
+        // 初期設定とイベントリスナー
+        // ページロード時に、初期選択されている難易度（normal）の設定で一度穴を作成する
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialSettings = DIFFICULTY_SETTINGS[difficultySelect.value];
+            createHoles(initialSettings.holeCount, initialSettings.gridColumns);
+        });
 
         startButton.addEventListener('click', startGame);
-        difficultySelect.addEventListener('change', () => {
-            if (!isGameRunning) {
-                initializeGame();
-            }
-        }); 
     </script>
 </body>
 </html>
