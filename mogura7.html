@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (単一配色・円形タイマー)</title>
+    <title>モグラたたき - SVGモグラ版 (ツムツム風レイアウト)</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Hachi+Maru+Pop&family=Potta+One&display=swap" rel="stylesheet">
     <style>
         /* ======================================================= */
-        /* 🔥 難易度による配色変化を削除し、Normal設定に統一 🔥 */
+        /* 🔥 共通配色 (Normal設定に固定) 🔥 */
         /* ======================================================= */
 
         body {
@@ -88,110 +88,116 @@
             background-attachment: fixed;
             color: var(--panel-text-color);
             transition: background 0.5s ease-in-out; 
+            position: relative; /* 子要素の絶対配置の基準 */
         }
-
-        /* ---------------------------------------------------------------- */
-        /* 難易度別クラス（easy, hard）の定義はすべて削除されました。       */
-        /* ---------------------------------------------------------------- */
+        
+        /* ------------------------------------------------------------- */
+        /* 🔥 新しいレイアウト調整 CSS 🔥 */
+        /* ------------------------------------------------------------- */
 
         h1 { 
+            /* タイトルは画面中央上部に配置し、固定 */
             font-family: 'Potta One', cursive;
-            font-size: 4.5em; 
+            font-size: 3.5em; /* タイトルを少し小さく */
             color: var(--title-main-color);
             text-shadow: 
                 3px 3px 0px var(--title-shadow-color-1),
                 -2px -2px 0px var(--title-shadow-color-2);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             letter-spacing: 2px;
             line-height: 1.2;
-            padding: 10px 25px;
+            padding: 5px 20px;
             position: relative;
             display: inline-block;
             z-index: 10;
-            transition: color 0.3s ease;
         }
-        h1::after {
-            content: '';
-            position: absolute;
-            top: 5px; left: 5px;
-            right: -5px; bottom: -5px;
-            background-color: var(--title-blob-color);
-            border-radius: 50% 30% 40% 60% / 60% 40% 50% 30%;
-            filter: blur(8px);
-            z-index: -1;
-            transition: background-color 0.3s ease;
-        }
-        
-        #controls, #game-info { 
+
+        #controls { 
+            /* コントロールパネルを画面下部に移動 */
             background: var(--panel-bg);
             padding: 15px 30px;
             border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-            margin-bottom: 25px; 
+            margin-top: 25px; /* グリッドとの間隔を調整 */
             display: flex;
             gap: 25px; 
             align-items: center;
             border: 2px dashed var(--panel-border);
             color: var(--panel-text-color);
             font-family: 'Hachi Maru Pop', cursive;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-            position: relative; 
+            z-index: 10;
         }
 
-        #game-info p { 
-            margin: 0; 
-            color: var(--panel-text-color); 
-            font-size: 1.4em; 
+        /* 🔥 スコアと時間の表示エリア（ツムツム風）🔥 */
+        #header-display {
+            position: absolute;
+            top: 130px; /* タイトルの下に配置 */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50; /* グリッドより手前 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none; /* クリックイベントがグリッドに透過するように */
         }
         
-        #score { 
-            font-weight: bold; 
+        .info-panel {
+            /* スコアと時間の背景パネル */
+            background-color: rgba(255, 255, 255, 0.85); /* 半透明の白 */
+            border: 3px solid var(--highlight-color);
+            border-radius: 15px;
+            margin: 5px 0;
+            padding: 5px 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 150px; /* パネル幅を固定 */
+            pointer-events: auto; /* 子要素はクリックできるように戻す */
+        }
+        
+        .info-label {
+            font-size: 0.9em;
+            color: var(--panel-text-color);
+            margin-bottom: -5px;
+            display: block;
+        }
+        
+        #score-display {
+            font-size: 2.5em; 
             color: var(--highlight-color);
             font-family: var(--highlight-font); 
-            font-size: 1.8em; 
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
-            transition: color 0.3s ease;
-        }
-        
-        /* 円形タイマーのCSS */
-        #time-display {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.4em; 
-        }
-        #timer-ring {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: grid; 
-            place-content: center;
-            position: relative;
-            font-family: var(--highlight-font);
-            font-size: 1.2em;
             font-weight: bold;
-            color: var(--highlight-color);
-            box-shadow: 0 0 0 3px var(--timer-track-color);
-            transition: box-shadow 0.3s ease;
-        }
-        #timer-ring::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit;
-            background: var(--timer-track-color);
-            background: conic-gradient(
-                var(--timer-color) 0%, 
-                var(--timer-track-color) 0% 
-            );
-            transition: background 0.3s ease;
-        }
-        #timer-ring span {
-            z-index: 10;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
-            transition: color 0.3s ease;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+            line-height: 1.2;
         }
 
+        /* 円形タイマーのレイアウト調整 */
+        #time-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 2.5em; /* 文字を大きく */
+            font-family: var(--highlight-font); 
+            color: var(--highlight-color);
+        }
+        #timer-ring {
+            width: 40px; /* 円を少し小さく */
+            height: 40px;
+            font-size: 0.7em; /* 円内の数字も調整 */
+            color: var(--highlight-color);
+            position: relative;
+            box-shadow: 0 0 0 3px var(--timer-track-color);
+            transition: box-shadow 0.3s ease, transform 0.2s;
+        }
+        #time-left {
+            /* 時間の数字 */
+            font-weight: bold; 
+            line-height: 1;
+        }
+
+        /* ------------------------------------------------------------- */
+        /* その他の共通CSS (変更なし) */
+        /* ------------------------------------------------------------- */
+        
         #difficulty-select {
             padding: 10px 18px;
             font-size: 1.1em;
@@ -208,7 +214,6 @@
             box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
             transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
-        /* 🔥 矢印の色もNormalに固定 🔥 */
         #difficulty-select { 
             background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
         }
@@ -257,6 +262,7 @@
             gap: 10px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             transition: background 0.3s ease, border-color 0.3s ease;
+            position: relative; /* スコアポップアップの位置基準 */
         }
 
         .hole {
@@ -412,10 +418,11 @@
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
+        /* 🔥 時間ポップアップの位置をグリッド中央ではなく、画面上部中央付近に調整 🔥 */
         .time-pop {
             position: absolute;
-            top: 50%; 
-            left: calc(50% + 150px); 
+            top: 25%; /* 画面上部寄りに変更 */
+            left: 50%; 
             transform: translate(-50%, -50%);
             font-size: 2.5em; 
             font-weight: bold;
@@ -483,18 +490,24 @@
 <body onload="initializeGame()">
     <h1>もぐらdeポン！ </h1>
 
-    <div id="game-info">
-        <p>スコア: <span id="score">0</span> | 
-            <span id="time-display">
-                時間: 
+    <div id="header-display">
+        <div id="score-info" class="info-panel">
+            <span class="info-label">スコア</span>
+            <span id="score-display">0</span>
+        </div>
+        
+        <div id="time-info" class="info-panel">
+            <span class="info-label">時間</span>
+            <div id="time-container">
                 <div id="timer-ring">
                     <span id="time-left">30</span>
                 </div>
-                秒
-            </span>
-        </p>
+                </div>
+        </div>
     </div>
-
+    <div id="grid">
+    </div>
+        
     <div id="controls">
         <label for="difficulty-select">難易度: </label>
         <select id="difficulty-select">
@@ -505,8 +518,6 @@
         <button id="start-button">ゲームスタート</button>
     </div>
 
-    <div id="grid">
-    </div>
         
     <div id="countdown-overlay">
         <span id="countdown-text"></span>
@@ -568,7 +579,8 @@
         let moleTimerId; 
         let lastHole = null;
 
-        const scoreDisplay = document.getElementById('score');
+        // 🔥 スコア表示要素のID変更 🔥
+        const scoreDisplay = document.getElementById('score-display');
         const timeLeftDisplay = document.getElementById('time-left');
         const timerRing = document.getElementById('timer-ring'); 
         const startButton = document.getElementById('start-button');
@@ -578,7 +590,8 @@
         const difficultySelect = document.getElementById('difficulty-select');
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
-        const gameInfoPanel = document.getElementById('game-info'); 
+        // 🔥 時間ポップアップの位置調整のため、親要素をdocument.bodyに変更 🔥
+        const gameInfoPanel = document.body; // #header-displayの上部にポップアップさせるため
 
         // SVGモグラのHTML (省略)
         const MOLE_SVG = `
@@ -615,9 +628,6 @@
             grid.style.height = `${newSize}px`;
 
             grid.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-            
-            // 🔥 難易度クラスの追加を削除。グリッドのスタイルは共通CSSで賄われる
-            // grid.classList.add('grid-' + difficulty);
         }
 
         function createHoles() {
@@ -775,12 +785,12 @@
             if (timeLeft <= 5) {
                 // 赤色を強制的に適用
                 timeLeftDisplay.style.color = '#e53935'; 
-                timeLeftDisplay.style.fontSize = '1.3em'; 
-                timerRing.style.transform = 'scale(1.1)';
+                timeLeftDisplay.style.fontSize = '1.2em'; 
+                timerRing.style.transform = 'scale(1.2)';
             } else {
                 // 統一配色（--highlight-color）に戻す
                 timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
-                timeLeftDisplay.style.fontSize = ''; 
+                timeLeftDisplay.style.fontSize = '1em'; 
                 timerRing.style.transform = 'scale(1.0)';
             }
 
@@ -800,6 +810,7 @@
             setTimeout(() => { pop.remove(); }, 900); 
         }
 
+        // 🔥 時間ポップアップの親要素を`document.body`に修正 🔥
         function showTimePop(seconds) {
             const pop = document.createElement('div');
             pop.classList.add('time-pop');
@@ -813,7 +824,8 @@
                 pop.classList.add('minus');
             }
             
-            gameInfoPanel.appendChild(pop);
+            // #header-displayの上部に重ねるためにbodyに追加
+            document.body.appendChild(pop); 
             
             setTimeout(() => { pop.remove(); }, 1200); 
         }
@@ -957,10 +969,6 @@
             currentHoleCount = initialSettings.holeCount;
             currentGridColumns = initialSettings.gridColumns;
             
-            // 🔥 bodyのクラス操作を削除
-            
-            // 🔥 select要素の矢印の色調整ロジックを削除
-            
             setGridClass(initialDifficulty);
             createHoles(); 
             
@@ -971,7 +979,6 @@
         startButton.addEventListener('click', startGame);
         difficultySelect.addEventListener('change', () => {
             if (!isGameRunning) {
-                // 難易度設定のみを更新し、ゲーム盤面を再構築
                 initializeGame();
             }
         }); 
