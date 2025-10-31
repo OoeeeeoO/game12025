@@ -2,80 +2,71 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - SVGモグラ版 (ツムツム風レイアウト)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Hachi+Maru+Pop&family=Potta+One&display=swap" rel="stylesheet">
+    <title>モグラたたき - SVGモグラ版 (シンプルデザイン・円形タイマー)</title>
     <style>
         /* ======================================================= */
-        /* 🔥 共通配色 (Normal設定に固定) 🔥 */
+        /* 🔥 シンプル＆モダンな配色とスタイル 🔥 */
         /* ======================================================= */
 
         body {
-            /* --- Normal設定を直接適用 --- */
-            --main-bg-start: #ffe0f0; 
-            --main-bg-end: #fefefe; 
-            --title-main-color: #ff69b4; 
-            --title-shadow-color-1: rgba(255, 105, 180, 0.3);
-            --title-shadow-color-2: #fff;
-            --title-blob-color: rgba(255, 105, 180, 0.1);
-            --panel-bg: rgba(255, 255, 255, 0.7);
-            --panel-border: #f0b0c0; 
-            --panel-text-color: #666;
-            --highlight-color: #ff69b4; 
-            --highlight-font: 'Potta One', cursive;
-            --select-border: #f0b0c0;
+            /* ベースカラー: シンプルな青系/グレー */
+            --main-bg-start: #f4f4f9; 
+            --main-bg-end: #e0e0f0; 
+            --title-main-color: #3f51b5; /* インディゴ */
+            --title-shadow-color-1: rgba(0, 0, 0, 0.1); 
+            --panel-bg: #ffffff;
+            --panel-border: #cccccc; 
+            --panel-text-color: #333;
+            --highlight-color: #3f51b5; /* メイン青 */
+            --select-border: #999;
             --select-bg: #fff;
-            --select-text-color: #666;
-            --select-arrow-color: #f0b0c0;
-            --select-focus-shadow: #f5d3db;
-            --button-bg-start: #ff99cc; 
-            --button-bg-end: #ff6699;
+            --select-text-color: #333;
+            --select-focus-shadow: rgba(63, 81, 181, 0.3);
+            --button-bg-start: #5c6bc0; 
+            --button-bg-end: #3f51b5;
             --button-text-color: white;
-            --button-shadow-color: #e05c8c;
-            --button-hover-bg-start: #ffadc2;
-            --button-hover-bg-end: #ff7ba0;
-            --button-active-shadow: #e05c8c;
+            --button-shadow-color: #303f9f;
+            --button-hover-bg-start: #7986cb;
+            --button-hover-bg-end: #5c6bc0;
             --button-disabled-bg-start: #ccc;
-            --button-disabled-bg-end: #bbb;
-            --button-disabled-shadow: #aaa;
-            --grid-bg: rgba(255, 255, 255, 0.8);
-            --grid-border: #f0b0c0;
-            --hole-bg: #d2b48c; 
-            --hole-border: #b39b7a;
-            --hole-inner-border: rgba(179, 155, 122, 0.3);
-            --mole-body-fill: #f0a0a0; 
-            --mole-body-stroke: #d08080;
-            --mole-face-fill: #ffebee; 
-            --mole-face-stroke: #d08080;
-            --mole-eyes-nose: #888;
-            --mole-gold-fill: #ffdf00;
-            --mole-gold-stroke: #e0b000;
-            --mole-gold-face-hand: #fff3a0;
-            --mole-bomb-fill: #a0a0a0;
-            --mole-bomb-stroke: #808080;
-            --mole-bomb-hand: #808080;
-            --mole-clock-fill: #87ceeb;
-            --mole-clock-stroke: #6aabcb;
-            --modal-bg-start: #fefefe;
-            --modal-bg-end: #fcfcfc;
-            --modal-border: #ff99cc;
-            --modal-h2-color: #ff69b4;
-            --modal-final-score-bg: #fff0f5;
-            --modal-final-score-border: #ff99cc;
-            --modal-button-bg-start: #99ccff; 
-            --modal-button-bg-end: #6699ff;
-            --modal-button-shadow: #5c8ae0;
-            --score-pop-color: #ff69b4;
+            --button-disabled-bg-end: #aaa;
+            --grid-bg: #ffffff;
+            --grid-border: #dddddd;
+            --hole-bg: #e0e0e0; 
+            --hole-border: #bdbdbd;
+            --mole-body-fill: #607d8b; /* スレートグレー */
+            --mole-body-stroke: #455a64;
+            --mole-face-fill: #cfd8dc; 
+            --mole-face-stroke: #455a64;
+            --mole-eyes-nose: #333;
+            --mole-gold-fill: #ffc107;
+            --mole-gold-stroke: #ff8f00;
+            --mole-gold-face-hand: #fff8e1;
+            --mole-bomb-fill: #424242;
+            --mole-bomb-stroke: #212121;
+            --mole-bomb-hand: #212121;
+            --mole-clock-fill: #4caf50;
+            --mole-clock-stroke: #388e3c;
+            --modal-bg-start: #fff;
+            --modal-bg-end: #f9f9f9;
+            --modal-border: #3f51b5;
+            --modal-h2-color: #3f51b5;
+            --modal-final-score-bg: #e8eaf6;
+            --modal-final-score-border: #9fa8da;
+            --modal-button-bg-start: #ff9800; 
+            --modal-button-bg-end: #f57c00;
+            --modal-button-shadow: #e65100;
+            --score-pop-color: #3f51b5;
             --score-pop-shadow: rgba(0,0,0,0.2);
             --time-pop-plus-color: #4CAF50; 
             --time-pop-minus-color: #F44336; 
-            --countdown-overlay-bg: rgba(255, 240, 245, 0.7);
-            --countdown-text-color: #ff69b4;
-            --countdown-text-shadow: rgba(0,0,0,0.2);
-            --timer-color: #ff69b4; 
-            --timer-track-color: rgba(0,0,0,0.1);
+            --countdown-overlay-bg: rgba(255, 255, 255, 0.8);
+            --countdown-text-color: #3f51b5;
+            --countdown-text-shadow: rgba(0,0,0,0.1);
+            --timer-color: #e53935; /* タイマーは警告色（赤）固定 */
+            --timer-track-color: #cccccc;
 
-            /* 共通フォントとレイアウト */
-            font-family: 'Hachi Maru Pop', cursive;
+            font-family: sans-serif; /* シンプルなフォント */
             text-align: center;
             margin: 0;
             padding: 20px;
@@ -84,185 +75,161 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background: linear-gradient(135deg, var(--main-bg-start) 0%, var(--main-bg-end) 50%, var(--main-bg-start) 100%);
+            background: linear-gradient(135deg, var(--main-bg-start), var(--main-bg-end));
             background-attachment: fixed;
             color: var(--panel-text-color);
             transition: background 0.5s ease-in-out; 
-            position: relative; /* 子要素の絶対配置の基準 */
         }
-        
-        /* ------------------------------------------------------------- */
-        /* 🔥 新しいレイアウト調整 CSS 🔥 */
-        /* ------------------------------------------------------------- */
 
         h1 { 
-            /* タイトルは画面中央上部に配置し、固定 */
-            font-family: 'Potta One', cursive;
-            font-size: 3.5em; /* タイトルを少し小さく */
+            font-family: sans-serif; 
+            font-size: 3em; 
             color: var(--title-main-color);
-            text-shadow: 
-                3px 3px 0px var(--title-shadow-color-1),
-                -2px -2px 0px var(--title-shadow-color-2);
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px var(--title-shadow-color-1); /* シンプルな影 */
+            margin-bottom: 30px;
+            letter-spacing: 1px;
             line-height: 1.2;
-            padding: 5px 20px;
+            padding: 10px 0;
             position: relative;
             display: inline-block;
             z-index: 10;
+            transition: color 0.3s ease;
         }
-
-        #controls { 
-            /* コントロールパネルを画面下部に移動 */
+        /* ポップな飾りを削除 */
+        h1::after { content: none; }
+        
+        #controls, #game-info { 
             background: var(--panel-bg);
             padding: 15px 30px;
-            border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-            margin-top: 25px; /* グリッドとの間隔を調整 */
+            border-radius: 8px; /* シンプルな角 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 柔らかな影 */
+            margin-bottom: 25px; 
             display: flex;
-            gap: 25px; 
+            gap: 20px; 
             align-items: center;
-            border: 2px dashed var(--panel-border);
+            border: 1px solid var(--panel-border); /* 実線 */
             color: var(--panel-text-color);
-            font-family: 'Hachi Maru Pop', cursive;
-            z-index: 10;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            position: relative; 
+            font-size: 1.1em;
         }
 
-        /* 🔥 スコアと時間の表示エリア（ツムツム風）🔥 */
-        #header-display {
-            position: absolute;
-            top: 130px; /* タイトルの下に配置 */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 50; /* グリッドより手前 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            pointer-events: none; /* クリックイベントがグリッドに透過するように */
-        }
+        #game-info p { margin: 0; }
         
-        .info-panel {
-            /* スコアと時間の背景パネル */
-            background-color: rgba(255, 255, 255, 0.85); /* 半透明の白 */
-            border: 3px solid var(--highlight-color);
-            border-radius: 15px;
-            margin: 5px 0;
-            padding: 5px 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 150px; /* パネル幅を固定 */
-            pointer-events: auto; /* 子要素はクリックできるように戻す */
-        }
-        
-        .info-label {
-            font-size: 0.9em;
-            color: var(--panel-text-color);
-            margin-bottom: -5px;
-            display: block;
-        }
-        
-        #score-display {
-            font-size: 2.5em; 
+        #score { 
+            font-weight: bold; 
             color: var(--highlight-color);
-            font-family: var(--highlight-font); 
-            font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
-            line-height: 1.2;
+            font-size: 1.4em; 
+            text-shadow: none; /* 影を削除 */
+            transition: color 0.3s ease;
         }
-
-        /* 円形タイマーのレイアウト調整 */
-        #time-container {
+        
+        /* 円形タイマーのCSS */
+        #time-display {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 5px;
-            font-size: 2.5em; /* 文字を大きく */
-            font-family: var(--highlight-font); 
-            color: var(--highlight-color);
+            gap: 8px;
+            font-size: 1.1em; 
         }
         #timer-ring {
-            width: 40px; /* 円を少し小さく */
+            width: 40px; /* サイズを少し小さく */
             height: 40px;
-            font-size: 0.7em; /* 円内の数字も調整 */
-            color: var(--highlight-color);
+            border-radius: 50%;
+            display: grid; 
+            place-content: center;
             position: relative;
-            box-shadow: 0 0 0 3px var(--timer-track-color);
-            transition: box-shadow 0.3s ease, transform 0.2s;
+            font-weight: bold;
+            font-size: 1em;
+            color: var(--highlight-color);
+            box-shadow: none; /* 影を削除 */
+            border: 2px solid var(--timer-track-color);
+            transition: border-color 0.3s ease;
         }
-        #time-left {
-            /* 時間の数字 */
-            font-weight: bold; 
-            line-height: 1;
+        #timer-ring::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px; /* ボーダーの内側で描画 */
+            border-radius: inherit;
+            background: conic-gradient(
+                var(--timer-color) 0%, 
+                transparent 0% 
+            );
+            /* トラックカラーはボーダーで表現するため、背景グラデーションから削除 */
+            transition: background 0.3s ease;
+            z-index: 0;
         }
-
-        /* ------------------------------------------------------------- */
-        /* その他の共通CSS (変更なし) */
-        /* ------------------------------------------------------------- */
+        #timer-ring span {
+            z-index: 10;
+            text-shadow: none;
+            transition: color 0.3s ease;
+        }
         
+        /* セレクトボックスのスタイルをシンプルに */
         #difficulty-select {
-            padding: 10px 18px;
-            font-size: 1.1em;
-            border-radius: 20px;
-            border: 2px solid var(--select-border); 
+            padding: 8px 15px;
+            font-size: 1em;
+            border-radius: 4px; 
+            border: 1px solid var(--select-border); 
             background-color: var(--select-bg); 
             color: var(--select-text-color);
-            font-family: 'Hachi Maru Pop', cursive;
             appearance: none; 
             background-repeat: no-repeat;
             background-position: right 10px center;
-            background-size: 20px;
+            background-size: 15px;
             cursor: pointer;
-            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
-            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: border-color 0.3s ease;
         }
+        /* 矢印をシンプルなグレーに固定 */
         #difficulty-select { 
-            background-image: url('data:image/svg+xml;utf8,<svg fill="#f0b0c0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
+            background-image: url('data:image/svg+xml;utf8,<svg fill="#666666" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
         }
         #difficulty-select:focus {
             outline: none;
+            border-color: var(--highlight-color);
             box-shadow: 0 0 0 3px var(--select-focus-shadow);
         }
 
+        /* スタートボタンのスタイルをシンプルに */
         #start-button {
-            padding: 12px 30px;
-            font-size: 1.6em; 
+            padding: 10px 25px;
+            font-size: 1.2em; 
             background: linear-gradient(180deg, var(--button-bg-start), var(--button-bg-end));
             color: var(--button-text-color, white);
             border: none;
-            border-radius: 25px;
+            border-radius: 4px; /* シンプルな角 */
             cursor: pointer;
             transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 3px 0 var(--button-shadow-color), 0 5px 10px rgba(0,0,0,0.15);
-            font-family: 'Potta One', cursive;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 0 var(--button-shadow-color), 0 3px 5px rgba(0,0,0,0.1);
+            font-family: sans-serif;
+            text-shadow: none;
         }
         #start-button:hover { 
             background: linear-gradient(180deg, var(--button-hover-bg-start), var(--button-hover-bg-end)); 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 0 var(--button-shadow-color), 0 7px 12px rgba(0,0,0,0.2);
+            transform: translateY(-1px); 
+            box-shadow: 0 3px 0 var(--button-shadow-color), 0 4px 8px rgba(0,0,0,0.15);
         }
         #start-button:active { 
-            transform: translateY(2px); 
-            box-shadow: 0 1px 0 var(--button-active-shadow), 0 2px 5px rgba(0,0,0,0.1);
+            transform: translateY(1px); 
+            box-shadow: 0 1px 0 var(--button-shadow-color), 0 1px 3px rgba(0,0,0,0.1);
         }
         #start-button:disabled { 
-            background: linear-gradient(180deg, var(--button-disabled-bg-start, #ccc), var(--button-disabled-bg-end, #bbb)); 
+            background: linear-gradient(180deg, var(--button-disabled-bg-start, #ccc), var(--button-disabled-bg-end, #aaa)); 
             cursor: not-allowed; 
             transform: translateY(0); 
-            box-shadow: 0 3px 0 var(--button-disabled-shadow, #aaa), 0 5px 10px rgba(0,0,0,0.15); 
+            box-shadow: 0 2px 0 var(--button-disabled-shadow, #999), 0 3px 5px rgba(0,0,0,0.1); 
         }
 
         #grid {
             display: grid;
             margin: 0 auto;
             background: var(--grid-bg);
-            border: 4px dashed var(--grid-border);
-            border-radius: 20px;
-            padding: 10px;
-            gap: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 1px solid var(--grid-border); /* 実線 */
+            border-radius: 4px;
+            padding: 8px;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: background 0.3s ease, border-color 0.3s ease;
-            position: relative; /* スコアポップアップの位置基準 */
         }
 
         .hole {
@@ -271,24 +238,15 @@
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 3px solid var(--hole-border);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2); 
+            border: 1px solid var(--hole-border);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
-        .hole::before {
-            content: '';
-            position: absolute;
-            top: -5%; left: -5%;
-            width: 110%; height: 110%;
-            border: 2px solid var(--hole-inner-border);
-            border-radius: 40% 60% 50% 50% / 50% 50% 40% 60%;
-            pointer-events: none;
-            z-index: 1;
-            transition: border-color 0.3s ease;
-        }
+        /* ポップな内側のボーダーを削除 */
+        .hole::before { content: none; }
 
         .mole {
             width: 100%; 
@@ -321,6 +279,7 @@
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: var(--mole-gold-face-hand); }
         .mole.bomb .mole-hand { fill: var(--mole-bomb-hand); }
 
+        /* モーダルのスタイルをシンプルに */
         #game-over-modal { 
             display: none; 
             position: fixed; 
@@ -329,65 +288,60 @@
             top: 0; 
             width: 100%; 
             height: 100%; 
-            overflow: auto; 
-            background-color: rgba(255, 255, 255, 0.7); 
-            backdrop-filter: blur(5px); 
+            background-color: rgba(0, 0, 0, 0.4); /* 暗い背景 */
+            backdrop-filter: blur(4px); 
         }
         .modal-content { 
-            background: linear-gradient(180deg, var(--modal-bg-start, #fefefe), var(--modal-bg-end, #fcfcfc)); 
-            margin: 10% auto; 
-            padding: 30px;
-            border: 3px solid var(--modal-border);
-            width: 85%; max-width: 450px; 
-            border-radius: 25px; 
+            background: var(--modal-bg-start); 
+            margin: 15% auto; 
+            padding: 25px;
+            border: 1px solid var(--modal-border);
+            width: 90%; max-width: 400px; 
+            border-radius: 8px; 
             text-align: center; 
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
             animation: fadeIn 0.5s; 
-            font-family: 'Hachi Maru Pop', cursive;
+            font-family: sans-serif;
             color: var(--panel-text-color);
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .modal-content h2 { 
             color: var(--modal-h2-color);
-            font-size: 3em; 
+            font-size: 2.5em; 
             margin-bottom: 15px; 
-            text-shadow: 1px 1px 0 #fff; 
-            font-family: 'Potta One', cursive;
-            transition: color 0.3s ease;
+            text-shadow: none; 
+            font-family: sans-serif;
         }
         .final-score { 
-            font-size: 4em; 
+            font-size: 3em; 
             color: var(--modal-h2-color);
             font-weight: bold; 
             display: block; 
             margin: 20px 0; 
-            padding: 15px; 
+            padding: 10px; 
             background-color: var(--modal-final-score-bg); 
-            border-radius: 15px; 
-            border: 2px dashed var(--modal-final-score-border);
-            font-family: 'Potta One', cursive; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px; 
+            border: 1px solid var(--modal-final-score-border); /* 実線 */
+            font-family: sans-serif; 
+            text-shadow: none;
         }
         .modal-content button { 
             background: linear-gradient(180deg, var(--modal-button-bg-start), var(--modal-button-bg-end));
             color: white; 
             border: none; 
-            padding: 12px 25px; 
-            font-size: 1.3em; 
-            border-radius: 20px; 
+            padding: 10px 20px; 
+            font-size: 1.1em; 
+            border-radius: 4px; 
             cursor: pointer; 
             transition: background 0.2s, transform 0.1s; 
-            font-family: 'Hachi Maru Pop', cursive;
-            box-shadow: 0 3px 0 var(--modal-button-shadow); 
+            font-family: sans-serif;
+            box-shadow: 0 2px 0 var(--modal-button-shadow); 
         }
         .modal-content button:hover { 
-            background: linear-gradient(180deg, var(--modal-button-hover-bg-start, #aaddff), var(--modal-button-hover-bg-end, #7bbaff)); 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 0 var(--modal-button-shadow);
+            transform: translateY(-1px); 
+            box-shadow: 0 3px 0 var(--modal-button-shadow);
         }
         .modal-content button:active {
-            transform: translateY(2px);
+            transform: translateY(1px);
             box-shadow: 0 1px 0 var(--modal-button-shadow);
         }
 
@@ -396,59 +350,44 @@
             top: 50%; 
             left: 50%; 
             transform: translate(-50%, -50%); 
-            font-size: 3em; 
+            font-size: 2.5em; /* 少し小さく */
             font-weight: bold; 
             color: var(--score-pop-color);
-            text-shadow: 
-                -1px -1px 0 #fff, 
-                1px -1px 0 #fff,
-                -1px 1px 0 #fff,
-                1px 1px 0 #fff,
-                2px 2px 0 var(--score-pop-shadow); 
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* シンプルな影 */
             pointer-events: none; 
             opacity: 0; 
             animation: scorePopUp 0.9s ease-out forwards; 
             z-index: 5; 
-            font-family: 'Potta One', cursive; 
-            transition: color 0.3s ease, text-shadow 0.3s ease;
+            font-family: sans-serif; 
         }
         @keyframes scorePopUp { 
             0% { opacity: 1; transform: translate(-50%, 0) scale(0.9); } 
-            50% { transform: translate(-50%, -50px) scale(1.1); } 
-            100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
+            50% { transform: translate(-50%, -40px) scale(1.1); } 
+            100% { opacity: 0; transform: translate(-50%, -80px) scale(1); } 
         }
         
-        /* 🔥 時間ポップアップの位置をグリッド中央ではなく、画面上部中央付近に調整 🔥 */
         .time-pop {
             position: absolute;
-            top: 25%; /* 画面上部寄りに変更 */
-            left: 50%; 
+            top: 50%; 
+            left: calc(50% + 150px); 
             transform: translate(-50%, -50%);
-            font-size: 2.5em; 
+            font-size: 2em; 
             font-weight: bold;
-            text-shadow: 
-                -1px -1px 0 #fff, 
-                1px -1px 0 #fff,
-                -1px 1px 0 #fff,
-                1px 1px 0 #fff;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
             pointer-events: none;
             opacity: 0;
             animation: timePopUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
             z-index: 20;
-            font-family: 'Potta One', cursive;
+            font-family: sans-serif;
         }
 
-        .time-pop.plus {
-            color: var(--time-pop-plus-color); 
-        }
-        .time-pop.minus {
-            color: var(--time-pop-minus-color); 
-        }
+        .time-pop.plus { color: var(--time-pop-plus-color); }
+        .time-pop.minus { color: var(--time-pop-minus-color); }
 
         @keyframes timePopUp {
             0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
             10% { opacity: 1; transform: translate(-50%, -20px) scale(1.1); }
-            100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
+            100% { opacity: 0; transform: translate(-50%, -80px) scale(0.9); }
         }
 
         #countdown-overlay {
@@ -463,22 +402,15 @@
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(3px); 
-            transition: background-color 0.3s ease;
         }
 
         #countdown-text {
-            font-family: 'Potta One', cursive; 
-            font-size: 7.5em; 
+            font-family: sans-serif; 
+            font-size: 6em; 
             color: var(--countdown-text-color);
             font-weight: bold;
-            text-shadow: 
-                -3px -3px 0 #fff, 
-                3px -3px 0 #fff,
-                -3px 3px 0 #fff,
-                3px 3px 0 #fff,
-                5px 5px 0 var(--countdown-text-shadow); 
+            text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.8); 
             animation: pulse 0.9s ease-in-out infinite alternate; 
-            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         @keyframes pulse {
@@ -488,26 +420,20 @@
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>もぐらdeポン！ </h1>
+    <h1>モグラたたき</h1>
 
-    <div id="header-display">
-        <div id="score-info" class="info-panel">
-            <span class="info-label">スコア</span>
-            <span id="score-display">0</span>
-        </div>
-        
-        <div id="time-info" class="info-panel">
-            <span class="info-label">時間</span>
-            <div id="time-container">
+    <div id="game-info">
+        <p>スコア: <span id="score">0</span> | 
+            <span id="time-display">
+                時間: 
                 <div id="timer-ring">
                     <span id="time-left">30</span>
                 </div>
-                </div>
-        </div>
+                秒
+            </span>
+        </p>
     </div>
-    <div id="grid">
-    </div>
-        
+
     <div id="controls">
         <label for="difficulty-select">難易度: </label>
         <select id="difficulty-select">
@@ -518,6 +444,8 @@
         <button id="start-button">ゲームスタート</button>
     </div>
 
+    <div id="grid">
+    </div>
         
     <div id="countdown-overlay">
         <span id="countdown-text"></span>
@@ -579,8 +507,7 @@
         let moleTimerId; 
         let lastHole = null;
 
-        // 🔥 スコア表示要素のID変更 🔥
-        const scoreDisplay = document.getElementById('score-display');
+        const scoreDisplay = document.getElementById('score');
         const timeLeftDisplay = document.getElementById('time-left');
         const timerRing = document.getElementById('timer-ring'); 
         const startButton = document.getElementById('start-button');
@@ -590,10 +517,9 @@
         const difficultySelect = document.getElementById('difficulty-select');
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
-        // 🔥 時間ポップアップの位置調整のため、親要素をdocument.bodyに変更 🔥
-        const gameInfoPanel = document.body; // #header-displayの上部にポップアップさせるため
+        const gameInfoPanel = document.getElementById('game-info'); 
 
-        // SVGモグラのHTML (省略)
+        // SVGモグラのHTML
         const MOLE_SVG = `
             <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
                 <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="38" />
@@ -742,7 +668,7 @@
                 hole.classList.remove('up');
                 mole.classList.remove('gold', 'bomb', 'clock'); 
                 
-                // モグラを隠すときに色をリセット
+                // モグラが隠れるときに色をリセット
                 mole.querySelector('.mole-body').style.fill = '';
                 mole.querySelector('.mole-body').style.stroke = '';
                 mole.querySelector('.mole-face').style.fill = '';
@@ -765,6 +691,7 @@
             moleTimerId = setTimeout(peep, time);
         }
 
+        // 🔥 円形タイマーの更新ロジック 🔥
         function updateTime() {
             if (timeLeft < 0) { timeLeft = 0; }
             
@@ -776,21 +703,25 @@
             const timerColor = getComputedStyle(document.body).getPropertyValue('--timer-color').trim();
             const timerTrackColor = getComputedStyle(document.body).getPropertyValue('--timer-track-color').trim();
             
-            timerRing.style.setProperty('background', `conic-gradient(
-                ${timerColor} ${progressDegree}deg,
-                ${timerTrackColor} ${progressDegree}deg 360deg
-            )`);
+            // progressDegreeが100%に近くなるほど塗りつぶしが減る
+            timerRing.style.setProperty('background', `
+                radial-gradient(circle, white 55%, transparent 55%), /* 中心を白で抜く */
+                conic-gradient(
+                    ${timerColor} ${progressDegree}deg,
+                    transparent ${progressDegree}deg 360deg
+                )
+            `);
             
             // 残り時間が少ない場合の警告色
             if (timeLeft <= 5) {
                 // 赤色を強制的に適用
                 timeLeftDisplay.style.color = '#e53935'; 
-                timeLeftDisplay.style.fontSize = '1.2em'; 
-                timerRing.style.transform = 'scale(1.2)';
+                timeLeftDisplay.style.fontSize = '1.1em'; 
+                timerRing.style.transform = 'scale(1.1)';
             } else {
-                // 統一配色（--highlight-color）に戻す
+                // 通常の色（--highlight-color）に戻す
                 timeLeftDisplay.style.color = getComputedStyle(document.body).getPropertyValue('--highlight-color'); 
-                timeLeftDisplay.style.fontSize = '1em'; 
+                timeLeftDisplay.style.fontSize = ''; 
                 timerRing.style.transform = 'scale(1.0)';
             }
 
@@ -810,7 +741,6 @@
             setTimeout(() => { pop.remove(); }, 900); 
         }
 
-        // 🔥 時間ポップアップの親要素を`document.body`に修正 🔥
         function showTimePop(seconds) {
             const pop = document.createElement('div');
             pop.classList.add('time-pop');
@@ -824,8 +754,7 @@
                 pop.classList.add('minus');
             }
             
-            // #header-displayの上部に重ねるためにbodyに追加
-            document.body.appendChild(pop); 
+            gameInfoPanel.appendChild(pop);
             
             setTimeout(() => { pop.remove(); }, 1200); 
         }
