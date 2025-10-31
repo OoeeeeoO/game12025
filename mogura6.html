@@ -20,34 +20,34 @@
         }
 
         h1 { 
-            /* たまごっち風タイトル */
+            /* たまごっち風タイトル (水色系) */
             font-family: 'Press Start 2P', cursive; /* よりドット絵感の強いフォント */
-            font-size: 2.2em; /* ドット絵感を出すため、少し小さめに */
-            color: #4a4a4a; /* 暗めのグレー */
+            font-size: 2.2em; 
+            color: #1565c0; /* 暗めの青 */
             text-shadow: 
-                2px 2px 0px #90a4ae, /* 少しずらした影 */
-                4px 4px 0px #607d8b; /* さらに深い影 */
+                2px 2px 0px #90a4ae, /* 影 */
+                4px 4px 0px #42a5f5; /* 水色の深い影 */
             margin-bottom: 25px;
-            letter-spacing: 0.1em; /* 字間を広げてドット絵感を強調 */
+            letter-spacing: 0.1em; 
             line-height: 1.5;
             padding: 10px 20px;
-            background-color: #cfd8dc; /* 少し明るいグレーの背景 */
-            border: 4px solid #78909c; /* 濃いめのボーダー */
-            border-radius: 8px; /* 少し角丸 */
+            background-color: #cfd8dc; 
+            border: 4px solid #78909c; 
+            border-radius: 8px; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 8px 15px rgba(0,0,0,0.2);
         }
         
         #controls, #game-info { 
-            background-color: #f0f4c3; /* 淡い黄緑色のゲーム画面風 */
+            background-color: #f0f4c3; 
             padding: 15px 25px;
-            border-radius: 5px; /* 角をあまり丸めない */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset 0 0 10px rgba(0,0,0,0.1); /* 内側と外側に影 */
+            border-radius: 5px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset 0 0 10px rgba(0,0,0,0.1); 
             margin-bottom: 25px; 
             display: flex;
-            gap: 25px; /* 間隔を広げる */
+            gap: 25px; 
             align-items: center;
-            border: 3px solid #a7b75b; /* 緑のボーダー */
-            color: #333333; /* 暗い文字色 */
+            border: 3px solid #a7b75b; 
+            color: #333333; 
         }
 
         #game-info p { 
@@ -56,19 +56,20 @@
             font-size: 1.3em; 
         }
         #score, #time-left { 
+            /* スコア・時間 (黄色系) */
             font-weight: bold; 
-            color: #2e7d32; /* 液晶画面のような緑 */
-            font-family: 'Press Start 2P', cursive; /* 専用フォント */
+            color: #ffb300; /* 濃い黄色/オレンジ */
+            font-family: 'Press Start 2P', cursive; 
             font-size: 1.6em; 
-            text-shadow: 1px 1px 0px #aed581; /* 少し明るい影 */
+            text-shadow: 1px 1px 0px #ffecb3; /* 薄い黄色の影 */
         }
 
         #difficulty-select {
             padding: 10px 18px;
             font-size: 1.1em;
-            border-radius: 3px; /* カクカク */
+            border-radius: 3px; 
             border: 2px solid #a7b75b; 
-            background-color: #fffde7; /* 白っぽい背景 */
+            background-color: #fffde7; 
             color: #333333;
             font-family: 'DotGothic16', sans-serif;
             appearance: none; 
@@ -87,13 +88,13 @@
         #start-button {
             padding: 12px 30px;
             font-size: 1.6em; 
-            background-color: #ff9933; /* オレンジ */
+            background-color: #ff9933; 
             color: white;
             border: none;
-            border-radius: 5px; /* カクカク */
+            border-radius: 5px; 
             cursor: pointer;
             transition: background-color 0.1s, transform 0.1s, box-shadow 0.1s;
-            box-shadow: 0 5px 0 #cc7a29, 0 7px 10px rgba(0,0,0,0.2); /* 押しボタン風の影 */
+            box-shadow: 0 5px 0 #cc7a29, 0 7px 10px rgba(0,0,0,0.2); 
             font-family: 'Press Start 2P', cursive;
             letter-spacing: 0.05em;
         }
@@ -117,9 +118,9 @@
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: #aed581; /* 明るい黄緑 */
-            border: 8px solid #558b2f; /* 濃い緑のボーダー */
-            border-radius: 10px; /* 少し角丸 */
+            background-color: #aed581; 
+            border: 8px solid #558b2f; 
+            border-radius: 10px; 
             padding: 8px;
             gap: 8px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
@@ -127,19 +128,19 @@
 
         /* 穴 */
         .hole {
-            background-color: #8d6e63; /* 少し暗めの茶色 */
+            background-color: #8d6e63; 
             border-radius: 50%;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 4px solid #5d4037; /* 濃い茶色のボーダー */
+            border: 4px solid #5d4037; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
         }
 
-        /* モグラ本体 (SVGコンテナ) - 色調を全体に合わせるため少し修正 */
+        /* モグラ本体 (SVGコンテナ) */
         .mole {
             width: 100%; 
             height: 100%; 
@@ -163,8 +164,8 @@
 
         /* 特殊モグラの色変更 (SVG内の要素を直接操作) */
         .mole.gold .mole-body { fill: #FFD700; stroke: #B8860B; }
-        .mole.bomb .mole-body { fill: #424242; stroke: #c62828; } /* より暗めのグレーと赤 */
-        .mole.clock .mole-body { fill: #64b5f6; stroke: #4fc3f7; } /* 明るい青 */
+        .mole.bomb .mole-body { fill: #424242; stroke: #c62828; } 
+        .mole.clock .mole-body { fill: #64b5f6; stroke: #4fc3f7; } 
         .mole.gold .mole-face, .mole.gold .mole-hand { fill: #FFE580; }
         .mole.bomb .mole-hand { fill: #333; }
 
@@ -182,12 +183,12 @@
             backdrop-filter: blur(5px); 
         }
         .modal-content { 
-            background-color: #eceff1; /* 明るいグレー */
+            background-color: #eceff1; 
             margin: 10% auto; 
             padding: 30px;
-            border: 5px solid #607d8b; /* 濃いグレーのボーダー */
+            border: 5px solid #607d8b; 
             width: 85%; max-width: 450px; 
-            border-radius: 10px; /* カクカク */
+            border-radius: 10px; 
             text-align: center; 
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
             animation: fadeIn 0.5s; 
@@ -202,25 +203,26 @@
             font-family: 'Press Start 2P', cursive;
         }
         .final-score { 
+            /* 最終スコア (黄色系) */
             font-size: 4em; 
-            color: #2e7d32; /* 液晶画面のような緑 */
+            color: #ffb300; /* 濃い黄色/オレンジ */
             font-weight: bold; 
             display: block; 
             margin: 20px 0; 
             padding: 15px; 
-            background-color: #c8e6c9; /* 淡い緑の背景 */
-            border-radius: 8px; /* 角丸 */
-            border: 3px solid #558b2f;
+            background-color: #fffde7; /* 薄い黄色背景 */
+            border-radius: 8px; 
+            border: 3px solid #ff9933;
             font-family: 'Press Start 2P', cursive; 
             text-shadow: 2px 2px 3px rgba(0,0,0,0.1);
         }
         .modal-content button { 
-            background-color: #7986cb; /* 少し落ち着いた青 */
+            background-color: #7986cb; 
             color: white; 
             border: none; 
             padding: 12px 25px; 
             font-size: 1.3em; 
-            border-radius: 5px; /* カクカク */
+            border-radius: 5px; 
             cursor: pointer; 
             transition: background-color 0.1s, transform 0.1s; 
             font-family: 'DotGothic16', sans-serif;
@@ -271,7 +273,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(189, 189, 189, 0.6); /* 淡いグレーの半透明 */
+            background-color: rgba(189, 189, 189, 0.6); 
             z-index: 90;
             justify-content: center;
             align-items: center;
@@ -279,16 +281,17 @@
         }
 
         #countdown-text {
-            font-family: 'Press Start 2P', cursive; /* ドット絵フォント */
+            /* カウントダウン (黄色系) */
+            font-family: 'Press Start 2P', cursive; 
             font-size: 7.5em; 
-            color: #2e7d32; /* 液晶画面のような緑 */
+            color: #ffb300; /* 濃い黄色/オレンジ */
             font-weight: bold;
             text-shadow: 
                 -3px -3px 0 #fff, 
                 3px -3px 0 #fff,
                 -3px 3px 0 #fff,
                 3px 3px 0 #fff,
-                5px 5px 0 #aed581; /* 淡い緑の影 */
+                5px 5px 0 #ffecb3; /* 薄い黄色の影 */
             animation: pulse 0.8s ease-in-out infinite alternate; 
         }
 
@@ -299,7 +302,7 @@
     </style>
 </head>
 <body onload="initializeGame()">
-    <h1>もぐらdeポン！ </h1>
+    <h1>SVGスペシャルモグラたたき！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
