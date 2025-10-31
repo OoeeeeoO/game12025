@@ -10,7 +10,6 @@
             font-family: 'Mochiy Pop P One', 'Arial', sans-serif;
             text-align: center;
             margin: 0;
-            /* 修正: paddingを調整。要素のbox-sizingがborder-boxなので、paddingは内部に影響 */
             padding: 20px 0; 
             display: flex;
             flex-direction: column;
@@ -29,7 +28,6 @@
                 2px -2px 0 #fff,
                 -2px 2px 0 #fff,
                 2px 2px 0 #fff,
-                /* 修正: シャドウを少し控えめに */
                 3px 3px 0 #ffc1e3,
                 5px 5px 0 #ffb3d9,
                 7px 7px 0 #ff99c8,
@@ -126,7 +124,8 @@
             background-color: #a0d468;
             border: 8px solid #6b9e32;
             border-radius: 20px;
-            padding: 10px;
+            /* **修正:** 穴の並びと盤面境界の余白を均等にするため、paddingを15pxに増やす */
+            padding: 15px; 
             gap: 10px;
             box-shadow: 0 12px 25px rgba(0,0,0,0.35);
         }
@@ -140,13 +139,12 @@
             cursor: pointer;
             border: none;
             box-shadow: 
-                inset 0 0 12px rgba(0,0,0,0.4), /* 内側の影で深さを表現 */
-                0 0 0 4px #8e5c46, /* 外側のボーダー風の影（4px） */
-                0 4px 6px rgba(0,0,0,0.2); /* 穴自体の少し浮いたような影 */
+                inset 0 0 12px rgba(0,0,0,0.4), 
+                0 0 0 4px #8e5c46, 
+                0 4px 6px rgba(0,0,0,0.2); 
             display: flex;
             justify-content: center;
             align-items: flex-end; /* モグラを下端に配置 */
-            /* widthとheightはJavaScriptで設定される */
         }
         
         /* モグラ本体 (SVGコンテナ) */
@@ -154,15 +152,12 @@
             width: 100%; 
             height: 100%; 
             position: absolute; 
-            /* 修正: 穴の高さと完全に一致するように-100%からbottom: -currentHoleSize + 誤差調整 に変更 */
-            /* ただし、holeのheightが動的なので、ここでは相対的な-100%を維持し、
-               SVG自体のviewBoxと中の要素のY座標で調整する方が安全 */
             bottom: -100%; 
             transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* SVGも下端に揃える */
+            align-items: flex-end;
             z-index: 2; 
         }
         .hole.up .mole { 
@@ -174,8 +169,6 @@
         .mole svg {
             width: 100%;
             height: 100%;
-            /* 修正: transformを削除。SVGのviewBoxと内部の要素の位置で調整する */
-            /* transform: translateY(15%); */ 
         }
 
         /* --- 特殊モグラの色変更 (SVG内の要素を直接操作) --- */
@@ -195,17 +188,17 @@
         /* ボムモグラ */
         .mole.bomb .mole-body { fill: #333; stroke: #111; }
         .mole.bomb .mole-face { fill: #555; stroke: #111; }
-        .mole.bomb .mole-hand { fill: #FF4500; stroke: #CC3700; } /* 手を爆弾っぽく */
+        .mole.bomb .mole-hand { fill: #FF4500; stroke: #CC3700; } 
         .mole.bomb .mole-nose { fill: #FF4500; }
         
         /* クロックモグラ */
-        .mole.clock .mole-body { fill: #80c0ff; stroke: #4682B4; } /* パステルブルー */
+        .mole.clock .mole-body { fill: #80c0ff; stroke: #4682B4; } 
         .mole.clock .mole-face { fill: #c0e0ff; stroke: #4682B4; }
         .mole.clock .mole-hand { fill: #80c0ff; }
         .mole.clock .mole-nose { fill: #4682B4; }
         /* ------------------------------------------------ */
 
-        /* ゲームオーバーモーダルのCSS (変更なし) */
+        /* ゲームオーバーモーダル */
         #game-over-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
         .modal-content { background-color: #fff0f5; margin: 10% auto; padding: 35px; border: 5px solid #ff80ab; width: 85%; max-width: 450px; border-radius: 25px; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); animation: fadeIn 0.5s; font-family: 'Mochiy Pop P One', sans-serif; color: #6a053c; }
         .modal-content h2 { color: #ff66b2; font-size: 3em; margin-bottom: 15px; text-shadow: 2px 2px 0 #fff; }
@@ -214,7 +207,7 @@
         .modal-content button:hover { background-color: #66aaff; transform: translateY(-2px); box-shadow: 0 6px 0 #66aaff; }
         .modal-content button:active { transform: translateY(2px); box-shadow: 0 2px 0 #66aaff; }
 
-        /* スコアポップアップのCSS */
+        /* スコアポップアップ */
         .score-pop { 
             position: absolute; 
             top: 50%; 
@@ -222,7 +215,7 @@
             transform: translate(-50%, -50%); 
             font-size: 3em;
             font-weight: bold; 
-            color: #fff; /* ベース色を白に変更 */
+            color: #fff; 
             text-shadow: 
                 -2px -2px 0 var(--pop-color, #ff66b2),
                 2px -2px 0 var(--pop-color, #ff66b2),
@@ -241,7 +234,7 @@
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); } 
         }
         
-        /* カウントダウンオーバーレイのCSS (変更なし) */
+        /* カウントダウンオーバーレイ */
         #countdown-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 204, 229, 0.7); z-index: 90; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         #countdown-text { font-family: 'Mochiy Pop P One', cursive; font-size: 9em; color: #ff3366; font-weight: bold; text-shadow: -4px -4px 0 #fff, 4px -4px 0 #fff, -4px 4px 0 #fff, 4px 4px 0 #fff, 6px 6px 0 #ffb3d9; animation: pulse 0.8s ease-in-out infinite alternate; }
         @keyframes pulse { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.1); opacity: 1; } }
@@ -343,9 +336,23 @@
         const countdownOverlay = document.getElementById('countdown-overlay');
         const countdownText = document.getElementById('countdown-text');
 
-        // SVGモグラのHTML (修正箇所: viewBoxの調整、および各パーツのcy調整)
+        // SVGモグラのHTML (ビューボックスとパーツ位置は前回の修正で最適な状態)
         const MOLE_SVG = `
-            <svg viewBox="0 0 100 110" preserveAspectRatio="xMidYMax meet"> <ellipse class="mole-body" cx="50" cy="70" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> <ellipse class="mole-face" cx="50" cy="80" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/> <circle class="mole-nose" cx="50" cy="78" r="3" fill="#333"/> <circle cx="38" cy="66" r="3.5" fill="black"/> <circle cx="62" cy="66" r="3.5" fill="black"/> <line class="mole-whisker" x1="23" y1="81" x2="38" y2="81" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="20" y1="86" x2="38" y2="86" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="23" y1="91" x2="38" y2="91" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="62" y1="81" x2="77" y2="81" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="62" y1="86" x2="80" y2="86" stroke="#6A462F" stroke-width="1"/> <line class="mole-whisker" x1="62" y1="91" x2="77" y2="91" stroke="#6A462F" stroke-width="1"/> <ellipse class="mole-hand" cx="25" cy="95" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> <ellipse class="mole-hand" cx="75" cy="95" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> </svg>
+            <svg viewBox="0 0 100 110" preserveAspectRatio="xMidYMax meet"> 
+<ellipse class="mole-body" cx="50" cy="70" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> 
+<ellipse class="mole-face" cx="50" cy="80" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1.5"/> 
+<circle class="mole-nose" cx="50" cy="78" r="3" fill="#333"/> 
+<circle cx="38" cy="66" r="3.5" fill="black"/> 
+<circle cx="62" cy="66" r="3.5" fill="black"/> 
+<line class="mole-whisker" x1="23" y1="81" x2="38" y2="81" stroke="#6A462F" stroke-width="1"/> 
+<line class="mole-whisker" x1="20" y1="86" x2="38" y2="86" stroke="#6A462F" stroke-width="1"/> 
+<line class="mole-whisker" x1="23" y1="91" x2="38" y2="91" stroke="#6A462F" stroke-width="1"/> 
+<line class="mole-whisker" x1="62" y1="81" x2="77" y2="81" stroke="#6A462F" stroke-width="1"/> 
+<line class="mole-whisker" x1="62" y1="86" x2="80" y2="86" stroke="#6A462F" stroke-width="1"/> 
+<line class="mole-whisker" x1="62" y1="91" x2="77" y2="91" stroke="#6A462F" stroke-width="1"/> 
+<ellipse class="mole-hand" cx="25" cy="95" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> 
+<ellipse class="mole-hand" cx="75" cy="95" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/> 
+</svg>
         `;
 
 
@@ -355,10 +362,12 @@
             const holeSize = settings.holeSize; 
             
             const gap = 10; 
-            const gridBorderPadding = (8 + 10) * 2; 
+            const border = 8;
+            // **修正:** CSSと連携させ、paddingを15pxに設定 (CSSの#gridと一致させる)
+            const padding = 15; 
 
-            // グリッド全体の幅を計算
-            const newGridSize = (holeSize * columns) + (gap * (columns - 1)) + gridBorderPadding;
+            // グリッド全体の幅を計算: (穴のサイズ * 列数) + (ギャップ * ギャップ数) + (ボーダー + パディング) * 2
+            const newGridSize = (holeSize * columns) + (gap * (columns - 1)) + (border + padding) * 2;
 
             grid.style.width = `${newGridSize}px`;
             grid.style.height = `${newGridSize}px`; 
