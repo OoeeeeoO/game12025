@@ -72,7 +72,7 @@
         /* ゲーム盤面 */
         #grid {
             display: grid;
-            /* grid-template-columns: repeat(3, 1fr); <--- JSで動的に設定するため削除 */
+            /* grid-template-columns は JS で動的に設定 */
             width: 420px; /* 固定サイズ */
             height: 420px; /* 固定サイズ */
             margin: 0 auto;
@@ -121,7 +121,7 @@
         }
 
         /* ---------------------------------- */
-        /* モグラの顔のデザイン (省略せず全て残す) */
+        /* モグラの顔のデザイン (変更なし) */
         /* ---------------------------------- */
         .face-container {
             position: relative;
@@ -425,7 +425,7 @@
     </style>
 </head>
 <body>
-    <h1>スペシャルモグラたたき！ </h1>
+    <h1>もぐらdeポン！ </h1>
 
     <div id="game-info">
         <p>スコア: <span id="score">0</span> | 時間: <span id="time-left">30</span>秒</p>
@@ -434,9 +434,9 @@
     <div id="controls">
         <label for="difficulty-select">難易度: </label>
         <select id="difficulty-select">
-            <option value="easy">かんたん (穴4)</option>
-            <option value="normal" selected>ふつう (穴9)</option>
-            <option value="hard">むずかしい (穴16)</option>
+            <option value="easy">かんたん</option>
+            <option value="normal" selected>ふつう</option>
+            <option value="hard">むずかしい</option>
         </select>
         <button id="start-button">ゲームスタート</button>
     </div>
@@ -455,8 +455,7 @@
 
     <script>
         // JavaScript (ゲームロジック)
-
-        // ★★★ 難易度によって穴の数を変更するための設定を拡張 ★★★
+        
         const GAME_DURATION = 30; 
         
         const NORMAL_MOLE_SCORE = 1;
@@ -472,22 +471,23 @@
         const CLOCK_MOLE_CHANCE = 0.05; 
         const NORMAL_MOLE_CHANCE = 1.0 - (GOLD_MOLE_CHANCE + BOMB_MOLE_CHANCE + CLOCK_MOLE_CHANCE); 
 
+        // ★★★ 難易度ごとのゲームパラメータを新しい要件に合わせて定義 ★★★
         const DIFFICULTY_SETTINGS = {
             easy: {
-                holeCount: 4, 
-                gridColumns: 'repeat(2, 1fr)', // 2x2のグリッド
+                holeCount: 9, 
+                gridColumns: 'repeat(3, 1fr)', // 9個なので 3x3
                 minTime: 800, 
                 maxTime: 1800, 
             },
             normal: {
-                holeCount: 9, 
-                gridColumns: 'repeat(3, 1fr)', // 3x3のグリッド
+                holeCount: 16, 
+                gridColumns: 'repeat(4, 1fr)', // 16個なので 4x4
                 minTime: 500,
                 maxTime: 1500,
             },
             hard: {
-                holeCount: 16, 
-                gridColumns: 'repeat(4, 1fr)', // 4x4のグリッド
+                holeCount: 25, 
+                gridColumns: 'repeat(5, 1fr)', // 25個なので 5x5
                 minTime: 300,
                 maxTime: 1000,
             }
@@ -510,7 +510,7 @@
         const finalScoreDisplay = document.getElementById('final-score');
         const difficultySelect = document.getElementById('difficulty-select');
 
-        // ★ createHoles 関数を修正: 穴の数とグリッドの列設定を引数で受け取る
+        // ★ createHoles 関数: 穴の数とグリッドの列設定を引数で受け取る
         function createHoles(count, columns) {
             grid.innerHTML = '';
             // グリッドのCSSを動的に設定
@@ -709,7 +709,7 @@
         }
 
         // 初期設定とイベントリスナー
-        // ページロード時に、初期選択されている難易度（normal）の設定で一度穴を作成する
+        // ページロード時に、初期選択されている難易度（normal、穴16個）の設定で一度穴を作成する
         document.addEventListener('DOMContentLoaded', () => {
             const initialSettings = DIFFICULTY_SETTINGS[difficultySelect.value];
             createHoles(initialSettings.holeCount, initialSettings.gridColumns);
