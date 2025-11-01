@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="ja">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
-
-    <style>
-
-        /* CSS (デザイン) */
+/* CSS (デザイン) */
 
         body {
 
@@ -85,6 +71,8 @@
             border: 2px solid #ffb3d9; 
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
             transition: all 0.5s ease;
+            position: relative; /* キラキラ星のために追加 */
+            overflow: hidden; /* キラキラ星がはみ出さないように */
         }
         
         #game-info p { 
@@ -98,27 +86,70 @@
 
         #score, #time-left { 
             font-weight: bold; 
-            color: #ff3366; 
             font-family: 'Nikukyu', cursive; 
             font-size: 4em; 
-            display: block;
+            display: inline-block; /* グラデーションのためにblockから変更 */
             line-height: 1.1;
+            padding: 0 5px; /* キラキラ星が数字に近すぎないように少しパディング */
+
+            /* ★★★ グラデーションとキラキラ装飾の追加 ★★★ */
+            background: linear-gradient(45deg, #ff80ab, #ffc1e3, #80c0ff); /* グラデーション */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; /* テキストを透明にして背景グラデーションを表示 */
+            color: transparent; /* fallback for non-webkit browsers */
+            
             text-shadow: 
-                -1px -1px 0 #fff,
-                1px 1px 0 #ffc1e3; 
-            transition: transform 0.2s, color 0.2s; /* アピールのためのアニメーション準備 */
+                -1px -1px 0 rgba(255,255,255,0.7), /* 白いフチ */
+                1px 1px 5px rgba(255,193,227,0.8), /* ピンクの輝き */
+                0 0 10px rgba(255,255,255,0.5); /* 全体的な光の拡散 */
+            position: relative;
+            z-index: 1; /* キラキラ星の上に表示 */
+            /* ★★★ ここまで ★★★ */
+        }
+
+        /* キラキラ星のアニメーション */
+        @keyframes blinkStar {
+            0%, 100% { opacity: 0.5; transform: scale(0.8) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(45deg); }
+        }
+
+        /* 各数字のコンテナにキラキラ星を追加 */
+        #score-display-container::before,
+        #time-display-container::before {
+            content: '✨'; /* または '⭐', '🌟' などお好みの絵文字 */
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 1.8em;
+            opacity: 0.5;
+            animation: blinkStar 2s infinite ease-in-out alternate;
+            z-index: 0; /* 数字の下に表示 */
+        }
+        /* 数字のコンテナの左側にも追加する場合は以下も追加 */
+        #score-display-container::after,
+        #time-display-container::after {
+            content: '✨';
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 1.5em;
+            opacity: 0.5;
+            animation: blinkStar 2.5s infinite ease-in-out alternate-reverse;
+            z-index: 0;
         }
 
         /* 🚨 制限時間が迫ったときのアピールCSS */
         @keyframes urgentTimePulse {
-            0% { transform: scale(1); color: #ff3366; }
-            50% { transform: scale(1.2); color: #ff0000; } /* 大きさと色を変化 */
-            100% { transform: scale(1); color: #ff3366; }
+            0% { transform: scale(1); background-position: 0% 50%; } /* グラデーションの位置も変化 */
+            50% { transform: scale(1.2); background-position: 100% 50%; background: linear-gradient(45deg, #ff0000, #ff8000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } /* 赤に変化 */
+            100% { transform: scale(1); background-position: 0% 50%; }
         }
 
         .time-urgent {
-            /* 最後の10秒で適用されるクラス */
+            /* 最後の5秒で適用されるクラス */
             animation: urgentTimePulse 0.5s ease-in-out infinite alternate;
+            background-size: 200% auto; /* グラデーションを動かすために必要 */
+            transition: all 0.5s ease; /* グラデーション変化を滑らかに */
         }
 
 
@@ -961,16 +992,16 @@
             if (timeLeft < 0) { timeLeft = 0; }
             timeLeftDisplay.textContent = timeLeft;
             
-            // 対象を数字の要素（timeLeftDisplay）に変更
+            // 対象は数字の要素（timeLeftDisplay）のまま
             const targetElement = timeLeftDisplay;
 
-            // 10秒以下になったらアピールクラスを追加
+            // 5秒以下になったらアピールクラスを追加
             if (timeLeft <= 5 && isGameRunning) {
                 if (!targetElement.classList.contains('time-urgent')) {
                     targetElement.classList.add('time-urgent');
                 }
             } else {
-                // 10秒より多いか、ゲームが終了したらクラスを削除
+                // 5秒より多いか、ゲームが終了したらクラスを削除
                 if (targetElement.classList.contains('time-urgent')) {
                     targetElement.classList.remove('time-urgent');
                 }
