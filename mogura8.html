@@ -965,7 +965,7 @@
             const targetElement = timeLeftDisplay;
 
             // 10秒以下になったらアピールクラスを追加
-            if (timeLeft <= 10 && isGameRunning) {
+            if (timeLeft <= 5 && isGameRunning) {
                 if (!targetElement.classList.contains('time-urgent')) {
                     targetElement.classList.add('time-urgent');
                 }
