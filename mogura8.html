@@ -25,10 +25,9 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            /* ★★★ 背景をピンクと紫のグラデーションに変更 ★★★ */
+            /* 背景をピンクと紫のグラデーションに変更 */
             background: linear-gradient(135deg, #ffc0cb, #e6e6fa, #d8bfd8); /* パステルピンク、ラベンダー、シスル */
             background-attachment: fixed; /* 画面いっぱいにグラデーションを固定 */
-            /* ★★★ ここまで ★★★ */
         }
 
 
@@ -108,13 +107,13 @@
             line-height: 1.1;
             padding: 0 5px; 
 
-            /* グラデーションとキラキラ装飾 (見やすさ改善) */
-            background: linear-gradient(45deg, #ff80ab, #ffc1e3, #80c0ff); /* グラデーションは維持 */
+            /* ★★★ グラデーションを紫系に変更 ★★★ */
+            background: linear-gradient(45deg, #a020f0, #dda0dd, #ba55d3); /* バイオレット、プラム、ミディアムオーキッド */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; 
             color: transparent; 
             
-            /* 可読性向上のための濃いフチを追加 */
+            /* 可読性向上のための濃いフチはそのまま */
             text-shadow: 
                 -2px -2px 0 #6a053c,  /* 濃いピンクのフチ（左上） */
                 2px -2px 0 #6a053c,   /* 濃いピンクのフチ（右上） */
@@ -124,6 +123,7 @@
             
             position: relative;
             z-index: 1; 
+            /* ★★★ ここまで ★★★ */
         }
 
         /* キラキラ星のアニメーション */
