@@ -18,13 +18,13 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            /* 背景をピンクと紫のグラデーション */
-            background: linear-gradient(135deg, #ffc0cb, #e6e6fa, #d8bfd8); /* パステルピンク、ラベンダー、シスル */
+            /* 背景をピンクと紫のグラデーション (維持) */
+            background: linear-gradient(135deg, #ffc0cb, #e6e6fa, #d8bfd8); 
             background-attachment: fixed; 
         }
 
         h1 { 
-            /* サンリオ風の大きなフチ付きタイトル */
+            /* サンリオ風の大きなフチ付きタイトル (維持) */
             font-family: 'Mochiy Pop P One', cursive;
             font-size: 3.8em; 
             color: #ff80ab; 
@@ -93,18 +93,16 @@
             line-height: 1.1;
             padding: 0 5px; 
 
-            /* ★★★ グラデーションを薄紫色に変更 ★★★ */
-            background: linear-gradient(45deg, #e6e6fa, #f0e6ff, #dda0dd); /* ラベンダー、明るい紫、プラム */
+            /* スコア・タイムの数字を薄紫色 (維持) */
+            background: linear-gradient(45deg, #e6e6fa, #f0e6ff, #dda0dd); 
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; 
             color: transparent; 
             
-            /* フチの色も薄い紫に合わせて調整 */
+            /* フチの色も薄い紫に合わせて調整 (維持) */
             text-shadow: 
-                -2px -2px 0 #9370db,  /* ミディアムパープル */
-                2px -2px 0 #9370db,   
-                -2px 2px 0 #9370db,   
-                2px 2px 0 #9370db,    
+                -2px -2px 0 #9370db, 2px -2px 0 #9370db,   
+                -2px 2px 0 #9370db, 2px 2px 0 #9370db,    
                 4px 4px 5px rgba(0,0,0,0.3); 
             
             position: relative;
@@ -190,9 +188,9 @@
         /* ゲーム盤面 */
         #grid {
             display: grid; margin: 0 auto;
-            /* パステルグリーン */
-            background-color: #d7f7e2; 
-            border: 8px solid #a8e6b9; 
+            /* ★★★ 元の色に戻す: 土色/セピア ★★★ */
+            background-color: #a0522d; 
+            border: 8px solid #8b4513; 
             border-radius: 20px;
             padding: 10px; gap: 10px;
             box-shadow: 0 12px 25px rgba(0,0,0,0.35);
@@ -201,14 +199,14 @@
 
         /* 穴 */
         .hole {
-            /* パステルピンク */
-            background-color: #ffe0f0; 
+            /* ★★★ 元の色に戻す: 濃い土色/サドルブラウン ★★★ */
+            background-color: #8b4513; 
             border-radius: 50%; overflow: hidden; position: relative; 
             cursor: pointer; border: none;
             box-shadow: 
-                inset 0 0 12px rgba(0,0,0,0.2), 
-                0 0 0 4px #ffb3d9, 
-                0 4px 6px rgba(0,0,0,0.1); 
+                inset 0 0 12px rgba(0,0,0,0.4), /* 影を濃く */
+                0 0 0 4px #a0522d, /* 盤面の色をフチに */
+                0 4px 6px rgba(0,0,0,0.2); 
             display: flex; justify-content: center; align-items: flex-end;
         }
 
@@ -228,38 +226,38 @@
         .mole svg { width: 100%; height: 100%; transform: translateY(10%); }
 
 
-          /* --- 特殊モグラの色変更 (パステル化) --- */
+          /* --- 特殊モグラの色変更 (元の色に戻す) --- */
 
         /* 通常モグラ */
-        .mole-body { fill: #f0e0d0; stroke: #d0c0b0; } 
-        .mole-face { fill: #fdf5e6; stroke: #d0c0b0; } 
-        .mole-hand { fill: #f0e0d0; stroke: #d0c0b0; } 
-        .mole-whisker { stroke: #d0c0b0; } 
-        .mole-nose { fill: #a08070; } 
+        .mole-body { fill: #8B5C3D; stroke: #6A462F; } 
+        .mole-face { fill: #E6C5A9; stroke: #6A462F; } 
+        .mole-hand { fill: #8B5C3D; stroke: #6A462F; } 
+        .mole-whisker { stroke: #6A462F; } 
+        .mole-nose { fill: #333; } 
 
 
         /* ゴールドモグラ */
-        .mole.gold .mole-body { fill: #fffacd; stroke: #ffebcd; } 
-        .mole.gold .mole-face { fill: #ffffe0; } 
-        .mole.gold .mole-hand { fill: #fffacd; }
-        .mole.gold .mole-nose { fill: #ffd700; }
+        .mole.gold .mole-body { fill: #ffd700; stroke: #ccad00; } 
+        .mole.gold .mole-face { fill: #ffeb84; stroke: #ccad00; } 
+        .mole.gold .mole-hand { fill: #ffd700; stroke: #ccad00; }
+        .mole.gold .mole-nose { fill: #333; }
 
         
         /* ボムモグラ */
-        .mole.bomb .mole-body { fill: #c0c0c0; stroke: #a0a0a0; } 
-        .mole.bomb .mole-face { fill: #e0e0e0; stroke: #a0a0a0; }
-        .mole.bomb .mole-hand { fill: #ff6347; stroke: #e0523e; } 
-        .mole.bomb .mole-nose { fill: #ff6347; } 
+        .mole.bomb .mole-body { fill: #333333; stroke: #1a1a1a; } 
+        .mole.bomb .mole-face { fill: #666666; stroke: #1a1a1a; }
+        .mole.bomb .mole-hand { fill: #ff0000; stroke: #cc0000; } 
+        .mole.bomb .mole-nose { fill: #ff0000; } 
 
         
         /* クロックモグラ */
-        .mole.clock .mole-body { fill: #b0e0e6; stroke: #87ceeb; } 
-        .mole.clock .mole-face { fill: #e0f8f8; stroke: #87ceeb; }
-        .mole.clock .mole-hand { fill: #b0e0e6; }
-        .mole.clock .mole-nose { fill: #6a5acd; }
+        .mole.clock .mole-body { fill: #5cb3ff; stroke: #3d8fd8; } 
+        .mole.clock .mole-face { fill: #99ccff; stroke: #3d8fd8; }
+        .mole.clock .mole-hand { fill: #5cb3ff; stroke: #3d8fd8; }
+        .mole.clock .mole-nose { fill: #0000ff; }
 
 
-        /* ゲームオーバーモーダルのCSS */
+        /* ゲームオーバーモーダルのCSS (維持) */
         #game-over-modal { 
             display: none; position: fixed; z-index: 100; left: 0; top: 0; 
             width: 100%; height: 100%; overflow: auto; 
@@ -306,7 +304,7 @@
         }
 
 
-        /* スコアポップアップのCSS */
+        /* スコアポップアップのCSS (維持) */
         .score-pop { 
             position: absolute; top: 50%; left: 50%; 
             transform: translate(-50%, -50%); font-size: 3em; 
@@ -327,7 +325,7 @@
         }
 
         
-        /* カウントダウンオーバーレイのCSS */
+        /* カウントダウンオーバーレイのCSS (維持) */
         #countdown-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
