@@ -84,7 +84,7 @@
             border-radius: 15px;
             border: 2px solid #ffb3d9; 
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-            transition: all 0.5s ease; /* アピール時のアニメーションのために追加 */
+            transition: all 0.5s ease;
         }
         
         #game-info p { 
@@ -106,20 +106,19 @@
             text-shadow: 
                 -1px -1px 0 #fff,
                 1px 1px 0 #ffc1e3; 
+            transition: transform 0.2s, color 0.2s; /* アピールのためのアニメーション準備 */
         }
 
         /* 🚨 制限時間が迫ったときのアピールCSS */
         @keyframes urgentTimePulse {
-            0% { transform: scale(1); color: #ff3366; opacity: 1; }
-            50% { transform: scale(1.1); color: #ff0000; opacity: 0.7; }
-            100% { transform: scale(1); color: #ff3366; opacity: 1; }
+            0% { transform: scale(1); color: #ff3366; }
+            50% { transform: scale(1.2); color: #ff0000; } /* 大きさと色を変化 */
+            100% { transform: scale(1); color: #ff3366; }
         }
 
         .time-urgent {
             /* 最後の10秒で適用されるクラス */
             animation: urgentTimePulse 0.5s ease-in-out infinite alternate;
-            border: 3px solid #ff0000 !important; /* 赤いボーダーを強制 */
-            background-color: #ffebeb !important; /* 警告色の薄い背景 */
         }
 
 
@@ -962,17 +961,18 @@
             if (timeLeft < 0) { timeLeft = 0; }
             timeLeftDisplay.textContent = timeLeft;
             
-            const timeContainer = document.getElementById('time-display-container');
+            // 対象を数字の要素（timeLeftDisplay）に変更
+            const targetElement = timeLeftDisplay;
 
             // 10秒以下になったらアピールクラスを追加
             if (timeLeft <= 10 && isGameRunning) {
-                if (!timeContainer.classList.contains('time-urgent')) {
-                    timeContainer.classList.add('time-urgent');
+                if (!targetElement.classList.contains('time-urgent')) {
+                    targetElement.classList.add('time-urgent');
                 }
             } else {
                 // 10秒より多いか、ゲームが終了したらクラスを削除
-                if (timeContainer.classList.contains('time-urgent')) {
-                    timeContainer.classList.remove('time-urgent');
+                if (targetElement.classList.contains('time-urgent')) {
+                    targetElement.classList.remove('time-urgent');
                 }
             }
 
@@ -1159,9 +1159,8 @@
             gameOverModal.style.display = 'flex'; 
             
             // 終了時にもアピールクラスを削除
-            const timeContainer = document.getElementById('time-display-container');
-            if (timeContainer.classList.contains('time-urgent')) {
-                timeContainer.classList.remove('time-urgent');
+            if (timeLeftDisplay.classList.contains('time-urgent')) {
+                timeLeftDisplay.classList.remove('time-urgent');
             }
         }
 
@@ -1210,9 +1209,8 @@
             updateTime(); 
             
             // 初期化時にもアピールクラスがないことを確認
-            const timeContainer = document.getElementById('time-display-container');
-            if (timeContainer.classList.contains('time-urgent')) {
-                timeContainer.classList.remove('time-urgent');
+            if (timeLeftDisplay.classList.contains('time-urgent')) {
+                timeLeftDisplay.classList.remove('time-urgent');
             }
         }
 
