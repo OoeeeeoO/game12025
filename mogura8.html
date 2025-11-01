@@ -102,22 +102,26 @@
             font-weight: bold; 
             font-family: 'Nikukyu', cursive; 
             font-size: 4em; 
-            display: inline-block; /* グラデーションのためにblockから変更 */
+            display: inline-block; 
             line-height: 1.1;
-            padding: 0 5px; /* キラキラ星が数字に近すぎないように少しパディング */
+            padding: 0 5px; 
 
-            /* ★★★ グラデーションとキラキラ装飾 ★★★ */
-            background: linear-gradient(45deg, #ff80ab, #ffc1e3, #80c0ff); /* グラデーション */
+            /* ★★★ グラデーションとキラキラ装飾 (見やすさ改善) ★★★ */
+            background: linear-gradient(45deg, #ff80ab, #ffc1e3, #80c0ff); /* グラデーションは維持 */
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; /* テキストを透明にして背景グラデーションを表示 */
-            color: transparent; /* fallback for non-webkit browsers */
+            -webkit-text-fill-color: transparent; 
+            color: transparent; 
             
+            /* 可読性向上のための濃いフチを追加 */
             text-shadow: 
-                -1px -1px 0 rgba(255,255,255,0.7), /* 白いフチ */
-                1px 1px 5px rgba(255,193,227,0.8), /* ピンクの輝き */
-                0 0 10px rgba(255,255,255,0.5); /* 全体的な光の拡散 */
+                -2px -2px 0 #6a053c,  /* 濃いピンクのフチ（左上） */
+                2px -2px 0 #6a053c,   /* 濃いピンクのフチ（右上） */
+                -2px 2px 0 #6a053c,   /* 濃いピンクのフチ（左下） */
+                2px 2px 0 #6a053c,    /* 濃いピンクのフチ（右下） */
+                4px 4px 5px rgba(0,0,0,0.3); /* ソフトな影を追加 */
+            
             position: relative;
-            z-index: 1; /* キラキラ星の上に表示 */
+            z-index: 1; 
             /* ★★★ ここまで ★★★ */
         }
 
