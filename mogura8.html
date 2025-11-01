@@ -1,4 +1,18 @@
-/* CSS (デザイン) */
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>モグラたたき - SVGモグラ版 (サンリオ風デザイン)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
+
+    <style>
+
+        /* CSS (デザイン) */
 
         body {
 
@@ -92,7 +106,7 @@
             line-height: 1.1;
             padding: 0 5px; /* キラキラ星が数字に近すぎないように少しパディング */
 
-            /* ★★★ グラデーションとキラキラ装飾の追加 ★★★ */
+            /* ★★★ グラデーションとキラキラ装飾 ★★★ */
             background: linear-gradient(45deg, #ff80ab, #ffc1e3, #80c0ff); /* グラデーション */
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; /* テキストを透明にして背景グラデーションを表示 */
@@ -125,7 +139,7 @@
             animation: blinkStar 2s infinite ease-in-out alternate;
             z-index: 0; /* 数字の下に表示 */
         }
-        /* 数字のコンテナの左側にも追加する場合は以下も追加 */
+        /* 数字のコンテナの左側にも追加 */
         #score-display-container::after,
         #time-display-container::after {
             content: '✨';
@@ -141,7 +155,14 @@
         /* 🚨 制限時間が迫ったときのアピールCSS */
         @keyframes urgentTimePulse {
             0% { transform: scale(1); background-position: 0% 50%; } /* グラデーションの位置も変化 */
-            50% { transform: scale(1.2); background-position: 100% 50%; background: linear-gradient(45deg, #ff0000, #ff8000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } /* 赤に変化 */
+            50% { 
+                transform: scale(1.2); 
+                background-position: 100% 50%; 
+                /* 警告色として赤系のグラデーションに上書き */
+                background: linear-gradient(45deg, #ff0000, #ff8000); 
+                -webkit-background-clip: text; 
+                -webkit-text-fill-color: transparent; 
+            } 
             100% { transform: scale(1); background-position: 0% 50%; }
         }
 
