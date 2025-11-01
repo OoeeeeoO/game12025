@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>もぐらdeポン！</title>
+    <title>モグラたたき - パステルカラー版</title>
     <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Nikukyu&display=swap" rel="stylesheet">
 
     <style>
@@ -63,7 +63,7 @@
             width: 90%;
             max-width: 650px;
         }
-        
+        
         #game-info > div {
             flex: 1;
             background-color: #fff;
@@ -75,7 +75,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+        
         #game-info p {
             margin: 0;
             color: #ff80ab;
@@ -98,13 +98,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             color: transparent;
-            
+            
             /* フチの色も薄い紫に合わせて調整 (維持) */
             text-shadow:
                 -2px -2px 0 #9370db, 2px -2px 0 #9370db,
                 -2px 2px 0 #9370db, 2px 2px 0 #9370db,
                 4px 4px 5px rgba(0,0,0,0.3);
-            
+            
             position: relative;
             z-index: 1;
         }
@@ -240,14 +240,14 @@
         .mole.gold .mole-hand { fill: #ffd700; stroke: #ccad00; }
         .mole.gold .mole-nose { fill: #333; }
 
-        
+        
         /* ボムモグラ */
         .mole.bomb .mole-body { fill: #333333; stroke: #1a1a1a; }
         .mole.bomb .mole-face { fill: #666666; stroke: #1a1a1a; }
         .mole.bomb .mole-hand { fill: #ff0000; stroke: #cc0000; }
         .mole.bomb .mole-nose { fill: #ff0000; }
 
-        
+        
         /* クロックモグラ */
         .mole.clock .mole-body { fill: #5cb3ff; stroke: #3d8fd8; }
         .mole.clock .mole-face { fill: #99ccff; stroke: #3d8fd8; }
@@ -322,7 +322,7 @@
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); }
         }
 
-        
+        
         /* カウントダウンオーバーレイのCSS (維持) */
         #countdown-overlay {
             display: none; position: fixed; top: 0; left: 0;
@@ -377,11 +377,11 @@
 
     <div id="grid">
     </div>
-        
+        
     <div id="countdown-overlay">
         <span id="countdown-text"></span>
     </div>
-        
+        
     <div id="game-over-modal">
         <div class="modal-content">
             <h2>ゲームオーバー！</h2>
@@ -409,7 +409,7 @@
         const CLOCK_MOLE_CHANCE = 0.05;
 
         const DIFFICULTY_SETTINGS = {
-            easy: { minTime: 800, maxTime: 1800, holeCount: 9, gridColumns: 3, maxMoles: 1 }, 
+            easy: { minTime: 800, maxTime: 1800, holeCount: 9, gridColumns: 3, maxMoles: 1 }, 
             normal: { minTime: 500, maxTime: 1500, holeCount: 16, gridColumns: 4, maxMoles: 2 }, // 最大2匹
             hard: { minTime: 300, maxTime: 1000, holeCount: 25, gridColumns: 5, maxMoles: 3 } // 最大3匹
         };
@@ -490,7 +490,7 @@
         }
 
         function randomTime() { return Math.round(Math.random() * (currentMaxTime - currentMinTime) + currentMinTime); }
-        
+        
         // まだモグラが出ていない穴を選ぶ関数
         function randomHole() {
             const holes = document.querySelectorAll('.hole');
@@ -519,7 +519,7 @@
                 return;
             }
 
-            // ★ 同時出現モグラ数のチェック
+            // 同時出現モグラ数のチェック
             const currentMolesUp = document.querySelectorAll('.hole.up').length;
 
             // 設定された最大数未満の場合にのみ、新しいモグラを出す
@@ -550,13 +550,24 @@
                         mole.classList.remove('gold', 'bomb', 'clock');
                         delete mole.dataset.type;
                         delete mole.dataset.score;
+                        
+                        // 穴が空いたので、タイマーをリセットして次の出現をすぐに試みる
+                        if (isGameRunning) {
+                            clearTimeout(moleTimerId);
+                            peep();
+                        }
                     }, time);
                 }
             }
 
-            // 次の出現チェックは短い間隔で常に行う
-            const nextPeepTime = currentMolesUp < currentMaxMoles ? Math.random() * 200 + 300 : Math.random() * 500 + 500;
-            moleTimerId = setTimeout(peep, nextPeepTime);
+            // 次の出現チェックまでの待ち時間を見直す
+            // 最大出現数未満の場合は、より短時間で次の出現を試みる (ゲームを活発にする)
+            const currentMolesAfterPeep = document.querySelectorAll('.hole.up').length;
+            const nextPeepDelay = currentMolesAfterPeep < currentMaxMoles
+                ? Math.random() * 200 + 100  // 100ms - 300ms (より早く次のモグラを出すチャンス)
+                : Math.random() * 500 + 500; // 500ms - 1000ms (最大数に達しているため少し待つ)
+                
+            moleTimerId = setTimeout(peep, nextPeepDelay);
         }
 
         function updateTime() {
@@ -578,12 +589,27 @@
             if (timeLeft <= 0 && isGameRunning) { endGame(); }
         }
 
-        function showScorePop(hole, points) {
+        function showScorePop(hole, points, type) {
             const pop = document.createElement('div');
             pop.classList.add('score-pop');
             let sign = points > 0 ? '+' : '';
             pop.textContent = sign + points;
-            if (points > 0) { pop.style.color = points >= GOLD_MOLE_SCORE ? '#ffd700' : '#27ae60'; } else { pop.style.color = '#e74c3c'; }
+            
+            // ポイントに応じた色設定
+            if (type === 'gold') {
+                pop.style.color = '#ffd700';
+                pop.style.textShadow = '-2px -2px 0 #ccad00, 2px -2px 0 #ccad00, -2px 2px 0 #ccad00, 2px 2px 0 #ccad00, 3px 3px 0 rgba(0,0,0,0.4)';
+            } else if (type === 'bomb') {
+                pop.style.color = '#ff4d4d'; // 赤系
+                pop.style.textShadow = '-2px -2px 0 #990000, 2px -2px 0 #990000, -2px 2px 0 #990000, 2px 2px 0 #990000, 3px 3px 0 rgba(0,0,0,0.4)';
+            } else if (type === 'clock') {
+                pop.textContent = sign + points + ' (+'+ CLOCK_TIME_BONUS +'s)';
+                pop.style.color = '#80c0ff'; // 青系
+                pop.style.textShadow = '-2px -2px 0 #3d8fd8, 2px -2px 0 #3d8fd8, -2px 2px 0 #3d8fd8, 2px 2px 0 #3d8fd8, 3px 3px 0 rgba(0,0,0,0.4)';
+            } else {
+                pop.style.color = '#fff';
+            }
+            
             hole.appendChild(pop);
             setTimeout(() => { pop.remove(); }, 700);
         }
@@ -597,7 +623,7 @@
                 const points = parseInt(mole.dataset.score);
                 const type = mole.dataset.type;
 
-                showScorePop(hole, points);
+                showScorePop(hole, points, type);
                 score += points;
                 scoreDisplay.textContent = score;
 
@@ -611,7 +637,7 @@
                 mole.classList.remove('gold', 'bomb', 'clock');
                 delete mole.dataset.type;
                 delete mole.dataset.score;
-                
+                
                 // 叩かれたことでモグラの同時出現数に空きができたため、即座にpeepを再実行
                 clearTimeout(moleTimerId); // 現在の待機をキャンセル
                 peep(); // すぐに次のモグラ出現を試みる
