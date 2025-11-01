@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>モグラたたき - 自然なデザイン</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@700&display=swap" rel="stylesheet">
+    
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@700&display=swap" rel="stylesheet">
     <style>
         /* CSS (デザイン) - モダンで自然なデザインに全面改修 */
         
@@ -16,7 +17,9 @@
             --wood-light: #d2b48c;         /* 明るい木の色 */
             --wood-dark: #8b4513;          /* 濃い木の色 */
             --earth-tone: #a0522d;         /* 土の色 */
+            --earth-dark: #7a4225;         /* 濃い土の色 */
             --button-green: #28a745;       /* アクションボタンの緑 */
+            --forest-green: #218838;       /* ボタンのアクティブ色 */
             --text-dark: #343a40;          /* 主要な文字色 */
             --text-light: #ffffff;         /* 明るい文字色 */
             --accent-yellow: #ffc107;      /* スコアなどのアクセント色 */
@@ -26,10 +29,10 @@
         }
 
         body {
-            font-family: var(--font-sans); /* モダンなフォントに変更 */
+            font-family: var(--font-sans); 
             text-align: center;
             margin: 0;
-            padding: 20px; /* パディングを増やす */
+            padding: 20px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -37,35 +40,35 @@
             box-sizing: border-box;
             /* 背景を空と草地の滑らかなグラデーションにする */
             background: linear-gradient(to bottom, var(--sky-gradient-start) 0%, var(--sky-gradient-end) 50%, var(--grass-gradient-start) 50%, var(--grass-gradient-end) 100%);
-            image-rendering: auto; /* ドット絵表現をオフにする */
+            image-rendering: auto; 
             position: relative;
             overflow: hidden;
             z-index: 1;
         }
 
-        /* 背景のドット絵パターンや動物のSVGは全て削除 */
         body::before, body::after {
             content: none;
         }
 
 
         h1 { 
-            font-family: var(--font-serif); /* タイトルは少しエレガントに */
-            font-size: 3.5em; /* フォントサイズを大きく */
-            color: var(--text-dark); /* 文字色を濃い色に */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* 柔らかい影 */
+            font-family: var(--font-serif); 
+            font-size: 3.5em; 
+            color: var(--text-dark); 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); 
             margin-bottom: 30px;
-            letter-spacing: -1px; /* 少し詰める */
+            letter-spacing: -1px; 
             line-height: 1.2;
             padding: 10px 20px;
-            background-color: rgba(255,255,255,0.7); /* 半透明の白背景 */
-            border-radius: 15px; /* 丸みを持たせる */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* 浮き上がるような影 */
+            background-color: rgba(255,255,255,0.7); 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
         }
 
         #game-info { 
-            background-color: rgba(139, 69, 19, 0.8); /* 半透明の濃い木目調 */
-            border-radius: 10px; /* 丸みを持たせる */
+            background-color: var(--wood-dark); 
+            opacity: 0.8; /* 透明度をCSS変数ではなくopacityで設定 */
+            border-radius: 10px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
             margin-bottom: 40px; 
             padding: 0; 
@@ -79,8 +82,9 @@
         #game-info > div { 
             flex: 1; 
             padding: 15px 10px;
-            border-right: 1px solid rgba(255,255,255,0.3); /* 細い仕切り */
-            background-color: rgba(210, 180, 140, 0.8); /* 半透明の明るい木目調 */
+            border-right: 1px solid rgba(255,255,255,0.3); 
+            background-color: var(--wood-light); 
+            opacity: 0.8; /* 透明度をopacityで設定 */
         }
         #game-info > div:last-child {
             border-right: none;
@@ -88,7 +92,7 @@
 
         #game-info p { 
             margin: 0; 
-            color: var(--text-dark); /* ラベル色 */
+            color: var(--text-dark); 
             font-size: 0.9em; 
             line-height: 1.2;
             font-weight: bold;
@@ -96,7 +100,7 @@
 
         #score, #time-left { 
             font-weight: bold; 
-            color: var(--accent-yellow); /* アクセント色 */
+            color: var(--accent-yellow); 
             font-family: var(--font-sans); 
             font-size: 3em; 
             display: block; 
@@ -105,29 +109,31 @@
         }
 
         #controls { 
-            background-color: rgba(160, 82, 45, 0.8); /* 半透明の土色 */
+            background-color: var(--earth-tone); 
+            opacity: 0.9; /* 透明度をopacityで設定 */
             padding: 15px 25px;
-            border-radius: 10px; /* 丸みを持たせる */
+            border-radius: 10px; 
             box-shadow: 0 3px 8px rgba(0,0,0,0.15); 
             margin-bottom: 30px; 
             display: flex;
             gap: 20px;
             align-items: center;
             border: none;
-            color: var(--text-light); /* 文字色を白に */
+            color: var(--text-light); 
             font-size: 1.2em;
         }
 
         #difficulty-select {
             padding: 8px 15px;
             font-size: 1.1em;
-            border-radius: 8px; /* 丸みを持たせる */
+            border-radius: 8px; 
             border: 1px solid rgba(255,255,255,0.4); 
-            background-color: rgba(210, 180, 140, 0.9); /* 明るい木目調 */
+            background-color: var(--wood-light);
+            opacity: 0.9;
             color: var(--text-dark); 
             font-family: var(--font-sans);
             appearance: none; 
-            background-image: linear-gradient(45deg, transparent 50%, rgba(0,0,0,0.2) 50%), linear-gradient(135deg, rgba(0,0,0,0.2) 50%, transparent 50%); /* カスタム矢印 */
+            background-image: linear-gradient(45deg, transparent 50%, rgba(0,0,0,0.2) 50%), linear-gradient(135deg, rgba(0,0,0,0.2) 50%, transparent 50%); 
             background-position: calc(100% - 15px) center, calc(100% - 10px) center;
             background-size: 5px 5px, 5px 5px;
             background-repeat: no-repeat;
@@ -140,7 +146,7 @@
         }
         #difficulty-select:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3); /* フォーカスリング */
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3); 
         }
 
         #start-button {
@@ -149,7 +155,7 @@
             background-color: var(--button-green); 
             color: var(--text-light);
             border: none;
-            border-radius: 8px; /* 丸みを持たせる */
+            border-radius: 8px; 
             cursor: pointer;
             transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
             box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); 
@@ -157,7 +163,7 @@
             letter-spacing: 0;
         }
         #start-button:hover { 
-            background-color: #218838; /* ホバーで少し暗く */
+            background-color: var(--forest-green); 
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
         }
@@ -176,9 +182,10 @@
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: rgba(60, 179, 113, 0.8); /* 草地の色 */
-            border: 2px solid var(--grass-gradient-end); /* ボーダーを濃い緑に */
-            border-radius: 15px; /* 丸みを持たせる */
+            background-color: var(--grass-gradient-end); 
+            opacity: 0.9;
+            border: 2px solid var(--grass-gradient-end); 
+            border-radius: 15px; 
             padding: 10px;
             gap: 10px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.2);
@@ -186,22 +193,22 @@
         }
 
         .hole {
-            background-color: var(--earth-tone); /* 穴の背景を土の色に */
-            border-radius: 50%; /* 完全な丸にする */
+            background-color: var(--earth-tone); 
+            border-radius: 50%; 
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
-            border: 3px solid var(--earth-dark); /* 濃い土色のボーダー */
+            border: 3px solid var(--earth-dark); 
             box-shadow: 
-                inset 0 0 10px rgba(0,0,0,0.3), /* 内側の影で深さを表現 */
-                0 2px 5px rgba(0,0,0,0.1); /* わずかな外側の影 */
+                inset 0 0 10px rgba(0,0,0,0.3), 
+                0 2px 5px rgba(0,0,0,0.1); 
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            transition: transform 0.1s ease-out; /* クリック時のアニメーション */
+            transition: transform 0.1s ease-out; 
         }
         .hole:active {
-            transform: scale(0.98); /* 押された感じ */
+            transform: scale(0.98); 
         }
         
         .mole {
@@ -209,7 +216,7 @@
             height: 100%; 
             position: absolute; 
             bottom: -100%; 
-            transition: bottom 0.2s ease-out; /* モグラの動きを滑らかに */
+            transition: bottom 0.2s ease-out; 
             pointer-events: none; 
             display: flex;
             justify-content: center;
@@ -219,28 +226,264 @@
         .hole.up .mole { 
             bottom: 0; 
             pointer-events: auto; 
-            transform: translateY(5%); /* 少し地面から浮く感じ */
+            transform: translateY(5%); 
         }
 
         .mole svg {
-            width: 90%; /* 少し小さくして穴に収まるように */
+            width: 90%; 
             height: 90%;
-            transform: translateY(10%); /* モグラが少し地面に埋まっているように */
+            transform: translateY(10%); 
         }
 
         /* 🌟 モグラの色をより自然で可愛い動物風に調整 */
-        .mole-body { fill: #8B5C3D; stroke: #6A462F; stroke-width: 1; } /* モグラの体を茶色に、少しアウトライン */
-        .mole-face { fill: #E6C5A9; stroke: #6A462F; stroke-width: 1; } /* 顔をベージュに、少しアウトライン */
-        <circle cx="38" cy="72" r="3.5" fill="black"/>
+        .mole-body { fill: #8B5C3D; stroke: #6A462F; stroke-width: 1; } 
+        .mole-face { fill: #E6C5A9; stroke: #6A462F; stroke-width: 1; } 
+        .mole-hand { fill: #8B5C3D; stroke: #6A462F; stroke-width: 1; } 
+        .mole-whisker { stroke: #333; stroke-width: 1.5; } 
+        .mole-nose { fill: #FF6699; } 
+
+        .mole.gold .mole-body { fill: var(--accent-yellow); } 
+        .mole.gold .mole-face { fill: #FFFACD; }
+        .mole.gold .mole-hand { fill: var(--accent-yellow); }
+        .mole.gold .mole-nose { fill: #B8860B; }
+        
+        .mole.bomb .mole-body { fill: #4a4a4a; } 
+        .mole.bomb .mole-face { fill: #808080; }
+        .mole.bomb .mole-hand { fill: #dc3545; } 
+        .mole.bomb .mole-nose { fill: #000; }
+
+        .mole.clock .mole-body { fill: #6495ed; } 
+        .mole.clock .mole-face { fill: #f0f8ff; } 
+        .mole.clock .mole-hand { fill: #6495ed; }
+        .mole.clock .mole-nose { fill: #205786; } 
+
+        /* ゲームオーバーモーダル (モダンなデザインに調整) */
+        #game-over-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(5px); 
+        }
+        .modal-content { 
+            background-color: #fff; 
+            margin: 10% auto; 
+            padding: 40px; 
+            border-radius: 20px; 
+            width: 85%; max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            animation: fadeIn 0.5s ease-out; 
+            font-family: var(--font-sans);
+            color: var(--text-dark); 
+        }
+        .modal-content h2 { 
+            color: var(--button-green); 
+            font-size: 3em; 
+            margin-bottom: 20px; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); 
+            font-family: var(--font-serif);
+        }
+        .final-score { 
+            font-size: 4em; 
+            color: var(--text-light);
+            background-color: var(--button-green); 
+            border-radius: 10px; 
+            padding: 10px 20px;
+            margin: 15px 0 30px;
+            display: inline-block; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        .modal-content button { 
+            padding: 12px 30px;
+            font-size: 1.5em;
+            background-color: var(--button-green); 
+            color: white;
+            border: none;
+            border-radius: 8px; 
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+        .modal-content button:hover { 
+            background-color: var(--forest-green); 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+        .modal-content button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(40, 167, 69, 0.2);
+        }
+
+        /* 💥 スコアポップアップ (モダンなデザインに調整) */
+        .score-pop { 
+            position: absolute; 
+            top: 5%; 
+            left: 50%; 
+            transform: translate(-50%, 0);
+            font-size: 3em; 
+            font-weight: bold; 
+            color: var(--accent-yellow); 
+            text-shadow: 
+                1px 1px 2px rgba(0,0,0,0.2), 
+                -1px -1px 2px rgba(0,0,0,0.2),
+                1px -1px 2px rgba(0,0,0,0.2),
+                -1px 1px 2px rgba(0,0,0,0.2); 
+            pointer-events: none; 
+            opacity: 0; 
+            animation: scorePopUp 0.8s ease-out forwards; 
+            z-index: 5; 
+            font-family: var(--font-sans); 
+        }
+
+        @keyframes scorePopUp { 
+            0% { opacity: 1; transform: translate(-50%, 0) scale(0.8); } 
+            50% { transform: translate(-50%, -70px) scale(1.2); } 
+            100% { opacity: 0; transform: translate(-50%, -120px) scale(1); }
+        }
+        
+        /* 🎮 カウントダウンオーバーレイ (モダンなデザインに調整) */
+        #countdown-overlay {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(168, 218, 220, 0.9); /* 半透明の空色 */
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        #countdown-text {
+            font-family: var(--font-sans); 
+            font-size: 10em; 
+            color: var(--text-dark); 
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.2), 
+                -2px -2px 4px rgba(255,255,255,0.8); 
+        }
+    </style>
+</head>
+
+<body>
+    <h1>もぐらdeポン！</h1>
+
+    <div id="game-info">
+        <div id="score-display-container">
+            <p>スコア</p>
+            <span id="score">0</span>
+        </div>
+        <div id="time-display-container">
+            <p>タイム</p>
+            <span id="time-left">30</span>
+        </div>
+    </div>
+
+    <div id="controls">
+        <label for="difficulty-select">難易度: </label>
+        <select id="difficulty-select">
+            <option value="easy">かんたん</option>
+            <option value="normal" selected>ふつう</option>
+            <option value="hard">むずかしい</option>
+        </select>
+        <button id="start-button">ゲームスタート</button>
+    </div>
+
+    <div id="grid">
+    </div>
+        
+    <div id="countdown-overlay">
+        <span id="countdown-text"></span>
+    </div>
+        
+    <div id="game-over-modal">
+        <div class="modal-content">
+            <h2>ゲームオーバー！</h2>
+            <p>最終スコア</p>
+            <span id="final-score" class="final-score">0</span>
+            <button onclick="closeModal()">もういちど</button>
+        </div>
+    </div>
+
+    <script>
+        const GAME_DURATION = 30; 
+        
+        const NORMAL_MOLE_SCORE = 1;
+        const GOLD_MOLE_SCORE = 3;
+        const BOMB_MOLE_SCORE = -5;
+        const CLOCK_MOLE_SCORE = 2;
+
+        const BOMB_TIME_PENALTY = 5; 
+        const CLOCK_TIME_BONUS = 5; 
+
+        const GOLD_MOLE_CHANCE = 0.10; 
+        const BOMB_MOLE_CHANCE = 0.15; 
+        const CLOCK_MOLE_CHANCE = 0.05; 
+        
+        const DIFFICULTY_SETTINGS = {
+            easy: {
+                minTime: 800, maxTime: 1800,
+                holeCount: 9, 
+                gridColumns: 3, 
+            },
+            normal: {
+                minTime: 500, maxTime: 1500,
+                holeCount: 16, 
+                gridColumns: 4, 
+            },
+            hard: {
+                minTime: 300, maxTime: 1000,
+                holeCount: 25, 
+                gridColumns: 5, 
+            }
+        };
+
+        let currentMinTime;
+        let currentMaxTime;
+        let currentHoleCount;
+        let currentGridColumns;
+
+        let score = 0;
+        let timeLeft = GAME_DURATION; 
+        let isGameRunning = false;
+        let countdownTimerId;
+        let moleTimerId; 
+        let lastHole = null;
+
+        const scoreDisplay = document.getElementById('score');
+        const timeLeftDisplay = document.getElementById('time-left');
+        const startButton = document.getElementById('start-button');
+        const grid = document.getElementById('grid');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const difficultySelect = document.getElementById('difficulty-select');
+        const countdownOverlay = document.getElementById('countdown-overlay');
+        const countdownText = document.getElementById('countdown-text');
+
+        // SVGモグラのHTML (修正済み)
+        const MOLE_SVG = `
+            <svg viewBox="0 0 100 120" preserveAspectRatio="xMidYMax slice">
+                <ellipse class="mole-body" cx="50" cy="80" rx="48" ry="48" fill="#8B5C3D" stroke="#6A462F" stroke-width="1"/>
+                <ellipse class="mole-face" cx="50" cy="92" rx="25" ry="18" fill="#E6C5A9" stroke="#6A462F" stroke-width="1"/>
+                <circle class="mole-nose" cx="50" cy="84" r="3" fill="#FF6699"/>
+                <circle cx="38" cy="72" r="3.5" fill="black"/>
                 <circle cx="62" cy="72" r="3.5" fill="black"/>
-                <line class="mole-whisker" x1="23" y1="87" x2="38" y2="87" stroke="#6A462F" stroke-width="1.5"/>
-                <line class="mole-whisker" x1="20" y1="92" x2="38" y2="92" stroke="#6A462F" stroke-width="1.5"/>
-                <line class="mole-whisker" x1="23" y1="97" x2="38" y2="97" stroke="#6A462F" stroke-width="1.5"/>
-                <line class="mole-whisker" x1="62" y1="87" x2="77" y2="87" stroke="#6A462F" stroke-width="1.5"/>
-                <line class="mole-whisker" x1="62" y1="92" x2="80" y2="92" stroke="#6A462F" stroke-width="1.5"/>
-                <line class="mole-whisker" x1="62" y1="97" x2="77" y2="97" stroke="#6A462F" stroke-width="1.5"/>
-                <ellipse class="mole-hand" cx="25" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
-                <ellipse class="mole-hand" cx="75" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="2"/>
+                <line class="mole-whisker" x1="23" y1="87" x2="38" y2="87" stroke="#333" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="20" y1="92" x2="38" y2="92" stroke="#333" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="23" y1="97" x2="38" y2="97" stroke="#333" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="62" y1="87" x2="77" y2="87" stroke="#333" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="62" y1="92" x2="80" y2="92" stroke="#333" stroke-width="1.5"/>
+                <line class="mole-whisker" x1="62" y1="97" x2="77" y2="97" stroke="#333" stroke-width="1.5"/>
+                <ellipse class="mole-hand" cx="25" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="1"/>
+                <ellipse class="mole-hand" cx="75" cy="105" rx="10" ry="5" fill="#8B5C3D" stroke="#6A462F" stroke-width="1"/>
             </svg>
         `;
 
@@ -251,8 +494,8 @@
             const columns = settings.gridColumns;
             
             const HOLE_SIZE = 100; 
-            const GAP = 10; /* Gapも少し大きく */
-            const PADDING = 20; /* パディングも大きく */
+            const GAP = 10; 
+            const PADDING = 20; 
 
             const newSize = (HOLE_SIZE * columns) + (GAP * (columns - 1)) + PADDING * 2;
 
@@ -348,14 +591,14 @@
             pop.textContent = sign + points;
             
             if (points > 0) { 
-                // スコアに応じた色コードを指定
+                // 修正: CSS変数を文字列として使用
                 pop.style.color = points >= GOLD_MOLE_SCORE ? 'var(--accent-yellow)' : 'var(--button-green)'; 
             } else { 
-                pop.style.color = '#dc3545'; // モダンな赤 (Bootstrapのdanger色など)
+                pop.style.color = '#dc3545'; 
             }
             
             hole.appendChild(pop);
-            setTimeout(() => { pop.remove(); }, 800); /* アニメーション時間に合わせる */
+            setTimeout(() => { pop.remove(); }, 800); 
         }
         
         function whack(event) {
@@ -474,6 +717,9 @@
                 initializeGame();
             }
         }); 
+        
+        // 修正: ページ読み込み時にゲームを初期化するために呼び出しを追加
+        document.addEventListener('DOMContentLoaded', initializeGame);
     </script>
 </body>
 </html>
