@@ -2,20 +2,29 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>モグラたたき - ドット絵ピクセル風 (寒色系)</title>
+    <title>モグラたたき - 自然なドット絵ピクセル風</title>
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
     <style>
-        /* CSS (デザイン) - 寒色系ドット絵ピクセル風に全面改修 */
+        /* CSS (デザイン) - 自然なドット絵ピクセル風に全面改修 */
         
-        /* 🎨 基本設定 */
+        /* 🎨 基本設定 - 自然なアースカラー */
         :root {
-            --blue-base: #a0c4ff;      /* 明るい水色 (背景) */
-            --blue-accent: #3f88c5;    /* 鮮やか青 (アクセント、タイトル) */
-            --blue-dark: #205786;      /* 濃い青 (影、ボーダー) */
-            --green-grass: #72a863;    /* 暗めの草地 */
-            --green-dark: #4b7342;     /* 草地ボーダー */
-            --gray-hole: #6d6d6d;      /* 穴ベース (グレー) */
-            --gray-dark: #4a4a4a;      /* 穴影 (濃いグレー) */
+            --sky-blue: #87ceeb;       /* 空の青 */
+            --cloud-white: #ffffff;      /* 雲の色 */
+            --mountain-gray: #a9a9a9;    /* 山のグレー */
+            --mountain-dark: #696969;    /* 山の濃いグレー */
+            --tree-green: #3a8a3a;       /* 木の葉の緑 */
+            --tree-dark: #2c6e2c;        /* 木の葉の濃い緑 */
+            --wood-trunk: #6b4c3e;       /* 木の幹の色 */
+            --grass-light: #6fb96f;      /* 明るい草地 */
+            --grass-dark: #4b8b4b;       /* 濃い草地 */
+            --earth-brown: #a07a50;      /* 穴の土の色 */
+            --earth-dark: #7a5f3f;       /* 穴の濃い土の色 */
+            --mushroom-red: #ff0000;     /* きのこの赤 */
+            --mushroom-white: #ffffff;   /* きのこの白 */
+            --bird-yellow: #ffd700;      /* 小鳥の黄色 */
+            --bird-orange: #ffa500;      /* 小鳥のオレンジ */
+
             --font-pixel: 'DotGothic16', monospace;
         }
 
@@ -29,33 +38,87 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background-color: var(--blue-base); /* ベース色を水色に */
+            /* 背景を空色と草地のグラデーションにする */
+            background: linear-gradient(to bottom, var(--sky-blue) 0%, var(--sky-blue) 50%, var(--grass-light) 100%);
             image-rendering: pixelated;
+            position: relative; /* 背景に動物を配置するために必要 */
+            overflow: hidden; /* 要素がはみ出さないように */
+            z-index: 1; /* ゲーム要素が上にくるように */
         }
+
+        /* 🌳 背景要素をCSSで追加 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 背景として配置 */
+            pointer-events: none; /* クリックを妨げない */
+            opacity: 0.8; /* 全体を少し薄く */
+
+            /* 複数の背景画像を重ねて自然な風景を表現 */
+            background-image: 
+                /* 遠くの山々 (シンプルな三角形) */
+                url('data:image/svg+xml;utf8,<svg width="100%" height="100" viewBox="0 0 300 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="0,100 50,30 150,80 250,20 300,100" fill="%23A9A9A9"/><polygon points="0,100 80,50 180,10 280,60 300,100" fill="%23696969"/></svg>'),
+                /* 森の木 (複数の木を組み合わせたパターン) */
+                url('data:image/svg+xml;utf8,<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><rect x="36" y="20" width="8" height="60" fill="%236B4C3E"/><circle cx="40" cy="20" r="15" fill="%233A8A3A"/><circle cx="25" cy="30" r="12" fill="%233A8A3A"/><circle cx="55" cy="30" r="12" fill="%233A8A3A"/><rect x="16" y="50" width="8" height="30" fill="%236B4C3E"/><circle cx="20" cy="50" r="10" fill="%232C6E2C"/><rect x="56" y="60" width="8" height="20" fill="%236B4C3E"/><circle cx="60" cy="60" r="8" fill="%232C6E2C"/></svg>'),
+                /* 小鳥 (簡単なピクセル鳥) */
+                url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 10 Q 7 5 10 7 Q 13 5 15 10 L 10 15 Z" fill="%23FFD700" stroke="%23FFA500" stroke-width="1"/><circle cx="12" cy="8" r="1" fill="black"/></svg>'),
+                /* きのこ (赤い傘のきのこ) */
+                url('data:image/svg+xml;utf8,<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="15" width="6" height="15" fill="%23FF0000"/><ellipse cx="15" cy="15" rx="10" ry="8" fill="%23FF0000"/><circle cx="10" cy="12" r="2" fill="%23FFFFFF"/><circle cx="20" cy="10" r="2" fill="%23FFFFFF"/></svg>'),
+                /* 草むら (いくつかの草の束) */
+                url('data:image/svg+xml;utf8,<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M5 30 L10 20 L15 30 L20 20 L25 30 Z" fill="%234B8B4B"/></svg>');
+            
+            background-repeat: no-repeat, repeat-x, no-repeat, no-repeat, repeat-x; /* 山は繰り返さない、木と草は横に繰り返す */
+            background-size: 100% 50%, 120px 120px, 20px 20px, 30px 30px, 50px 50px; /* それぞれのサイズ */
+            background-position: 0 0, 0 100%, 80% 10%, 10% 80%, 0 100%; /* それぞれの位置 (重ね順に注意) */
+        }
+
+        /* 雲を動かすアニメーション (簡易的な例) */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 5%;
+            left: 0%;
+            width: 100px;
+            height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="40" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg"><path d="M10 20 Q 20 5 40 10 Q 60 0 80 10 Q 90 15 90 20 Q 80 35 60 30 Q 40 40 20 30 Z" fill="%23FFFFFF" opacity="0.8"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: -1;
+            animation: moveCloud 20s linear infinite;
+        }
+
+        @keyframes moveCloud {
+            0% { transform: translateX(-120%); }
+            100% { transform: translateX(120%); }
+        }
+
 
         h1 { 
             font-family: var(--font-pixel);
             font-size: 2.8em;
-            color: var(--blue-accent); /* タイトル色 */
+            color: var(--wood-trunk); /* タイトル色を木の幹色に */
             text-shadow: 
-                -2px -2px 0 var(--blue-dark),
-                2px -2px 0 var(--blue-dark),
-                -2px 2px 0 var(--blue-dark),
-                2px 2px 0 var(--blue-dark);
+                -2px -2px 0 var(--earth-dark),
+                2px -2px 0 var(--earth-dark),
+                -2px 2px 0 var(--earth-dark),
+                2px 2px 0 var(--earth-dark);
             margin-bottom: 20px;
             letter-spacing: 0; 
             line-height: 1.2;
             padding: 5px 10px;
-            background-color: #fff;
-            border: 2px solid var(--blue-dark);
-            box-shadow: 4px 4px 0 var(--blue-dark);
+            background-color: var(--grass-dark); /* 背景を濃い草色に */
+            border: 2px solid var(--wood-trunk); /* ボーダーを木の幹色に */
+            box-shadow: 4px 4px 0 var(--wood-trunk);
         }
-        
-        /* 🌟 スコアと時間の表示強調デザイン (寒色系に調整) */
+
         #game-info { 
-            background-color: var(--blue-dark); /* 背景を濃い青に */
-            border: 4px solid var(--blue-accent); /* 派手な枠線 */
-            box-shadow: 6px 6px 0 rgba(0,0,0,0.5); /* 強い影 */
+            background-color: var(--wood-trunk); /* 背景を木の幹色に */
+            border: 4px solid var(--grass-dark); /* 枠を濃い草色に */
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.5); 
             margin-bottom: 30px; 
             padding: 0; 
             display: flex; 
@@ -65,12 +128,12 @@
             overflow: hidden;
             font-size: 1.2em;
         }
-        
+
         #game-info > div { 
             flex: 1; 
             padding: 10px 5px;
-            border-right: 4px solid var(--blue-accent); /* 中央の仕切り */
-            background-color: #e0f2f7; /* 明るい青 */
+            border-right: 4px solid var(--grass-dark); /* 中央の仕切り */
+            background-color: var(--grass-light); /* 明るい草色 */
         }
         #game-info > div:last-child {
             border-right: none;
@@ -78,10 +141,11 @@
 
         #game-info p { 
             margin: 0; 
-            color: var(--blue-dark); /* ラベルの色 */
+            color: var(--wood-trunk); /* ラベルの色を木の幹色に */
             font-size: 0.8em; 
             line-height: 1.2;
         }
+
         #score, #time-left { 
             font-weight: bold; 
             color: #FFFF00; /* 視認性の高い黄色は維持 */
@@ -90,21 +154,21 @@
             display: block; 
             line-height: 1.1;
             text-shadow: 
-                -2px -2px 0 var(--blue-accent), /* 影の色を青に */
-                2px 2px 0 var(--blue-accent);
+                -2px -2px 0 var(--wood-trunk), /* 影の色を木の幹色に */
+                2px 2px 0 var(--wood-trunk);
         }
 
         #controls { 
-            background-color: #fff;
+            background-color: var(--earth-brown); /* コントロール部分も土の色に */
             padding: 8px 15px;
             border-radius: 0;
-            box-shadow: 3px 3px 0 var(--blue-dark); /* 影の色を青に */
+            box-shadow: 3px 3px 0 var(--earth-dark); /* 影色を濃い土色に */
             margin-bottom: 20px; 
             display: flex;
             gap: 15px;
             align-items: center;
-            border: 2px solid var(--blue-dark); /* ボーダー色を青に */
-            color: var(--blue-dark); /* 文字色を青に */
+            border: 2px solid var(--earth-dark); /* ボーダー色を濃い土色に */
+            color: #fff; /* 文字色を白に */
             font-size: 1.1em;
         }
 
@@ -112,41 +176,41 @@
             padding: 6px 10px;
             font-size: 1em;
             border-radius: 0; 
-            border: 2px solid var(--blue-dark); /* ボーダー色を青に */
-            background-color: var(--blue-base); /* 背景色を水色に */
-            color: var(--blue-dark); /* 文字色を青に */
+            border: 2px solid var(--earth-dark); /* ボーダー色を濃い土色に */
+            background-color: var(--earth-brown); /* 背景色を土の色に */
+            color: #fff; /* 文字色を白に */
             font-family: var(--font-pixel);
             appearance: none; 
             background-image: none;
             cursor: pointer;
-            box-shadow: 1px 1px 0 var(--blue-dark);
+            box-shadow: 1px 1px 0 var(--earth-dark);
         }
         #difficulty-select:focus {
             outline: none;
-            box-shadow: 2px 2px 0 var(--blue-accent); /* フォーカス色を青に */
+            box-shadow: 2px 2px 0 var(--grass-light); /* フォーカス色を草色に */
         }
 
         #start-button {
             padding: 8px 20px;
             font-size: 1.3em; 
-            background-color: var(--blue-accent); /* ボタン色を青に */
+            background-color: var(--grass-dark); /* ボタン色を濃い草色に */
             color: white;
-            border: 2px solid var(--blue-dark); /* ボーダー色を青に */
+            border: 2px solid var(--forest-green); /* ボーダー色を森の緑に */
             border-radius: 0; 
             cursor: pointer;
             transition: background-color 0.1s, transform 0.05s, box-shadow 0.05s;
-            box-shadow: 4px 4px 0 var(--blue-dark); /* 影色を青に */
+            box-shadow: 4px 4px 0 var(--forest-green); 
             font-family: var(--font-pixel);
             letter-spacing: 0;
         }
         #start-button:hover { 
-            background-color: var(--blue-dark); /* ホバー色を濃い青に */
+            background-color: var(--forest-green); 
             transform: translate(-1px, -1px);
-            box-shadow: 5px 5px 0 var(--blue-dark);
+            box-shadow: 5px 5px 0 var(--forest-green);
         }
         #start-button:active { 
             transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0 var(--blue-dark); 
+            box-shadow: 2px 2px 0 var(--forest-green); 
         }
         #start-button:disabled { 
             background-color: #cccccc; 
@@ -159,25 +223,25 @@
         #grid {
             display: grid;
             margin: 0 auto;
-            background-color: var(--green-grass); /* 草地色を暗めの緑に */
-            border: 4px solid var(--green-dark); /* 草地ボーダーを濃い緑に */
+            background-color: var(--grass-dark); /* グリッド背景を濃い草色に */
+            border: 4px solid var(--forest-green); /* グリッドボーダーを森の緑に */
             border-radius: 0;
             padding: 8px;
             gap: 8px;
-            box-shadow: 6px 6px 0 var(--green-dark);
+            box-shadow: 6px 6px 0 var(--forest-green);
             aspect-ratio: 1 / 1; 
         }
 
         .hole {
-            background-color: var(--gray-hole); /* 穴の背景をグレーに */
+            background-color: var(--earth-brown); /* 穴の背景を土の色に */
             border-radius: 0;
             overflow: hidden; 
             position: relative; 
             cursor: pointer;
             border: none;
             box-shadow: 
-                inset -2px -2px 0 var(--gray-dark), /* 穴の影色を濃いグレーに */
-                inset 2px 2px 0 #9e9e9e; /* 明るい穴の影色 */
+                inset -2px -2px 0 var(--earth-dark), /* 穴の影色を濃い土色に */
+                inset 2px 2px 0 var(--wood-light); /* 明るい部分 */
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -203,29 +267,29 @@
             transform: translateY(10%); 
         }
 
-        /* 🌟 モグラの色を寒色系に調整 */
-        .mole-body { fill: #4a4a4a; stroke: none; } /* モグラの体を濃いグレーに */
-        .mole-face { fill: #b0b0b0; stroke: none; } /* 顔を明るいグレーに */
-        .mole-hand { fill: #4a4a4a; stroke: none; } /* 手を濃いグレーに */
+        /* 🌟 モグラの色を自然な配色に調整 */
+        .mole-body { fill: #8B5C3D; stroke: none; } /* モグラの体を茶色に */
+        .mole-face { fill: #E6C5A9; stroke: none; } /* 顔をベージュに */
+        .mole-hand { fill: #8B5C3D; stroke: none; } /* 手を茶色に */
         .mole-whisker { stroke: #333; } /* ヒゲはそのまま */
-        .mole-nose { fill: #3f88c5; } /* 鼻を青に */
+        .mole-nose { fill: #FF6699; } /* 鼻をピンク系に */
 
-        .mole.gold .mole-body { fill: #FFD700; } /* ゴールドモグラは黄色を維持 */
-        .mole.gold .mole-face { fill: #FFFF00; }
-        .mole.gold .mole-hand { fill: #FFD700; }
-        .mole.gold .mole-nose { fill: #B8860B; }
+        .mole.gold .mole-body { fill: var(--bird-yellow); } /* ゴールドモグラは鳥の黄色 */
+        .mole.gold .mole-face { fill: var(--bird-orange); }
+        .mole.gold .mole-hand { fill: var(--bird-yellow); }
+        .mole.gold .mole-nose { fill: var(--wood-trunk); }
         
         .mole.bomb .mole-body { fill: #333; } /* 爆弾モグラはそのまま */
         .mole.bomb .mole-face { fill: #888; }
         .mole.bomb .mole-hand { fill: #FF0000; } 
         .mole.bomb .mole-nose { fill: #000; }
-        
-        .mole.clock .mole-body { fill: #00FFFF; } /* 時計モグラは水色を維持 */ 
-        .mole.clock .mole-face { fill: #99FFFF; }
-        .mole.clock .mole-hand { fill: #00FFFF; }
-        .mole.clock .mole-nose { fill: #008080; }
 
-        /* ゲームオーバーモーダル (寒色系に調整) */
+        .mole.clock .mole-body { fill: var(--sky-blue); } /* 時計モグラは空の色 */ 
+        .mole.clock .mole-face { fill: var(--cloud-white); }
+        .mole.clock .mole-hand { fill: var(--sky-blue); }
+        .mole.clock .mole-nose { fill: var(--mountain-dark); } /* 濃いグレー */
+
+        /* ゲームオーバーモーダル (自然な色合いに調整) */
         #game-over-modal { 
             display: none; 
             position: fixed; 
@@ -242,52 +306,52 @@
             background-color: #fff; 
             margin: 10% auto; 
             padding: 30px;
-            border: 4px solid var(--blue-dark); /* ボーダー色を青に */
+            border: 4px solid var(--earth-dark); /* ボーダー色を土色に */
             width: 85%; max-width: 350px; 
             border-radius: 0; 
             text-align: center; 
-            box-shadow: 6px 6px 0 var(--blue-dark); /* 影色を青に */
+            box-shadow: 6px 6px 0 var(--earth-dark); 
             animation: fadeIn 0.5s; 
             font-family: var(--font-pixel);
-            color: var(--blue-dark); /* 文字色を青に */
+            color: var(--earth-dark); /* 文字色を土色に */
         }
         .modal-content h2 { 
-            color: var(--blue-accent); /* タイトル色を青に */
+            color: var(--grass-dark); /* タイトル色を濃い草色に */
             font-size: 2.5em; 
             margin-bottom: 15px; 
-            text-shadow: 2px 2px 0 var(--blue-dark); 
+            text-shadow: 2px 2px 0 var(--earth-dark); 
         }
         .final-score { 
             font-size: 3.5em; 
             color: #fff;
-            background-color: var(--blue-accent); /* 背景色を青に */
-            border: 3px solid var(--blue-dark); /* ボーダー色を青に */
-            text-shadow: 2px 2px 0 var(--blue-dark);
-            box-shadow: 4px 4px 0 var(--blue-dark);
+            background-color: var(--grass-dark); /* 背景色を濃い草色に */
+            border: 3px solid var(--earth-dark); /* ボーダー色を土色に */
+            text-shadow: 2px 2px 0 var(--earth-dark);
+            box-shadow: 4px 4px 0 var(--earth-dark);
         }
         .modal-content button { 
             padding: 8px 20px;
             font-size: 1.3em;
-            background-color: #00bfff; /* ボタン色を水色に */
+            background-color: var(--grass-light); /* ボタン色を明るい草色に */
             color: white;
-            border: 2px solid #008080; 
-            box-shadow: 3px 3px 0 #008080; 
+            border: 2px solid var(--grass-dark); 
+            box-shadow: 3px 3px 0 var(--grass-dark); 
             border-radius: 0; 
             cursor: pointer;
             font-family: var(--font-pixel);
             transition: transform 0.05s, box-shadow 0.05s;
         }
         .modal-content button:hover { 
-            background-color: #008080; 
+            background-color: var(--grass-dark); 
             transform: translate(-1px, -1px);
-            box-shadow: 4px 4px 0 #008080;
+            box-shadow: 4px 4px 0 var(--grass-dark);
         }
         .modal-content button:active {
             transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0 #008080;
+            box-shadow: 1px 1px 0 var(--grass-dark);
         }
 
-        /* 💥 スコアポップアップ (寒色系に調整) */
+        /* 💥 スコアポップアップ (自然な色合いに調整) */
         .score-pop { 
             position: absolute; 
             top: 5%; 
@@ -297,10 +361,10 @@
             font-weight: bold; 
             color: #fff; 
             text-shadow: 
-                -2px -2px 0 var(--blue-dark), /* 影色を青系に */
-                2px -2px 0 var(--blue-dark),
-                -2px 2px 0 var(--blue-dark),
-                2px 2px 0 var(--blue-dark),
+                -2px -2px 0 var(--earth-dark), /* 影色を土色に */
+                2px -2px 0 var(--earth-dark),
+                -2px 2px 0 var(--earth-dark),
+                2px 2px 0 var(--earth-dark),
                 3px 3px 0 rgba(0,0,0,0.4); 
             pointer-events: none; 
             opacity: 0; 
@@ -315,7 +379,7 @@
             100% { opacity: 0; transform: translate(-50%, -100px) scale(1); }
         }
         
-        /* 🎮 カウントダウンオーバーレイ (寒色系に調整) */
+        /* 🎮 カウントダウンオーバーレイ (自然な色合いに調整) */
         #countdown-overlay {
             display: none; 
             position: fixed;
@@ -323,7 +387,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(160, 196, 255, 0.85); /* 半透明の青系 */
+            background-color: rgba(135, 206, 235, 0.85); /* 半透明の空色 */
             z-index: 200;
             justify-content: center;
             align-items: center;
@@ -331,13 +395,13 @@
         #countdown-text {
             font-family: var(--font-pixel);
             font-size: 8em; 
-            color: var(--blue-accent); /* カウントダウン文字色を青に */
+            color: var(--wood-trunk); /* カウントダウン文字色を木の幹色に */
             text-shadow: 
                 -4px -4px 0 #fff, 
                 4px -4px 0 #fff,
                 -4px 4px 0 #fff,
                 4px 4px 0 #fff,
-                6px 6px 0 var(--blue-dark); /* カウントダウン影色を青に */
+                6px 6px 0 var(--earth-dark); /* カウントダウン影色を土色に */
         }
     </style>
 </head>
@@ -560,8 +624,8 @@
             pop.textContent = sign + points;
             
             if (points > 0) { 
-                // スコアに応じた色コードを指定 (寒色系に合わせた緑)
-                pop.style.color = points >= GOLD_MOLE_SCORE ? '#FFD700' : '#00FF00'; // ゴールドは黄色、通常は明るい緑
+                // スコアに応じた色コードを指定
+                pop.style.color = points >= GOLD_MOLE_SCORE ? '#FFD700' : 'var(--grass-light)'; // ゴールドは黄色、通常は明るい草色
             } else { 
                 pop.style.color = '#FF0000'; // 赤はマイナスなのでそのまま
             }
